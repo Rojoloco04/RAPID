@@ -1,8 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
-// UNITS ALWAYS NEED TO BE NM
+#define PI 3.14159
+
+/*
+UNITS ARE IN NM
+COMPILE WITH:
+gcc -Wall -Wextra -O2 -o inputParser inputParser.c -lm
+*/
 
 // struct for each point
 typedef struct {
@@ -11,9 +18,9 @@ typedef struct {
 } Coordinate;
 
 typedef struct {
-    int r;
-    int theta;
-} Polar;
+    double r;
+    double theta;
+} PolarPoint;
 
 // error function
 static void error(const char *msg) {
@@ -22,7 +29,7 @@ static void error(const char *msg) {
 }
 
 // read input file
-// grab the path starting from "xy"
+// grab the points starting from "XY"
 Coordinate *getCoordinates(const char *filename, size_t *count) {
     FILE *fp = fopen(filename, "r");
     if (!fp) { perror("fopen"); return NULL; }
@@ -65,9 +72,25 @@ Coordinate *getCoordinates(const char *filename, size_t *count) {
     return coordinates;
 }
 
-// convert path to polar arcs
+PolarPoint *convertToPolar(const Coordinate *coords, size_t count) {
+    PolarPoint *polar = malloc(count * sizeof(PolarPoint));
+    if (!polar) return NULL;
 
-// send to FPGA ?
+    for (size_t i = 0; i < count; i++) {
+        double x = (double)coords[i].x;
+        double y = (double)coords[i].y;
+
+        polar[i].r = sqrt(x * x + y * y);
+
+        double theta_rad = atan2(y, x);
+        double theta_deg = theta_rad * (180.0 / PI);
+
+        if (theta_deg < 0) theta_deg += 360.0;   // normalize to [0,360)
+        polar[i].theta = theta_deg;
+    }
+
+    return polar;
+}
 
 
 int main(void) {
@@ -81,9 +104,15 @@ int main(void) {
     }
 
     // convert coordinates to polar arcs
-    
+    PolarPoint *polar = convertToPolar(coordinates, count);
+    if (!polar) error("Failed to convert to polar\n");
 
+    // test print statement
+    for (size_t i = 0; i < count; i++) {
+        printf("polar[%zu] = (r=%.3f nm, theta=%.2f deg)\n", i, polar[i].r, polar[i].theta);
+    }
 
     free(coordinates);
+    free(polar);
     return 0;
 }
