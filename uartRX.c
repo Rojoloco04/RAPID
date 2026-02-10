@@ -1,22 +1,24 @@
-// motor and laser control based on arcs, onboard fpga
+// UART receive onboard FPGA
 
 #include <stdint.h>
 #include "xuartps.h"
 #include "xil_printf.h"
 
+// receive bytes from UART bridge
 static int uart_recv_byte(XUartPs *Uart, uint8_t *out) {
-    // XUartPs_Recv returns number of bytes received (0 or 1 here)
     while (XUartPs_Recv(Uart, out, 1) != 1) { }
     return 1;
 }
 
-static uint8_t crc8_xor(const uint8_t *data, unsigned len) {
+// checksum validation
+static uint8_t crc8(const uint8_t *data, unsigned len) {
     uint8_t c = 0;
     for (unsigned i = 0; i < len; i++) c ^= data[i];
     return c;
 }
 
-static int32_t unpack_i32_le(const uint8_t b[4]) {
+// unpack 4 byte integers into i32
+static int32_t unpack_i32(const uint8_t b[4]) {
     return (int32_t)(
         ((uint32_t)b[0]) |
         ((uint32_t)b[1] << 8) |
@@ -29,7 +31,7 @@ void receive_points_forever(XUartPs *Uart) {
     uint8_t b;
 
     for (;;) {
-        // Find SOF: 0xAA 0x55
+        // SOF 0xAA 0x55
         uart_recv_byte(Uart, &b);
         if (b != 0xAA) continue;
         uart_recv_byte(Uart, &b);
@@ -56,19 +58,18 @@ void receive_points_forever(XUartPs *Uart) {
         chk_buf[1] = len;
         for (int i = 0; i < 8; i++) chk_buf[2 + i] = payload[i];
 
-        uint8_t expect = crc8_xor(chk_buf, sizeof(chk_buf));
+        uint8_t expect = crc8(chk_buf, sizeof(chk_buf));
         if (crc != expect) {
             xil_printf("CRC mismatch\r\n");
             continue;
         }
 
-        int32_t r_nm      = unpack_i32_le(&payload[0]);
-        int32_t theta_udeg = unpack_i32_le(&payload[4]);
+        int32_t r_nm = unpack_i32(&payload[0]);
+        int32_t theta_udeg = unpack_i32(&payload[4]);
 
-        // Now you have fixed-point point data!
-        // Example debug print:
+        // debug print
         xil_printf("r=%ld nm, theta=%ld udeg\r\n", (long)r_nm, (long)theta_udeg);
 
-        // TODO: push into FIFO / BRAM / your arc generator, etc.
+        // TODO: process arcs into usable control signals
     }
 }
