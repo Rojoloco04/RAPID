@@ -1,3 +1,4 @@
+#include "inputParser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,22 +12,13 @@ COMPILE WITH:
 gcc -Wall -Wextra -O2 -o inputParser inputParser.c -lm
 */
 
-// struct for each point
-typedef struct {
-    int x;
-    int y;
-} Coordinate;
-
-typedef struct {
-    double r;
-    double theta;
-} PolarPoint;
-
+/*
 // error function
 static void error(const char *msg) {
     fprintf(stderr, "*ERROR: %s\n", msg);
     exit(1);
 }
+*/
 
 // read input file
 // grab the points starting from "XY"
@@ -85,13 +77,14 @@ PolarPoint *convertToPolar(const Coordinate *coords, size_t count) {
         double theta_rad = atan2(y, x);
         double theta_deg = theta_rad * (180.0 / PI);
 
-        if (theta_deg < 0) theta_deg += 360.0;   // normalize to [0,360)
+        if (theta_deg < 0) theta_deg += 360.0; // normalize to [0,360)
         polar[i].theta = theta_deg;
     }
 
     return polar;
 }
 
+/* MAIN TEST
 
 int main(void) {
     size_t count = 0;
@@ -116,3 +109,4 @@ int main(void) {
     free(polar);
     return 0;
 }
+*/
