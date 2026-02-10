@@ -27,6 +27,7 @@ static void pack_i32(uint8_t out[4], int32_t v) {
     out[3] = (uint8_t)((v >> 24) & 0xFF);
 }
 
+// write to the UART channel at handle h
 static int write_all(HANDLE h, const uint8_t *buf, size_t len) {
     size_t sent = 0;
     while (sent < len) {
@@ -39,61 +40,55 @@ static int write_all(HANDLE h, const uint8_t *buf, size_t len) {
     return 1;
 }
 
+// using windows routines to open UART over COM port
 static HANDLE open_serial(const char *com_name, int baud) {
-    // Use \\.\COM10 format to support COM10+
     char path[64];
     snprintf(path, sizeof(path), "\\\\.\\%s", com_name);
 
-    HANDLE h = CreateFileA(path,
-                           GENERIC_WRITE, 0, NULL,
-                           OPEN_EXISTING, 0, NULL);
+    // windows treats COM ports as files
+    HANDLE h = CreateFileA(path, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (h == INVALID_HANDLE_VALUE) return INVALID_HANDLE_VALUE;
 
-    // Configure
-    DCB dcb = {0};
-    dcb.DCBlength = sizeof(dcb);
-    if (!GetCommState(h, &dcb)) { CloseHandle(h); return INVALID_HANDLE_VALUE; }
+    // configuration
+    // windows requires you to read the control state before writing it back
+    DCB dcb = {0}; // device control block
+    dcb.DCBlength = sizeof(dcb); 
+    if (!GetCommState(h, &dcb)) { CloseHandle(h); return INVALID_HANDLE_VALUE; } // read
 
     dcb.BaudRate = baud;
     dcb.ByteSize = 8;
-    dcb.Parity   = NOPARITY;
+    dcb.Parity = NOPARITY;
     dcb.StopBits = ONESTOPBIT;
 
-    if (!SetCommState(h, &dcb)) { CloseHandle(h); return INVALID_HANDLE_VALUE; }
+    if (!SetCommState(h, &dcb)) { CloseHandle(h); return INVALID_HANDLE_VALUE; } // write
 
-    // Optional: timeouts (non-blocky)
-    COMMTIMEOUTS t = {0};
-    t.WriteTotalTimeoutConstant = 2000;
-    t.WriteTotalTimeoutMultiplier = 10;
-    SetCommTimeouts(h, &t);
-
-    return h;
+    return h; // handle for COM port
 }
 
-// ---------- send one polar point ----------
+// send a single polar point to FPGA
 static int send_polar_point(HANDLE h, double r_nm, double theta_deg) {
-    // Convert to fixed-point ints
     int32_t r_i32 = (int32_t)llround(r_nm);
     int32_t t_i32 = (int32_t)llround(theta_deg * 1000000.0);
 
     uint8_t frame[13];
-    size_t idx = 0;
+    size_t index = 0;
 
-    frame[idx++] = 0xAA;
-    frame[idx++] = 0x55;
-    frame[idx++] = 0x01; // TYPE
-    frame[idx++] = 0x08; // LEN
+    // packing into frame
+    frame[index++] = 0xAA; // SOF
+    frame[index++] = 0x55; // SOF
+    frame[index++] = 0x01; // TYPE
+    frame[index++] = 0x08; // LEN
 
-    pack_i32(&frame[idx], r_i32); idx += 4;
-    pack_i32(&frame[idx], t_i32); idx += 4;
+    pack_i32(&frame[index], r_i32); index += 4;
+    pack_i32(&frame[index], t_i32); index += 4;
 
-    frame[idx++] = crc8(&frame[2], 1 + 1 + 8); // TYPE+LEN+payload
+    frame[index++] = crc8(&frame[2], 10); // TYPE (1) + LEN (1) + PAYLOAD (8)
 
-    return write_all(h, frame, sizeof(frame));
+    return write_all(h, frame, sizeof(frame)); // write entire packet
 }
 
 int main(int argc, char **argv) {
-    const char *port = (argc >= 2) ? argv[1] : "COM25";   // change default as needed
+    const char *port = (argc >= 2) ? argv[1] : "COM25";
     const char *file = (argc >= 3) ? argv[2] : "input.gds";
 
     size_t count = 0;
@@ -120,7 +115,7 @@ int main(int argc, char **argv) {
     printf("Sending %zu polar points over %s...\n", count, port);
 
     for (size_t i = 0; i < count; i++) {
-        if (!send_polar_point(h, polar[i].r, polar[i].theta)) {
+        if (!send_polar_point(h, polar[i].r, polar[i].theta)) { // send all points and error check
             fprintf(stderr, "UART send failed at i=%zu\n", i);
             CloseHandle(h);
             free(polar);
