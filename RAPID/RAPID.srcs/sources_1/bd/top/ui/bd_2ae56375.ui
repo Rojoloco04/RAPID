@@ -1,0 +1,72 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"0.658028",
+   "Default View_TopLeft":"324,-346",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 4 -x 1260 -y -430 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 4 -x 1260 -y -410 -defaultsOSRD
+preplace port uart_rtl -pg 1 -lvl 4 -x 1260 -y -450 -defaultsOSRD
+preplace port uart_rtl_0 -pg 1 -lvl 4 -x 1260 -y -150 -defaultsOSRD
+preplace port uart_rtl_1 -pg 1 -lvl 4 -x 1260 -y -130 -defaultsOSRD
+preplace port port-id_phA1 -pg 1 -lvl 4 -x 1260 -y 30 -defaultsOSRD
+preplace port port-id_phB1 -pg 1 -lvl 4 -x 1260 -y 50 -defaultsOSRD
+preplace port port-id_phA2 -pg 1 -lvl 4 -x 1260 -y 70 -defaultsOSRD
+preplace port port-id_phB2 -pg 1 -lvl 4 -x 1260 -y 90 -defaultsOSRD
+preplace port port-id_kill_0 -pg 1 -lvl 0 -x -310 -y -200 -defaultsOSRD
+preplace port port-id_En_Spindle -pg 1 -lvl 4 -x 1260 -y -300 -defaultsOSRD
+preplace port port-id_INHA_0 -pg 1 -lvl 4 -x 1260 -y -280 -defaultsOSRD
+preplace port port-id_INLA_0 -pg 1 -lvl 4 -x 1260 -y -260 -defaultsOSRD
+preplace port port-id_INHB_0 -pg 1 -lvl 4 -x 1260 -y -240 -defaultsOSRD
+preplace port port-id_INLB_0 -pg 1 -lvl 4 -x 1260 -y -220 -defaultsOSRD
+preplace port port-id_INHC_0 -pg 1 -lvl 4 -x 1260 -y -200 -defaultsOSRD
+preplace port port-id_INLC_0 -pg 1 -lvl 4 -x 1260 -y -180 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 1 -x 390 -y -130 -defaultsOSRD
+preplace inst Spindle_0 -pg 1 -lvl 3 -x 1100 -y -240 -defaultsOSRD
+preplace inst stepperDriver_0 -pg 1 -lvl 3 -x 1100 -y 60 -defaultsOSRD
+preplace inst axi_gpio_0 -pg 1 -lvl 1 -x 390 -y 60 -defaultsOSRD
+preplace inst xlslice_0 -pg 1 -lvl 2 -x 790 -y -190 -defaultsOSRD
+preplace inst xlslice_1 -pg 1 -lvl 2 -x 790 -y -90 -defaultsOSRD
+preplace inst xlslice_2 -pg 1 -lvl 2 -x 790 -y 10 -defaultsOSRD
+preplace inst xlslice_3 -pg 1 -lvl 2 -x 790 -y 110 -defaultsOSRD
+preplace inst xlslice_4 -pg 1 -lvl 2 -x 790 -y 210 -defaultsOSRD
+preplace inst xlslice_5 -pg 1 -lvl 2 -x 790 -y 310 -defaultsOSRD
+preplace inst rst_ps7_0_100M -pg 1 -lvl 1 -x 390 -y 220 -defaultsOSRD
+preplace inst axi_smc -pg 1 -lvl 2 -x 790 -y -360 -defaultsOSRD
+preplace netloc Spindle_0_INHA 1 3 1 N -280
+preplace netloc Spindle_0_INHB 1 3 1 N -240
+preplace netloc Spindle_0_INHC 1 3 1 N -200
+preplace netloc Spindle_0_INLA 1 3 1 N -260
+preplace netloc Spindle_0_INLB 1 3 1 N -220
+preplace netloc Spindle_0_INLC 1 3 1 N -180
+preplace netloc Spindle_0_en_spindle 1 3 1 N -300
+preplace netloc axi_gpio_0_gpio_io_o 1 1 1 650 -190n
+preplace netloc kill_0_1 1 0 3 -290J -250 NJ -250 980J
+preplace netloc processing_system7_0_FCLK_CLK0 1 0 3 170 -270 630 -260 940
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 2 190 -260 590
+preplace netloc rst_ps7_0_100M_peripheral_aresetn 1 0 2 180 320 640J
+preplace netloc stepperDriver_0_phA1 1 3 1 N 30
+preplace netloc stepperDriver_0_phA2 1 3 1 N 70
+preplace netloc stepperDriver_0_phB1 1 3 1 N 50
+preplace netloc stepperDriver_0_phB2 1 3 1 N 90
+preplace netloc xlslice_0_Dout 1 2 1 970 -220n
+preplace netloc xlslice_1_Dout 1 2 1 960 -240n
+preplace netloc xlslice_2_Dout 1 2 1 950 -260n
+preplace netloc xlslice_3_Dout 1 2 1 930 50n
+preplace netloc xlslice_4_Dout 1 2 1 950 70n
+preplace netloc xlslice_5_Dout 1 2 1 970 90n
+preplace netloc axi_smc_M00_AXI 1 0 3 180 -460 NJ -460 930
+preplace netloc processing_system7_0_DDR 1 1 3 610J -440 N -440 1220
+preplace netloc processing_system7_0_FIXED_IO 1 1 3 600J -450 N -450 1230
+preplace netloc processing_system7_0_M_AXI_GP0 1 1 1 620 -380n
+levelinfo -pg 1 -310 390 790 1100 1260
+pagesize -pg 1 -db -bbox -sgen -410 -680 1440 700
+"
+}
+{
+   "da_axi4_cnt":"6",
+   "da_board_cnt":"7",
+   "da_clkrst_cnt":"5",
+   "da_ps7_cnt":"2"
+}
