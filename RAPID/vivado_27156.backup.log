@@ -1,0 +1,1844 @@
+#-----------------------------------------------------------
+# Vivado v2025.1 (64-bit)
+# SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Thu Jan 29 16:14:17 2026
+# Process ID         : 27156
+# Current directory  : D:/HardSoftCodesign/Hardsoftcodesign/RAPID
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent26928 D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.xpr
+# Log file           : D:/HardSoftCodesign/Hardsoftcodesign/RAPID/vivado.log
+# Journal file       : D:/HardSoftCodesign/Hardsoftcodesign/RAPID\vivado.jou
+# Running On         : MDD-ECE-HPG853
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 22631
+# Processor Detail   : Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz
+# CPU Frequency      : 2904 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 34058 MB
+# Swap memory        : 5100 MB
+# Total Virtual      : 39158 MB
+# Available Virtual  : 22482 MB
+#-----------------------------------------------------------
+start_gui
+open_project D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.xpr
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:emb-plus-vpr-4616:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\emb-plus-vpr-4616\1.0\board.xml as part xcve2302-sfva784-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:emb-plus-vpr-4616:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\emb-plus-vpr-4616\1.1\board.xml as part xcve2302-sfva784-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.4 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\kcu116\1.4\board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.5 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\kcu116\1.5\board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:scu35:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\scu35\1.0\board.xml as part xcsu35p-sbvb625-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:v80:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\v80\1.0\board.xml as part xcv80-lsva4737-2mhp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:2.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\2.2\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\3.0\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\3.1\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\3.2\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.3 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\3.3\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.4 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\3.4\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190_newl\production\1.0\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190_newl\production\1.1\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190_newl\production\1.2\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.3 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190_newl\production\1.3\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu118\2.0\board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.3 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu118\2.3\board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.4 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu118\2.4\board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu128:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu128\production\1.0\board.xml as part xcvu37p-fsvh2892-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu129:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu129\production\1.0\board.xml as part xcvu29p-fsga2577-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu1525:part0:1.3 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu1525\1.3\board.xml as part xcvu9p-fsgd2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vek280\production\1.0\board.xml as part xcve2802-vsvh1760-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vek280\production\1.1\board.xml as part xcve2802-vsvh1760-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280:part0:1.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vek280\production\1.2\board.xml as part xcve2802-vsvh1760-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek385:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vek385\1.0\board.xml as part xc2ve3858-ssva2112-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vhk158\production\1.0\board.xml as part xcvh1582-vsva3697-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vhk158\production\1.1\board.xml as part xcvh1582-vsva3697-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158:part0:1.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vhk158\production\1.2\board.xml as part xcvh1582-vsva3697-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:2.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180\production\2.2\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180\production\3.0\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180\production\3.1\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180\production\3.2\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.3 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180\production\3.3\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_newl:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180_newl\production\1.0\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_newl:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180_newl\production\1.1\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk120\production\1.0\board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk120\production\1.1\board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk120\production\1.2\board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk180\production\1.0\board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk180\production\1.1\board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk180\production\1.2\board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu208ld\production\2.0\board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu216ld\production\2.0\board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu670ld\1.0\board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+WARNING: [filemgmt 56-3] IP Repository Path: Could not find the directory 'c:/Users/mbracker/AppData/Roaming/Xilinx/ip_repo'.
+Scanning sources...
+Finished scanning sources
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:emb-plus-vpr-4616:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\emb-plus-vpr-4616\1.0\board.xml as part xcve2302-sfva784-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:emb-plus-vpr-4616:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\emb-plus-vpr-4616\1.1\board.xml as part xcve2302-sfva784-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.4 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\kcu116\1.4\board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.5 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\kcu116\1.5\board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:scu35:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\scu35\1.0\board.xml as part xcsu35p-sbvb625-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:v80:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\v80\1.0\board.xml as part xcv80-lsva4737-2mhp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:2.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\2.2\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\3.0\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\3.1\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\3.2\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.3 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\3.3\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.4 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190\production\3.4\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190_newl\production\1.0\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190_newl\production\1.1\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190_newl\production\1.2\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.3 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vck190_newl\production\1.3\board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu118\2.0\board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.3 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu118\2.3\board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.4 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu118\2.4\board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu128:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu128\production\1.0\board.xml as part xcvu37p-fsvh2892-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu129:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu129\production\1.0\board.xml as part xcvu29p-fsga2577-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu1525:part0:1.3 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vcu1525\1.3\board.xml as part xcvu9p-fsgd2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vek280\production\1.0\board.xml as part xcve2802-vsvh1760-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vek280\production\1.1\board.xml as part xcve2802-vsvh1760-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280:part0:1.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vek280\production\1.2\board.xml as part xcve2802-vsvh1760-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek385:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vek385\1.0\board.xml as part xc2ve3858-ssva2112-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vhk158\production\1.0\board.xml as part xcvh1582-vsva3697-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vhk158\production\1.1\board.xml as part xcvh1582-vsva3697-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158:part0:1.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vhk158\production\1.2\board.xml as part xcvh1582-vsva3697-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:2.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180\production\2.2\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180\production\3.0\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180\production\3.1\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180\production\3.2\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.3 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180\production\3.3\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_newl:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180_newl\production\1.0\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_newl:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vmk180_newl\production\1.1\board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk120\production\1.0\board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk120\production\1.1\board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk120\production\1.2\board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk180\production\1.0\board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk180\production\1.1\board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.2 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\vpk180\production\1.2\board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu208ld\production\2.0\board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu216ld\production\2.0\board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu670ld\1.0\board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+WARNING: [Project 1-5713] Board part '' set for the project  is not found. BoardPart property will be unset. Please select board from latest repo build 
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+WARNING: [IP_Flow 19-2248] Failed to load user IP repository 'c:/Users/mbracker/AppData/Roaming/Xilinx/ip_repo'; Can't find the specified path.
+If this directory should no longer be in your list of user repositories, go to the IP Settings dialog and remove it.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/2025.1/Vivado/data/ip'.
+INFO: [Project 1-5698] Found the below utility IPs instantiated in block design D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd which have equivalent inline hdl with improved performance and reduced diskspace.
+It is recommended to migrate these utility IPs to inline hdl  using the command upgrade_project -migrate_to_inline_hdl.  The utility IPs may be deprecated in future releases.
+More information on inline hdl is available in UG994.
+Utility IP Component Instances:
+ top_xlslice_0_1
+top_xlslice_0_2
+top_xlslice_0_3
+top_xlslice_0_4
+top_xlslice_0_5
+top_xlslice_0_6
+open_project: Time (s): cpu = 00:00:08 ; elapsed = 00:00:10 . Memory (MB): peak = 1758.051 ; gain = 289.863
+update_compile_order -fileset sources_1
+synth_design -rtl -rtl_skip_mlo -name rtl_1
+Command: synth_design -rtl -rtl_skip_mlo -name rtl_1
+Starting synth_design
+Using part: xc7z020clg400-1
+Top: top_wrapper
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 13756
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2428.469 ; gain = 485.285
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'top_wrapper' [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd:53]
+INFO: [Synth 8-3491] module 'top' declared at 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:15' bound to instance 'top_i' of component 'top' [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd:92]
+INFO: [Synth 8-638] synthesizing module 'top' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:57]
+INFO: [Synth 8-3491] module 'top_Spindle_0_0' declared at 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_Spindle_0_0_stub.vhdl:6' bound to instance 'Spindle_0' of component 'top_Spindle_0_0' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:554]
+INFO: [Synth 8-638] synthesizing module 'top_Spindle_0_0' [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_Spindle_0_0_stub.vhdl:32]
+INFO: [Synth 8-3491] module 'top_axi_gpio_0_1' declared at 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_axi_gpio_0_1_stub.vhdl:6' bound to instance 'axi_gpio_0' of component 'top_axi_gpio_0_1' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:569]
+INFO: [Synth 8-638] synthesizing module 'top_axi_gpio_0_1' [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_axi_gpio_0_1_stub.vhdl:38]
+INFO: [Synth 8-3491] module 'top_axi_smc_1' declared at 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_axi_smc_1_stub.vhdl:6' bound to instance 'axi_smc' of component 'top_axi_smc_1' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:592]
+INFO: [Synth 8-638] synthesizing module 'top_axi_smc_1' [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_axi_smc_1_stub.vhdl:167]
+INFO: [Synth 8-3491] module 'top_processing_system7_0_0' declared at 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_processing_system7_0_0_stub.vhdl:6' bound to instance 'processing_system7_0' of component 'top_processing_system7_0_0' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:744]
+INFO: [Synth 8-638] synthesizing module 'top_processing_system7_0_0' [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_processing_system7_0_0_stub.vhdl:87]
+INFO: [Synth 8-3491] module 'top_rst_ps7_0_100M_1' declared at 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_rst_ps7_0_100M_1_stub.vhdl:6' bound to instance 'rst_ps7_0_100M' of component 'top_rst_ps7_0_100M_1' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:816]
+INFO: [Synth 8-638] synthesizing module 'top_rst_ps7_0_100M_1' [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_rst_ps7_0_100M_1_stub.vhdl:28]
+INFO: [Synth 8-3491] module 'top_stepperDriver_0_0' declared at 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_stepperDriver_0_0_stub.vhdl:6' bound to instance 'stepperDriver_0' of component 'top_stepperDriver_0_0' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:829]
+INFO: [Synth 8-638] synthesizing module 'top_stepperDriver_0_0' [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/.Xil/Vivado-27156-MDD-ECE-HPG853/realtime/top_stepperDriver_0_0_stub.vhdl:28]
+INFO: [Synth 8-3491] module 'top_xlslice_0_1' declared at 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_1/synth/top_xlslice_0_1.v:53' bound to instance 'xlslice_0' of component 'top_xlslice_0_1' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:840]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_1' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_1/synth/top_xlslice_0_1.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_1' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_1/synth/top_xlslice_0_1.v:53]
+INFO: [Synth 8-3491] module 'top_xlslice_0_2' declared at 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_2/synth/top_xlslice_0_2.v:53' bound to instance 'xlslice_1' of component 'top_xlslice_0_2' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:845]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_2' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_2/synth/top_xlslice_0_2.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized0' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized0' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_2' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_2/synth/top_xlslice_0_2.v:53]
+INFO: [Synth 8-3491] module 'top_xlslice_0_3' declared at 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_3/synth/top_xlslice_0_3.v:53' bound to instance 'xlslice_2' of component 'top_xlslice_0_3' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:850]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_3' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_3/synth/top_xlslice_0_3.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized1' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized1' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_3' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_3/synth/top_xlslice_0_3.v:53]
+INFO: [Synth 8-3491] module 'top_xlslice_0_4' declared at 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_4/synth/top_xlslice_0_4.v:53' bound to instance 'xlslice_3' of component 'top_xlslice_0_4' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:855]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_4' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_4/synth/top_xlslice_0_4.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized2' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized2' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_4' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_4/synth/top_xlslice_0_4.v:53]
+INFO: [Synth 8-3491] module 'top_xlslice_0_5' declared at 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_5/synth/top_xlslice_0_5.v:53' bound to instance 'xlslice_4' of component 'top_xlslice_0_5' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:860]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_5' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_5/synth/top_xlslice_0_5.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized3' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized3' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_5' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_5/synth/top_xlslice_0_5.v:53]
+INFO: [Synth 8-3491] module 'top_xlslice_0_6' declared at 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_6/synth/top_xlslice_0_6.v:53' bound to instance 'xlslice_5' of component 'top_xlslice_0_6' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:865]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_6' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_6/synth/top_xlslice_0_6.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized4' [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized4' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_6' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_6/synth/top_xlslice_0_6.v:53]
+INFO: [Synth 8-256] done synthesizing module 'top' (0#1) [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:57]
+INFO: [Synth 8-256] done synthesizing module 'top_wrapper' (0#1) [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd:53]
+WARNING: [Synth 8-7129] Port Din[5] in module xlslice_v1_0_5_xlslice__parameterized4 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[4] in module xlslice_v1_0_5_xlslice__parameterized4 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[3] in module xlslice_v1_0_5_xlslice__parameterized4 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[2] in module xlslice_v1_0_5_xlslice__parameterized4 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[1] in module xlslice_v1_0_5_xlslice__parameterized4 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[0] in module xlslice_v1_0_5_xlslice__parameterized4 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[6] in module xlslice_v1_0_5_xlslice__parameterized3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[4] in module xlslice_v1_0_5_xlslice__parameterized3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[3] in module xlslice_v1_0_5_xlslice__parameterized3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[2] in module xlslice_v1_0_5_xlslice__parameterized3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[1] in module xlslice_v1_0_5_xlslice__parameterized3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[0] in module xlslice_v1_0_5_xlslice__parameterized3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[6] in module xlslice_v1_0_5_xlslice__parameterized2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[5] in module xlslice_v1_0_5_xlslice__parameterized2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[3] in module xlslice_v1_0_5_xlslice__parameterized2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[2] in module xlslice_v1_0_5_xlslice__parameterized2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[1] in module xlslice_v1_0_5_xlslice__parameterized2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[0] in module xlslice_v1_0_5_xlslice__parameterized2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[6] in module xlslice_v1_0_5_xlslice__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[5] in module xlslice_v1_0_5_xlslice__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[4] in module xlslice_v1_0_5_xlslice__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[2] in module xlslice_v1_0_5_xlslice__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[1] in module xlslice_v1_0_5_xlslice__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[0] in module xlslice_v1_0_5_xlslice__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[6] in module xlslice_v1_0_5_xlslice__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[5] in module xlslice_v1_0_5_xlslice__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[4] in module xlslice_v1_0_5_xlslice__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[3] in module xlslice_v1_0_5_xlslice__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[1] in module xlslice_v1_0_5_xlslice__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[0] in module xlslice_v1_0_5_xlslice__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[6] in module xlslice_v1_0_5_xlslice is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[5] in module xlslice_v1_0_5_xlslice is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[4] in module xlslice_v1_0_5_xlslice is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[3] in module xlslice_v1_0_5_xlslice is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Din[2] in module xlslice_v1_0_5_xlslice is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2544.266 ; gain = 601.082
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2544.266 ; gain = 601.082
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2544.266 ; gain = 601.082
+---------------------------------------------------------------------------------
+INFO: [Project 1-454] Reading design checkpoint 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0.dcp' for cell 'top_i/Spindle_0'
+INFO: [Project 1-454] Reading design checkpoint 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1.dcp' for cell 'top_i/axi_gpio_0'
+INFO: [Project 1-454] Reading design checkpoint 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/top_axi_smc_1.dcp' for cell 'top_i/axi_smc'
+INFO: [Project 1-454] Reading design checkpoint 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0.dcp' for cell 'top_i/processing_system7_0'
+INFO: [Project 1-454] Reading design checkpoint 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1.dcp' for cell 'top_i/rst_ps7_0_100M'
+INFO: [Project 1-454] Reading design checkpoint 'd:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_stepperDriver_0_0_1/top_stepperDriver_0_0.dcp' for cell 'top_i/stepperDriver_0'
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.143 . Memory (MB): peak = 2545.977 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 24 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2025.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0.xdc] for cell 'top_i/processing_system7_0/inst'
+Finished Parsing XDC File [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0.xdc] for cell 'top_i/processing_system7_0/inst'
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/top_wrapper_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/top_wrapper_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Parsing XDC File [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1_board.xdc] for cell 'top_i/axi_gpio_0/U0'
+Finished Parsing XDC File [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1_board.xdc] for cell 'top_i/axi_gpio_0/U0'
+Parsing XDC File [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1_board.xdc] for cell 'top_i/rst_ps7_0_100M/U0'
+Finished Parsing XDC File [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1_board.xdc] for cell 'top_i/rst_ps7_0_100M/U0'
+Parsing XDC File [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_1/bd_74fb_psr_aclk_0_board.xdc] for cell 'top_i/axi_smc/inst/clk_map/psr_aclk/U0'
+Finished Parsing XDC File [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_1/bd_74fb_psr_aclk_0_board.xdc] for cell 'top_i/axi_smc/inst/clk_map/psr_aclk/U0'
+Parsing XDC File [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/smartconnect.xdc] for cell 'top_i/axi_smc/inst'
+Finished Parsing XDC File [d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/smartconnect.xdc] for cell 'top_i/axi_smc/inst'
+Parsing XDC File [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_baudoutn'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:1]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_ctsn'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:2]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_dcdn'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:3]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_ddis'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:4]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_dsrn'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:5]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_dtrn'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:6]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_out1n'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:7]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_out2n'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:8]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_ri'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:9]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_rtsn'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:10]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_rxd'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:11]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_rxrdyn'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:12]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_txd'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:13]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_txrdyn'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:14]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_0_txd'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:20]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_0_rxd'. [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:21]
+Finished Parsing XDC File [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc]
+WARNING: [Project 1-498] One or more constraints failed evaluation while reading constraint file [D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc] and the design contains unresolved black boxes. These constraints will be read post-synthesis (as long as their source constraint file is marked as used_in_implementation) and should be applied correctly then. You should review the constraints listed in the file [.Xil/top_wrapper_propImpl.xdc] and check the run log file to verify that these constraints were correctly applied.
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Xilinx/2025.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_array_single.tcl]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/top_wrapper_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/top_wrapper_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Xilinx/2025.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/top_wrapper_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/top_wrapper_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+INFO: [Project 1-1714] 39 XPM XDC files have been applied to the design.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 2627.055 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+RTL Elaboration Complete:  : Time (s): cpu = 00:00:12 ; elapsed = 00:00:17 . Memory (MB): peak = 2943.699 ; gain = 1000.516
+66 Infos, 52 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:15 ; elapsed = 00:00:30 . Memory (MB): peak = 2943.699 ; gain = 1185.648
+set_property IOSTANDARD LVCMOS18 [get_ports [list INHC_0]]
+set_property IOSTANDARD LVCMOS33 [get_ports [list INHC_0]]
+save_constraints
+place_ports INHC_0 A20
+save_constraints
+undo
+INFO: [Common 17-17] undo 'place_ports INHC_0 A20'
+undo
+INFO: [Common 17-17] undo 'set_property IOSTANDARD LVCMOS33 [get_ports [list INHC_0]]'
+undo
+INFO: [Common 17-17] undo 'set_property IOSTANDARD LVCMOS18 [get_ports [list INHC_0]]'
+save_constraints
+open_hw_manager
+connect_hw_server -allow_non_jtag
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:0
+INFO: [Labtools 27-3417] Launching cs_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+
+******** Xilinx cs_server v2025.1.0
+  ****** Build date   : May 13 2025-14:15:27
+    **** Build number : 2025.1.1747163727
+      ** Copyright 2017-2022 Xilinx, Inc. All Rights Reserved.
+      ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+
+
+connect_hw_server: Time (s): cpu = 00:00:00 ; elapsed = 00:00:05 . Memory (MB): peak = 3130.930 ; gain = 0.000
+open_hw_target
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/003017BC91A1A
+set_property PROGRAM.FILE {D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-12493] Simulation top is 'top_wrapper'
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/2025.1/Vivado/tps/boost_1_72_0'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'C:/Xilinx/2025.1/Vivado/data/xsim/xsim.ini' copied to run dir:'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-20] The project contains locked or custom IPs. The pre-compiled version of these IPs will not be referenced and the sources from these IP libraries will be compiled locally.
+INFO: [SIM-utils-54] Inspecting design source files for 'top_wrapper' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim/sc_xtlm_top_axi_smc_1.mem'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [SIM-utils-40] Using sources from the locked IP version (pre-compiled version will not be referenced) - xlslice_v1_0_5
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -L axi_vip_v1_1_21 -L smartconnect_v1_0 -L processing_system7_vip_v1_0_23 -L xilinx_vip -prj top_wrapper_vlog.prj"
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v" into library xlslice_v1_0_5
+INFO: [VRFC 10-311] analyzing module xlslice_v1_0_5_xlslice
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_xlslice_0_1/sim/top_xlslice_0_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_xlslice_0_2/sim/top_xlslice_0_2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_2
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_xlslice_0_3/sim/top_xlslice_0_3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_3
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_xlslice_0_4/sim/top_xlslice_0_4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_4
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_xlslice_0_5/sim/top_xlslice_0_5.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_5
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_xlslice_0_6/sim/top_xlslice_0_6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_6
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+"xvhdl --incr --relax -prj top_wrapper_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/new/spindle.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'Spindle'
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/new/stepperDriver.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'stepperDriver'
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0_sim_netlist.vhdl" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'top_processing_system7_0_0_processing_system7_v5_5_processing_system7'
+INFO: [VRFC 10-3107] analyzing entity 'top_processing_system7_0_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_Spindle_0_0/sim/top_Spindle_0_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'top_Spindle_0_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_stepperDriver_0_0_1/sim/top_stepperDriver_0_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'top_stepperDriver_0_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_axi_gpio_0_1/sim/top_axi_gpio_0_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_gpio_0_1'
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_rst_ps7_0_100M_1/sim/top_rst_ps7_0_100M_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'top_rst_ps7_0_100M_1'
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/ip/top_axi_smc_1/top_axi_smc_1_sim_netlist.vhdl" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_upcnt_n'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_xpm_cdc_async_rst'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__1\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__10\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__11\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__12\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__13\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__14\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__15\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__16\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__17\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__18\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__19\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__2\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__20\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__21\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__22\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__23\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__24\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__25\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__26\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__27\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__28\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__29\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__3\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__30\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__31\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__32\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__33\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__4\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__5\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__6\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__7\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__8\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_async_rst__9\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_xpm_cdc_single'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_xpm_cdc_single__1\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_axi2sc_v1_0_10_top'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_exit_v1_0_17_exit'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_mmu_v1_0_15_decerr_slave'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_node_v1_0_18_arb_alg_rr'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_node_v1_0_18_arb_alg_rr_1'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_node_v1_0_18_fi_regulator'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_node_v1_0_18_fi_regulator_3'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_node_v1_0_18_mi_handler'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized0\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized1\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized2\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized3\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized4\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized5\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized6\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized7\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized8\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_sc2axi_v1_0_10_top'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_si_converter_v1_0_15_axilite_conv'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_switchboard_v1_0_8_top'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_switchboard_v1_0_8_top__1\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized0\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized0__1\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized1\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized2\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized3\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized4\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized5\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized6\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_transaction_regulator_v1_0_11_singleorder'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_transaction_regulator_v1_0_11_singleorder_9'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_util_v1_0_4_axi_reg_stall__parameterized0\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_util_v1_0_4_axi_reg_stall__parameterized0_10\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_util_v1_0_4_axi_splitter'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_0\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_4\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_5\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_8\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized1\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized1_2\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_arinsw_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_aroutsw_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_awinsw_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_awoutsw_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_binsw_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_boutsw_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_m00s2a_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_rinsw_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_routsw_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_s00a2s_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_winsw_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_woutsw_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_lpf'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sequence_psr'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_exit_v1_0_17_top'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_mmu_v1_0_15_top'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_node_v1_0_18_reg_fifo'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_node_v1_0_18_reg_fifo_7'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_reg_fifo__parameterized0\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_reg_fifo__parameterized1\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_reg_fifo__parameterized2\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_si_handler__parameterized6\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_si_handler__parameterized7\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_node_v1_0_18_top'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized0\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized1\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized2\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized3\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized4\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized5\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized6\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized7\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized8\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_si_converter_v1_0_15_top'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_transaction_regulator_v1_0_11_top'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_m00arn_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_m00awn_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_m00bn_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_m00e_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_m00rn_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_m00wn_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_s00mmu_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_s00sic_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_s00tr_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_sarn_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_sawn_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_sbn_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_srn_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_swn_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_proc_sys_reset'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_node_v1_0_18_fifo'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_sc_node_v1_0_18_fifo_6'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_fifo__parameterized0\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_fifo__parameterized1\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_fifo__parameterized2\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_psr_aclk_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_m00_exit_pipeline_imp_3RUC2O'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_m00_nodes_imp_PZNZIK'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_s00_entry_pipeline_imp_13LAFTV'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_s00_nodes_imp_170MV21'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized10\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized11\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized12\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized13\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized9\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_clk_map_imp_1W1CU4B'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized10\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized11\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized12\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized13\'
+INFO: [VRFC 10-3107] analyzing entity '\top_axi_smc_1_sc_node_v1_0_18_top__parameterized9\'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_arni_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_awni_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_bni_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_rni_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb_wni_0'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_i_nodes_imp_ENVONP'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_switchboards_imp_1UV7UZX'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1_bd_74fb'
+INFO: [VRFC 10-3107] analyzing entity 'top_axi_smc_1'
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/bd/top/sim/top.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'top'
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'top_wrapper'
+run_program: Time (s): cpu = 00:00:00 ; elapsed = 00:00:16 . Memory (MB): peak = 3130.930 ; gain = 0.000
+INFO: [USF-XSim-69] 'compile' step finished in '17' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L axi_lite_ipif_v3_0_4 -L interrupt_control_v3_1_5 -L axi_gpio_v2_0_37 -L xlslice_v1_0_5 -L proc_sys_reset_v5_0_17 -L xilinx_vip -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot top_wrapper_behav xil_defaultlib.top_wrapper xil_defaultlib.glbl -log elaborate.log"
+Vivado Simulator v2025.1.0
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/2025.1/Vivado/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L axi_lite_ipif_v3_0_4 -L interrupt_control_v3_1_5 -L axi_gpio_v2_0_37 -L xlslice_v1_0_5 -L proc_sys_reset_v5_0_17 -L xilinx_vip -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot top_wrapper_behav xil_defaultlib.top_wrapper xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package unisim.vcomponents
+Compiling package ieee.std_logic_arith
+Compiling package ieee.std_logic_unsigned
+Compiling package synopsys.attributes
+Compiling package ieee.std_logic_misc
+Compiling package axi_lite_ipif_v3_0_4.ipif_pkg
+Compiling package xpm.vcomponents
+Compiling package ieee.vital_timing
+Compiling package ieee.vital_primitives
+Compiling package unisim.vpkg
+Compiling package vl.vl_types
+Compiling module xil_defaultlib.glbl
+Compiling architecture behavioral of entity xil_defaultlib.Spindle [spindle_default]
+Compiling architecture top_spindle_0_0_arch of entity xil_defaultlib.top_Spindle_0_0 [top_spindle_0_0_default]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.pselect_f [\pselect_f(c_ab=2,c_aw=2,c_bar="...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.pselect_f [\pselect_f(c_ab=2,c_aw=2,c_bar="...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.pselect_f [\pselect_f(c_ab=2,c_aw=2,c_bar="...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.pselect_f [\pselect_f(c_ab=2,c_aw=2,c_bar="...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.address_decoder [\address_decoder(c_bus_awidth=9,...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.slave_attachment [\slave_attachment(c_ard_addr_ran...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.axi_lite_ipif [\axi_lite_ipif(c_s_axi_addr_widt...]
+Compiling module xpm.xpm_cdc_array_single(DEST_SYNC_F...
+Compiling architecture imp of entity axi_gpio_v2_0_37.GPIO_Core [\GPIO_Core(c_aw=9,c_gpio_width=7...]
+Compiling architecture imp of entity axi_gpio_v2_0_37.axi_gpio [\axi_gpio(c_family="zynq",c_gpio...]
+Compiling architecture top_axi_gpio_0_1_arch of entity xil_defaultlib.top_axi_gpio_0_1 [top_axi_gpio_0_1_default]
+Compiling architecture gnd_v of entity unisim.GND [gnd_default]
+Compiling architecture fdre_v of entity unisim.FDRE [fdre_default]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_xpm_cdc_single [top_axi_smc_1_xpm_cdc_single_def...]
+Compiling architecture lut1_v of entity unisim.LUT1 [\LUT1(init="0001")(0,3)\]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_single__1\ [\top_axi_smc_1_xpm_cdc_single__1...]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="1111111111111111")...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11101010101010101010...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="11111110")(0,7)\]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_lpf [top_axi_smc_1_lpf_default]
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="0010")(0,3)\]
+Compiling architecture fdse_v of entity unisim.FDSE [fdse_default]
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="0110")(0,3)\]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="01111000")(0,7)\]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0111111110000000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="01111111111111111000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01111111111111111111...]
+Compiling architecture fdre_v of entity unisim.FDRE [\FDRE(init='1')\]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_upcnt_n [top_axi_smc_1_upcnt_n_default]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000010010000")(0...]
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="1000")(0,3)\]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1001000000000000")(0...]
+Compiling architecture fdse_v of entity unisim.FDSE [\FDSE(init='0')\]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000000011000")(0...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sequence_psr [top_axi_smc_1_sequence_psr_defau...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_proc_sys_reset [top_axi_smc_1_proc_sys_reset_def...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_psr_aclk_0 [top_axi_smc_1_bd_74fb_psr_aclk_0...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_clk_map_imp_1W1CU4B [top_axi_smc_1_clk_map_imp_1w1cu4...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11101110001011100010...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111001000000010...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="00001000")(0,7)\]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="01000000")(0,7)\]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_exit_v1_0_17_exit [top_axi_smc_1_sc_exit_v1_0_17_ex...]
+Compiling architecture fdce_v of entity unisim.FDCE [\FDCE(init='1')\]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__1\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_exit_v1_0_17_top [top_axi_smc_1_sc_exit_v1_0_17_to...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_m00e_0 [top_axi_smc_1_bd_74fb_m00e_0_def...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_m00_exit_pipeline_imp_3RUC2O [top_axi_smc_1_m00_exit_pipeline_...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_node_v1_0_18_mi_handler [top_axi_smc_1_sc_node_v1_0_18_mi...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__3\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture lut1_v of entity unisim.LUT1 [\LUT1(init="0010")(0,3)\]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__2\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_node_v1_0_18_top [top_axi_smc_1_sc_node_v1_0_18_to...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_m00arn_0 [top_axi_smc_1_bd_74fb_m00arn_0_d...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized0\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__5\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__4\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized0\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_m00awn_0 [top_axi_smc_1_bd_74fb_m00awn_0_d...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="11101111")(0,7)\]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="00100000")(0,7)\]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized1\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__7\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__6\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized1\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_m00bn_0 [top_axi_smc_1_bd_74fb_m00bn_0_de...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized2\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__9\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__8\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized2\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_m00rn_0 [top_axi_smc_1_bd_74fb_m00rn_0_de...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized3\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__11\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__10\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized3\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_m00wn_0 [top_axi_smc_1_bd_74fb_m00wn_0_de...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_m00_nodes_imp_PZNZIK [top_axi_smc_1_m00_nodes_imp_pznz...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_sc2axi_v1_0_10_top [top_axi_smc_1_sc_sc2axi_v1_0_10_...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_m00s2a_0 [top_axi_smc_1_bd_74fb_m00s2a_0_d...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_axi2sc_v1_0_10_top [top_axi_smc_1_sc_axi2sc_v1_0_10_...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_s00a2s_0 [top_axi_smc_1_bd_74fb_s00a2s_0_d...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000011111111000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000111111111111111...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="00000100")(0,7)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111101111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000010000000000000...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111111111111110")(0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111111111111101")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000000000001")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00010101000100000001...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="01110001")(0,7)\]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000100000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="10101100")(0,7)\]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111101110001011")(0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000000001000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000011000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111111111110...]
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="1011")(0,3)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10111010100010101111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="01010101110000000001...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000101000001010101...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10111000111111111010...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111010111111111000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00001010000010101010...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="10111000")(0,7)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000001010100000...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_util_v1_0_4_axi_reg_stall__parameterized0\ [\top_axi_smc_1_sc_util_v1_0_4_ax...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111111111011111")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111011...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00111010000010101111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10111000101110001011...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111100111111111010...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10111011101100000000...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_util_v1_0_4_axi_reg_stall__parameterized0_10\ [\top_axi_smc_1_sc_util_v1_0_4_ax...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11110000111101011111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10101010101010101010...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10101010101010101010...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10000000000000000000...]
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="0111")(0,3)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01000000000000000100...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="01110100")(0,7)\]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1001111110010000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11100001111111111110...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10101010101010011111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10101010101010101010...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1010100000000010")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10101010101010000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111000000001000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111100000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111100000001111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000000001000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10111000111111111011...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10101010101010101010...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111101111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1011111110101010")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111110111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000000000100")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00001110000011100000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="01010101001111110011...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10000000100000001011...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1011111110000000")(0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1110101000101010")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111000100010000111...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_mmu_v1_0_15_decerr_slave [top_axi_smc_1_sc_mmu_v1_0_15_dec...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000111011111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000111011111111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111111111101111")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000010000000101010...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="01110000000000000000...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0111111111111111")(0...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="00000001")(0,7)\]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111110111111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000010101000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000000001111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000001100000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00001110000011100000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_util_v1_0_4_axi_splitter [top_axi_smc_1_sc_util_v1_0_4_axi...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000100010001000")(0...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="11101010")(0,7)\]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="00101010")(0,7)\]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__12\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_mmu_v1_0_15_top [top_axi_smc_1_sc_mmu_v1_0_15_top...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_s00mmu_0 [top_axi_smc_1_bd_74fb_s00mmu_0_d...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000000100000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111010101010101111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111000000001111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000001111...]
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="0001")(0,3)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111111111000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00100010001000101111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10101010110011111010...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1001010101010101")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111101000011011111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10010101010101010101...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01110000011100000111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="1110")(0,3)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111101100000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111110000011101111...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="01101010")(0,7)\]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0110101010101010")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="01101010101010101010...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01101010101010101010...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="10001111")(0,7)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111110111011111011...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111101110111111101...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0001111111111111")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111101101111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11110110111111111111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1001010101101010")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10010101010101010110...]
+Compiling architecture carry4_v of entity unisim.CARRY4 [carry4_default]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="10000000")(0,7)\]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="01111111100000001000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000001111111110000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000111101111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01000010101010001010...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1010101011000000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000001010101000111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000001011101101111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00111101011111010110...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01100110011110001000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111000111110001111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1010100000000000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111010101110...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000011100001")(0...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="11100000")(0,7)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10111011101110111011...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111010...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01000100010001000100...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11000011110000100000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10011000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1000000000000000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000000000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="01111111111111110000...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111111000010000")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111000100000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000001000000010000...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0101000000110000")(0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111111011110010")(0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111110010100000")(0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1010000011000000")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="00001011")(0,7)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00100010111100101111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10011001000010011001...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1101111111011101")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111101111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0100111111110100")(0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0110111111110110")(0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0100111101000100")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01101111111101101111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="01010101011010101010...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10100110010101101010...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10100110101001101010...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="10011010")(0,7)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000001010101001111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000001011101100101...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01000010101010001010...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="00011110")(0,7)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00011111111101010100...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11010101001010101010...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01010101010101010000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01111111011111110000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00010001000100001111...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="00000010")(0,7)\]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00010000111111110001...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111011111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111111101110000")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10010000000010010000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11011101110011001101...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000001000000010000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00010000000000000001...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111000000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="01111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000010100100001001...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00001001010000000000...]
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="1001")(0,3)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111011...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111101010000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111110...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111110111011111110...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11101111111011101111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10001111100010001000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111011111110...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00011101110100100001...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10111000101110001011...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="01111111000000001000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10101111010101011111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10101000100000001000...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111100010001000")(0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111000111110000")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111000000101111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0001000100010000")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111111110000...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000000101010")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111010111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000010101000100")(0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01000000010000000100...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11110000101000001111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111000000001111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11110000000000001111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111000100001111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000111100100000...]
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="0100")(0,3)\]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="00101000")(0,7)\]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0010101010000000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00101010101010101000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01110000111100001111...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000000100011")(0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1110111011100000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000011000000101010...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10001000100011111000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000100000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11101110111000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000010000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000001000011110000...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="0000000100000000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000000010000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00101010101010101010...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000100010000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00010001000000000000...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1110111011000000")(0...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000010001000101000...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="10110000")(0,7)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00110000001100000101...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01010101111111110000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01011111111111110000...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_si_converter_v1_0_15_axilite_conv [top_axi_smc_1_sc_si_converter_v1...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__13\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_si_converter_v1_0_15_top [top_axi_smc_1_sc_si_converter_v1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_s00sic_0 [top_axi_smc_1_bd_74fb_s00sic_0_d...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11110011111110111111...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_transaction_regulator_v1_0_11_singleorder [top_axi_smc_1_sc_transaction_reg...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11110011001100111111...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_transaction_regulator_v1_0_11_singleorder_9 [top_axi_smc_1_sc_transaction_reg...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__14\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_transaction_regulator_v1_0_11_top [top_axi_smc_1_sc_transaction_reg...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_s00tr_0 [top_axi_smc_1_bd_74fb_s00tr_0_de...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_s00_entry_pipeline_imp_13LAFTV [top_axi_smc_1_s00_entry_pipeline...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized4\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__16\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__15\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized4\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_sarn_0 [top_axi_smc_1_bd_74fb_sarn_0_def...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized5\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__18\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__17\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized5\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_sawn_0 [top_axi_smc_1_bd_74fb_sawn_0_def...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized6\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__20\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__19\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized6\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_sbn_0 [top_axi_smc_1_bd_74fb_sbn_0_defa...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized7\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__22\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__21\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized7\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_srn_0 [top_axi_smc_1_bd_74fb_srn_0_defa...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized8\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__24\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__23\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized8\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_swn_0 [top_axi_smc_1_bd_74fb_swn_0_defa...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_s00_nodes_imp_170MV21 [top_axi_smc_1_s00_nodes_imp_170m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_switchboard_v1_0_8_top__1\ [\top_axi_smc_1_sc_switchboard_v1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_arinsw_0 [top_axi_smc_1_bd_74fb_arinsw_0_d...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized0__1\ [\top_axi_smc_1_sc_switchboard_v1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_aroutsw_0 [top_axi_smc_1_bd_74fb_aroutsw_0_...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_switchboard_v1_0_8_top [top_axi_smc_1_sc_switchboard_v1_...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_awinsw_0 [top_axi_smc_1_bd_74fb_awinsw_0_d...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized0\ [\top_axi_smc_1_sc_switchboard_v1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_awoutsw_0 [top_axi_smc_1_bd_74fb_awoutsw_0_...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized1\ [\top_axi_smc_1_sc_switchboard_v1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_binsw_0 [top_axi_smc_1_bd_74fb_binsw_0_de...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized2\ [\top_axi_smc_1_sc_switchboard_v1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_boutsw_0 [top_axi_smc_1_bd_74fb_boutsw_0_d...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111111110001...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_8\ [\top_axi_smc_1_sc_util_v1_0_4_co...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_node_v1_0_18_reg_fifo_7 [top_axi_smc_1_sc_node_v1_0_18_re...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_node_v1_0_18_fifo_6 [top_axi_smc_1_sc_node_v1_0_18_fi...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized9\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__26\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__25\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized9\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_arni_0 [top_axi_smc_1_bd_74fb_arni_0_def...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_5\ [\top_axi_smc_1_sc_util_v1_0_4_co...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_node_v1_0_18_reg_fifo [top_axi_smc_1_sc_node_v1_0_18_re...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_node_v1_0_18_fifo [top_axi_smc_1_sc_node_v1_0_18_fi...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized10\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__28\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__27\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized10\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_awni_0 [top_axi_smc_1_bd_74fb_awni_0_def...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_node_v1_0_18_fi_regulator_3 [top_axi_smc_1_sc_node_v1_0_18_fi...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10111111111111111000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000000000110...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111111111110100...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_4\ [\top_axi_smc_1_sc_util_v1_0_4_co...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_reg_fifo__parameterized0\ [\top_axi_smc_1_sc_node_v1_0_18_r...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_fifo__parameterized0\ [\top_axi_smc_1_sc_node_v1_0_18_f...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized11\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111111100001000")(0...]
+Compiling architecture lut3_v of entity unisim.LUT3 [\LUT3(init="11010000")(0,7)\]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_node_v1_0_18_arb_alg_rr_1 [top_axi_smc_1_sc_node_v1_0_18_ar...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10000000011111110111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11100111011101110111...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111111111111111...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized1_2\ [\top_axi_smc_1_sc_util_v1_0_4_co...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_si_handler__parameterized6\ [\top_axi_smc_1_sc_node_v1_0_18_s...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__30\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__29\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized11\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_bni_0 [top_axi_smc_1_bd_74fb_bni_0_defa...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_node_v1_0_18_fi_regulator [top_axi_smc_1_sc_node_v1_0_18_fi...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_0\ [\top_axi_smc_1_sc_util_v1_0_4_co...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_reg_fifo__parameterized1\ [\top_axi_smc_1_sc_node_v1_0_18_r...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_fifo__parameterized1\ [\top_axi_smc_1_sc_node_v1_0_18_f...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized12\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_sc_node_v1_0_18_arb_alg_rr [top_axi_smc_1_sc_node_v1_0_18_ar...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized1\ [\top_axi_smc_1_sc_util_v1_0_4_co...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_si_handler__parameterized7\ [\top_axi_smc_1_sc_node_v1_0_18_s...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__32\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__31\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized12\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_rni_0 [top_axi_smc_1_bd_74fb_rni_0_defa...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0\ [\top_axi_smc_1_sc_util_v1_0_4_co...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_reg_fifo__parameterized2\ [\top_axi_smc_1_sc_node_v1_0_18_r...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_fifo__parameterized2\ [\top_axi_smc_1_sc_node_v1_0_18_f...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized13\ [\top_axi_smc_1_sc_node_v1_0_18_m...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_xpm_cdc_async_rst [top_axi_smc_1_xpm_cdc_async_rst_...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_xpm_cdc_async_rst__33\ [\top_axi_smc_1_xpm_cdc_async_rst...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_node_v1_0_18_top__parameterized13\ [\top_axi_smc_1_sc_node_v1_0_18_t...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_wni_0 [top_axi_smc_1_bd_74fb_wni_0_defa...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_i_nodes_imp_ENVONP [top_axi_smc_1_i_nodes_imp_envonp...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized3\ [\top_axi_smc_1_sc_switchboard_v1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_rinsw_0 [top_axi_smc_1_bd_74fb_rinsw_0_de...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized4\ [\top_axi_smc_1_sc_switchboard_v1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_routsw_0 [top_axi_smc_1_bd_74fb_routsw_0_d...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized5\ [\top_axi_smc_1_sc_switchboard_v1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_winsw_0 [top_axi_smc_1_bd_74fb_winsw_0_de...]
+Compiling architecture structure of entity xil_defaultlib.\top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized6\ [\top_axi_smc_1_sc_switchboard_v1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb_woutsw_0 [top_axi_smc_1_bd_74fb_woutsw_0_d...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_switchboards_imp_1UV7UZX [top_axi_smc_1_switchboards_imp_1...]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1_bd_74fb [top_axi_smc_1_bd_74fb_default]
+Compiling architecture structure of entity xil_defaultlib.top_axi_smc_1 [top_axi_smc_1_default]
+Compiling architecture vcc_v of entity unisim.VCC [vcc_default]
+Compiling architecture bibuf_v of entity unisim.BIBUF [bibuf_default]
+Compiling architecture ps7_v of entity unisim.PS7 [\PS7:top_wrapper:top_i:processin...]
+Compiling architecture bufg_v of entity unisim.BUFG [bufg_default]
+Compiling architecture structure of entity xil_defaultlib.top_processing_system7_0_0_processing_system7_v5_5_processing_system7 [\top_processing_system7_0_0_proc...]
+Compiling architecture structure of entity xil_defaultlib.top_processing_system7_0_0 [\top_processing_system7_0_0:top_...]
+Compiling architecture srl16_v of entity unisim.SRL16 [\SRL16(init="1111111111111111")(...]
+Compiling module xpm.xpm_cdc_single(DEST_SYNC_FF=4,IN...
+Compiling architecture imp of entity proc_sys_reset_v5_0_17.lpf [\lpf(c_ext_rst_width=4,c_aux_rst...]
+Compiling architecture imp of entity proc_sys_reset_v5_0_17.upcnt_n [\upcnt_n(c_size=6)\]
+Compiling architecture imp of entity proc_sys_reset_v5_0_17.sequence_psr [sequence_psr_default]
+Compiling architecture imp of entity proc_sys_reset_v5_0_17.proc_sys_reset [\proc_sys_reset(c_family="zynq",...]
+Compiling architecture top_rst_ps7_0_100m_1_arch of entity xil_defaultlib.top_rst_ps7_0_100M_1 [top_rst_ps7_0_100m_1_default]
+Compiling architecture behavioral of entity xil_defaultlib.stepperDriver [stepperdriver_default]
+Compiling architecture top_stepperdriver_0_0_arch of entity xil_defaultlib.top_stepperDriver_0_0 [top_stepperdriver_0_0_default]
+Compiling module xlslice_v1_0_5.xlslice_v1_0_5_xlslice(DIN_WIDTH...
+Compiling module xil_defaultlib.top_xlslice_0_1
+Compiling module xlslice_v1_0_5.xlslice_v1_0_5_xlslice(DIN_WIDTH...
+Compiling module xil_defaultlib.top_xlslice_0_2
+Compiling module xlslice_v1_0_5.xlslice_v1_0_5_xlslice(DIN_WIDTH...
+Compiling module xil_defaultlib.top_xlslice_0_3
+Compiling module xlslice_v1_0_5.xlslice_v1_0_5_xlslice(DIN_WIDTH...
+Compiling module xil_defaultlib.top_xlslice_0_4
+Compiling module xlslice_v1_0_5.xlslice_v1_0_5_xlslice(DIN_WIDTH...
+Compiling module xil_defaultlib.top_xlslice_0_5
+Compiling module xlslice_v1_0_5.xlslice_v1_0_5_xlslice(DIN_WIDTH...
+Compiling module xil_defaultlib.top_xlslice_0_6
+Compiling architecture structure of entity xil_defaultlib.top [\top:top_wrapper:top_i:\]
+Compiling architecture structure of entity xil_defaultlib.top_wrapper
+Built simulation snapshot top_wrapper_behav
+run_program: Time (s): cpu = 00:00:01 ; elapsed = 00:01:17 . Memory (MB): peak = 3130.930 ; gain = 0.000
+INFO: [USF-XSim-69] 'elaborate' step finished in '77' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "top_wrapper_behav -key {Behavioral:sim_1:Functional:top_wrapper} -tclbatch {top_wrapper.tcl} -protoinst "protoinst_files/bd_74fb.protoinst" -protoinst "protoinst_files/top.protoinst" -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+INFO: [Wavedata 42-565] Reading protoinst file protoinst_files/bd_74fb.protoinst
+WARNING: [Wavedata 42-558] Couldn't load one or more protocol instances from protoinst file protoinst_files/bd_74fb.protoinst for the following reason(s):
+There are no instances of module "bd_74fb" in the design.
+
+INFO: [Wavedata 42-565] Reading protoinst file protoinst_files/top.protoinst
+INFO: [Wavedata 42-564]   Found protocol instance at /top_wrapper/top_i//axi_gpio_0/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_wrapper/top_i//axi_smc/M00_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_wrapper/top_i//axi_smc/S00_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_wrapper/top_i//processing_system7_0/M_AXI_GP0
+Time resolution is 1 ps
+source top_wrapper.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+Note: Warning on instance :top_wrapper:top_i:processing_system7_0:inst:PS7_i: The Zynq-7000 All Programmable SoC does not have a simulation model. Behavioral simulation of Zynq-7000 (e.g. Zynq PS7 block) is not supported in any simulator. Please use the AXI BFM simulation model to verify the AXI transactions
+Time: 0 ps  Iteration: 0  Process: /top_wrapper/top_i/processing_system7_0/inst/PS7_i/line__663  File: /proj/xbuilds/SWIP/2025.1_0521_0003/installs/lin64/2025.1/data/vhdl/src/unisims/primitive/PS7.vhd
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'top_wrapper_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:03 ; elapsed = 00:01:43 . Memory (MB): peak = 3269.387 ; gain = 138.457
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+set_property top Spindle [current_fileset]
+set_property top_lib xil_defaultlib [current_fileset]
+set_property top_arch Behavioral [current_fileset]
+set_property top_file D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/new/spindle.vhd [current_fileset]
+update_compile_order -fileset sources_1
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-12493] Simulation top is 'top_wrapper'
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/2025.1/Vivado/tps/boost_1_72_0'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'C:/Xilinx/2025.1/Vivado/data/xsim/xsim.ini' copied to run dir:'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-20] The project contains locked or custom IPs. The pre-compiled version of these IPs will not be referenced and the sources from these IP libraries will be compiled locally.
+INFO: [SIM-utils-54] Inspecting design source files for 'top_wrapper' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim/sc_xtlm_top_axi_smc_1.mem'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [SIM-utils-40] Using sources from the locked IP version (pre-compiled version will not be referenced) - xlslice_v1_0_5
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -L axi_vip_v1_1_21 -L smartconnect_v1_0 -L processing_system7_vip_v1_0_23 -L xilinx_vip -prj top_wrapper_vlog.prj"
+"xvhdl --incr --relax -prj top_wrapper_vhdl.prj"
+INFO: [USF-XSim-69] 'compile' step finished in '3' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L axi_lite_ipif_v3_0_4 -L interrupt_control_v3_1_5 -L axi_gpio_v2_0_37 -L xlslice_v1_0_5 -L proc_sys_reset_v5_0_17 -L xilinx_vip -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot top_wrapper_behav xil_defaultlib.top_wrapper xil_defaultlib.glbl -log elaborate.log"
+Vivado Simulator v2025.1.0
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/2025.1/Vivado/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L axi_lite_ipif_v3_0_4 -L interrupt_control_v3_1_5 -L axi_gpio_v2_0_37 -L xlslice_v1_0_5 -L proc_sys_reset_v5_0_17 -L xilinx_vip -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot top_wrapper_behav xil_defaultlib.top_wrapper xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+run_program: Time (s): cpu = 00:00:01 ; elapsed = 00:00:07 . Memory (MB): peak = 3269.387 ; gain = 0.000
+INFO: [USF-XSim-69] 'elaborate' step finished in '7' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "top_wrapper_behav -key {Behavioral:sim_1:Functional:top_wrapper} -tclbatch {top_wrapper.tcl} -protoinst "protoinst_files/bd_74fb.protoinst" -protoinst "protoinst_files/top.protoinst" -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+INFO: [Wavedata 42-565] Reading protoinst file protoinst_files/bd_74fb.protoinst
+WARNING: [Wavedata 42-558] Couldn't load one or more protocol instances from protoinst file protoinst_files/bd_74fb.protoinst for the following reason(s):
+There are no instances of module "bd_74fb" in the design.
+
+INFO: [Wavedata 42-565] Reading protoinst file protoinst_files/top.protoinst
+INFO: [Wavedata 42-564]   Found protocol instance at /top_wrapper/top_i//axi_gpio_0/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_wrapper/top_i//axi_smc/M00_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_wrapper/top_i//axi_smc/S00_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_wrapper/top_i//processing_system7_0/M_AXI_GP0
+Time resolution is 1 ps
+source top_wrapper.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+Note: Warning on instance :top_wrapper:top_i:processing_system7_0:inst:PS7_i: The Zynq-7000 All Programmable SoC does not have a simulation model. Behavioral simulation of Zynq-7000 (e.g. Zynq PS7 block) is not supported in any simulator. Please use the AXI BFM simulation model to verify the AXI transactions
+Time: 0 ps  Iteration: 0  Process: /top_wrapper/top_i/processing_system7_0/inst/PS7_i/line__663  File: /proj/xbuilds/SWIP/2025.1_0521_0003/installs/lin64/2025.1/data/vhdl/src/unisims/primitive/PS7.vhd
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'top_wrapper_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:02 ; elapsed = 00:00:17 . Memory (MB): peak = 3275.191 ; gain = 5.805
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+set_property top top_wrapper [current_fileset]
+update_compile_order -fileset sources_1
+set_property top Spindle [get_filesets sim_1]
+set_property top_lib xil_defaultlib [get_filesets sim_1]
+set_property top_arch Behavioral [get_filesets sim_1]
+set_property top_file D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/new/spindle.vhd [get_filesets sim_1]
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-12493] Simulation top is 'Spindle'
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/2025.1/Vivado/tps/boost_1_72_0'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'C:/Xilinx/2025.1/Vivado/data/xsim/xsim.ini' copied to run dir:'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-20] The project contains locked or custom IPs. The pre-compiled version of these IPs will not be referenced and the sources from these IP libraries will be compiled locally.
+INFO: [SIM-utils-54] Inspecting design source files for 'Spindle' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim/sc_xtlm_top_axi_smc_1.mem'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -L axi_vip_v1_1_21 -L smartconnect_v1_0 -L processing_system7_vip_v1_0_23 -L xilinx_vip -prj Spindle_vlog.prj"
+"xvhdl --incr --relax -prj Spindle_vhdl.prj"
+INFO: [USF-XSim-69] 'compile' step finished in '3' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L xilinx_vip -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot Spindle_behav xil_defaultlib.Spindle xil_defaultlib.glbl -log elaborate.log"
+Vivado Simulator v2025.1.0
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/2025.1/Vivado/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L xilinx_vip -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot Spindle_behav xil_defaultlib.Spindle xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling module xil_defaultlib.glbl
+Compiling architecture behavioral of entity xil_defaultlib.spindle
+Built simulation snapshot Spindle_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '3' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "Spindle_behav -key {Behavioral:sim_1:Functional:Spindle} -tclbatch {Spindle.tcl} -protoinst "protoinst_files/bd_74fb.protoinst" -protoinst "protoinst_files/top.protoinst" -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+INFO: [Wavedata 42-565] Reading protoinst file protoinst_files/bd_74fb.protoinst
+WARNING: [Wavedata 42-558] Couldn't load one or more protocol instances from protoinst file protoinst_files/bd_74fb.protoinst for the following reason(s):
+There are no instances of module "bd_74fb" in the design.
+
+INFO: [Wavedata 42-565] Reading protoinst file protoinst_files/top.protoinst
+WARNING: [Wavedata 42-558] Couldn't load one or more protocol instances from protoinst file protoinst_files/top.protoinst for the following reason(s):
+There are no instances of module "top" in the design.
+
+Time resolution is 1 ps
+source Spindle.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'Spindle_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:02 ; elapsed = 00:00:12 . Memory (MB): peak = 3780.617 ; gain = 15.336
+add_force {/Spindle/clk} -radix bin {0 0ns} {1 4000ps} -repeat_every 8000ps
+add_force {/Spindle/en} -radix bin {1 0ns}
+add_force {/Spindle/dir} -radix bin {0 0ns}
+add_force {/Spindle/speed} -radix bin {01 0ns}
+add_force {/Spindle/kill} -radix bin {0 0ns}
+run 10 us
+run 1 ms
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+launch_simulation -mode post-implementation -type timing
+Command: launch_simulation  -mode post-implementation -type timing
+INFO: [Vivado 12-12493] Simulation top is 'Spindle'
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching post-implementation timing simulation in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/2025.1/Vivado/tps/boost_1_72_0'
+INFO: [SIM-utils-20] The target language is set to VHDL, it is not supported for simulation type 'timing', using Verilog instead.
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.135 . Memory (MB): peak = 4767.398 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 24 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2025.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Read ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 4767.398 ; gain = 0.000
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+INFO: [Designutils 20-5722] Start Reading Physical Databases.
+Reading placement.
+Read Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 4767.398 ; gain = 0.000
+Reading placer database...
+Read Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 4767.398 ; gain = 0.000
+Read PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.128 . Memory (MB): peak = 4767.398 ; gain = 0.000
+Read PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 4767.398 ; gain = 0.000
+Reading routing.
+Read RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.026 . Memory (MB): peak = 4767.398 ; gain = 0.000
+Read Physdb Files: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.186 . Memory (MB): peak = 4767.398 ; gain = 0.000
+Restored from archive | CPU: 0.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.187 . Memory (MB): peak = 4767.398 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 4767.398 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+open_run: Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 4767.398 ; gain = 0.000
+INFO: [SIM-utils-31] Writing simulation netlist file for design 'impl_1'...
+INFO: [SIM-utils-32] write_verilog -mode timesim -nolib -sdf_anno true -force -file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim/Spindle_time_impl.v"
+INFO: [SIM-utils-34] Writing SDF file...
+INFO: [SIM-utils-35] write_sdf -mode timesim -process_corner slow -force -file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim/Spindle_time_impl.sdf"
+INFO: [SIM-utils-36] Netlist generated:D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim/Spindle_time_impl.v
+INFO: [SIM-utils-37] SDF generated:D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim/Spindle_time_impl.sdf
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'C:/Xilinx/2025.1/Vivado/data/xsim/xsim.ini' copied to run dir:'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim'
+INFO: [SIM-utils-20] The project contains locked or custom IPs. The pre-compiled version of these IPs will not be referenced and the sources from these IP libraries will be compiled locally.
+INFO: [SIM-utils-54] Inspecting design source files for 'Spindle' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim/sc_xtlm_top_axi_smc_1.mem'
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim'
+"xvlog --incr --relax -L axi_vip_v1_1_21 -L smartconnect_v1_0 -L processing_system7_vip_v1_0_23 -L xilinx_vip -prj Spindle_vlog.prj"
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim/Spindle_time_impl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module top
+INFO: [VRFC 10-311] analyzing module top_Spindle_0_0
+INFO: [VRFC 10-311] analyzing module top_Spindle_0_0_Spindle
+INFO: [VRFC 10-311] analyzing module top_axi_gpio_0_1
+INFO: [VRFC 10-311] analyzing module top_axi_gpio_0_1_GPIO_Core
+INFO: [VRFC 10-311] analyzing module top_axi_gpio_0_1_address_decoder
+INFO: [VRFC 10-311] analyzing module top_axi_gpio_0_1_axi_gpio
+INFO: [VRFC 10-311] analyzing module top_axi_gpio_0_1_axi_lite_ipif
+INFO: [VRFC 10-311] analyzing module top_axi_gpio_0_1_pselect_f
+INFO: [VRFC 10-311] analyzing module top_axi_gpio_0_1_pselect_f__parameterized1
+INFO: [VRFC 10-311] analyzing module top_axi_gpio_0_1_slave_attachment
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_arinsw_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_arni_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_aroutsw_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_awinsw_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_awni_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_awoutsw_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_binsw_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_bni_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_boutsw_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_m00arn_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_m00awn_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_m00bn_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_m00e_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_m00rn_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_m00s2a_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_m00wn_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_psr_aclk_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_rinsw_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_rni_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_routsw_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_s00a2s_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_s00mmu_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_s00sic_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_s00tr_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_sarn_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_sawn_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_sbn_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_srn_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_swn_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_winsw_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_wni_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_bd_74fb_woutsw_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_clk_map_imp_1W1CU4B
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_i_nodes_imp_ENVONP
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_lpf
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_m00_exit_pipeline_imp_3RUC2O
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_m00_nodes_imp_PZNZIK
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_proc_sys_reset
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_s00_entry_pipeline_imp_13LAFTV
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_s00_nodes_imp_170MV21
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sequence_psr
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_switchboards_imp_1UV7UZX
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_upcnt_n
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__10
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__12
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__13
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__14
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__15
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__17
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__19
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__2
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__21
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__23
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__25
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__27
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__29
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__31
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__33
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__4
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__6
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_async_rst__8
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_single
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_xpm_cdc_single__1
+INFO: [VRFC 10-311] analyzing module top_processing_system7_0_0
+INFO: [VRFC 10-311] analyzing module top_processing_system7_0_0_processing_system7_v5_5_processing_system7
+INFO: [VRFC 10-311] analyzing module top_rst_ps7_0_100M_1
+INFO: [VRFC 10-311] analyzing module top_rst_ps7_0_100M_1_lpf
+INFO: [VRFC 10-311] analyzing module top_rst_ps7_0_100M_1_proc_sys_reset
+INFO: [VRFC 10-311] analyzing module top_rst_ps7_0_100M_1_sequence_psr
+INFO: [VRFC 10-311] analyzing module top_rst_ps7_0_100M_1_upcnt_n
+INFO: [VRFC 10-311] analyzing module top_rst_ps7_0_100M_1_xpm_cdc_single
+INFO: [VRFC 10-311] analyzing module top_rst_ps7_0_100M_1_xpm_cdc_single__1
+INFO: [VRFC 10-311] analyzing module top_stepperDriver_0_0
+INFO: [VRFC 10-311] analyzing module top_stepperDriver_0_0_stepperDriver
+INFO: [VRFC 10-311] analyzing module top_wrapper
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_1
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_2
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_3
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_4
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_5
+INFO: [VRFC 10-311] analyzing module top_xlslice_0_6
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_axi2sc_v1_0_10_top
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_exit_v1_0_17_exit
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_exit_v1_0_17_top
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_mmu_v1_0_15_decerr_slave
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_mmu_v1_0_15_top
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_arb_alg_rr
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_arb_alg_rr_1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_fi_regulator
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_fi_regulator_3
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_fifo
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_fifo_6
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_fifo__parameterized0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_fifo__parameterized1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_fifo__parameterized2
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized10
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized11
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized12
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized13
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized2
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized3
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized4
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized5
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized6
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized7
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized8
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_mi_handler__parameterized9
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_reg_fifo
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_reg_fifo_7
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_reg_fifo__parameterized0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_reg_fifo__parameterized1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_reg_fifo__parameterized2
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_si_handler__parameterized6
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_si_handler__parameterized7
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized10
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized11
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized12
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized13
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized2
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized3
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized4
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized5
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized6
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized7
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized8
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_node_v1_0_18_top__parameterized9
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_sc2axi_v1_0_10_top
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_si_converter_v1_0_15_axilite_conv
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_si_converter_v1_0_15_top
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_switchboard_v1_0_8_top
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_switchboard_v1_0_8_top__1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized0__1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized2
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized3
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized4
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized5
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_switchboard_v1_0_8_top__parameterized6
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_transaction_regulator_v1_0_11_singleorder
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_transaction_regulator_v1_0_11_singleorder_9
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_transaction_regulator_v1_0_11_top
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_util_v1_0_4_axi_reg_stall__parameterized0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_util_v1_0_4_axi_reg_stall__parameterized0_10
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_util_v1_0_4_axi_splitter
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_0
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_4
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_5
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_util_v1_0_4_counter__parameterized0_8
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_util_v1_0_4_counter__parameterized1
+INFO: [VRFC 10-311] analyzing module top_axi_smc_1_sc_util_v1_0_4_counter__parameterized1_2
+INFO: [VRFC 10-311] analyzing module glbl
+"xvhdl --incr --relax -prj Spindle_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/new/spindle.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'Spindle'
+run_program: Time (s): cpu = 00:00:01 ; elapsed = 00:00:09 . Memory (MB): peak = 4767.398 ; gain = 0.000
+INFO: [USF-XSim-69] 'compile' step finished in '9' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim'
+"xelab --incr --debug typical --relax --mt 2 --maxdelay -L xil_defaultlib -L xilinx_vip -L simprims_ver -L secureip --snapshot Spindle_time_impl -transport_int_delays -pulse_r 0 -pulse_int_r 0 -pulse_e 0 -pulse_int_e 0 xil_defaultlib.Spindle xil_defaultlib.glbl -log elaborate.log"
+Vivado Simulator v2025.1.0
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/2025.1/Vivado/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 --maxdelay -L xil_defaultlib -L xilinx_vip -L simprims_ver -L secureip --snapshot Spindle_time_impl -transport_int_delays -pulse_r 0 -pulse_int_r 0 -pulse_e 0 -pulse_int_e 0 xil_defaultlib.Spindle xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling module xil_defaultlib.glbl
+Compiling architecture behavioral of entity xil_defaultlib.spindle
+Built simulation snapshot Spindle_time_impl
+INFO: [USF-XSim-69] 'elaborate' step finished in '3' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.sim/sim_1/impl/timing/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "Spindle_time_impl -key {Post-Implementation:sim_1:Timing:Spindle} -tclbatch {Spindle.tcl} -protoinst "protoinst_files/bd_74fb.protoinst" -protoinst "protoinst_files/top.protoinst" -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+INFO: [Wavedata 42-565] Reading protoinst file protoinst_files/bd_74fb.protoinst
+WARNING: [Wavedata 42-558] Couldn't load one or more protocol instances from protoinst file protoinst_files/bd_74fb.protoinst for the following reason(s):
+There are no instances of module "bd_74fb" in the design.
+
+INFO: [Wavedata 42-565] Reading protoinst file protoinst_files/top.protoinst
+WARNING: [Wavedata 42-558] Couldn't load one or more protocol instances from protoinst file protoinst_files/top.protoinst for the following reason(s):
+There are no instances of module "top" in the design.
+
+Time resolution is 1 ps
+source Spindle.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'Spindle_time_impl' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:13 ; elapsed = 00:00:31 . Memory (MB): peak = 4767.398 ; gain = 0.000
+RESTART
+invalid command name "RESTART"
+restart
+INFO: [Wavedata 42-604] Simulation restarted
+add_force {/Spindle/clk} -radix bin {1 0ns} {0 4000ps} -repeat_every 8000ps
+add_force {/Spindle/en} -radix bin {1 0ns}
+add_force {/Spindle/dir} -radix bin {0 0ns}
+add_force {/Spindle/speed} -radix bin {01 0ns}
+add_force {/Spindle/kill} -radix bin {0 0ns}
+run 1 ms
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+open_bd_design {D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd}
+Reading block design file <D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd>...
+Adding component instance block -- xilinx.com:ip:processing_system7:5.5 - processing_system7_0
+Adding component instance block -- xilinx.com:module_ref:Spindle:1.0 - Spindle_0
+Adding component instance block -- xilinx.com:module_ref:stepperDriver:1.0 - stepperDriver_0
+Adding component instance block -- xilinx.com:ip:axi_gpio:2.0 - axi_gpio_0
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_0
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_1
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_2
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_3
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_4
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_5
+Adding component instance block -- xilinx.com:ip:proc_sys_reset:5.0 - rst_ps7_0_100M
+Adding component instance block -- xilinx.com:ip:smartconnect:1.0 - axi_smc
+Successfully read diagram <top> from block design file <D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd>
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\new\spindle.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+Wrote  : <D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ui/bd_2ae56375.ui> 
+generate_target all [get_files  D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:07 ; elapsed = 00:00:13 . Memory (MB): peak = 4767.398 ; gain = 0.000
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 16
+[Thu Jan 29 16:53:46 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/questa} {riviera=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files -ipstatic_source_dir D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1
+
+reset_run top_Spindle_0_0_synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\new\spindle.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\new\spindle.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\new\spindle.vhd:]
+[Thu Jan 29 16:54:28 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/runme.log
+[Thu Jan 29 16:54:28 2026] Launched impl_1...
+Run output will be captured here: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1/runme.log
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:08 ; elapsed = 00:00:13 . Memory (MB): peak = 4959.004 ; gain = 0.000
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 16
+[Thu Jan 29 16:56:35 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/questa} {riviera=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files -ipstatic_source_dir D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+close_bd_design [get_bd_designs top]
+report_ip_status -name ip_status 
+reset_run synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+[Thu Jan 29 16:57:56 2026] Launched synth_1...
+Run output will be captured here: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/runme.log
+[Thu Jan 29 16:57:56 2026] Launched impl_1...
+Run output will be captured here: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Reading block design file <D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd>...
+Adding component instance block -- xilinx.com:ip:processing_system7:5.5 - processing_system7_0
+Adding component instance block -- xilinx.com:module_ref:Spindle:1.0 - Spindle_0
+Adding component instance block -- xilinx.com:module_ref:stepperDriver:1.0 - stepperDriver_0
+Adding component instance block -- xilinx.com:ip:axi_gpio:2.0 - axi_gpio_0
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_0
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_1
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_2
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_3
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_4
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_5
+Adding component instance block -- xilinx.com:ip:proc_sys_reset:5.0 - rst_ps7_0_100M
+Adding component instance block -- xilinx.com:ip:smartconnect:1.0 - axi_smc
+Successfully read diagram <top> from block design file <D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd>
+Upgrading 'D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\new\spindle.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+generate_target all [get_files  D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File d:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:07 ; elapsed = 00:00:13 . Memory (MB): peak = 4959.004 ; gain = 0.000
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 16
+[Thu Jan 29 17:11:00 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/questa} {riviera=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files -ipstatic_source_dir D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\new\spindle.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\new\spindle.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\new\spindle.vhd:]
+ERROR: [Common 17-180] Spawn failed: The operation completed successfully.
+
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+[Thu Jan 29 17:11:19 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/runme.log
+[Thu Jan 29 17:11:19 2026] Launched impl_1...
+Run output will be captured here: D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1/runme.log
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.srcs\sources_1\new\spindle.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.gen\sources_1\bd\top\hdl\top_wrapper.vhd:]
+ERROR: [Common 17-180] Spawn failed: The operation completed successfully.
+
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+exit
+INFO: [Common 17-206] Exiting Vivado at Thu Jan 29 17:19:40 2026...

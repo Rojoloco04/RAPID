@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2025.1 (64-bit)
+# SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Mon Dec  1 15:01:46 2025
+# Process ID         : 13156
+# Current directory  : E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_rst_ps7_0_100M_1_synth_1
+# Command line       : vivado.exe -log top_rst_ps7_0_100M_1.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top_rst_ps7_0_100M_1.tcl
+# Log file           : E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_rst_ps7_0_100M_1_synth_1/top_rst_ps7_0_100M_1.vds
+# Journal file       : E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_rst_ps7_0_100M_1_synth_1\vivado.jou
+# Running On         : MDD-ECE-HHP8853
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 22631
+# Processor Detail   : Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz
+# CPU Frequency      : 2904 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 34057 MB
+# Swap memory        : 5100 MB
+# Total Virtual      : 39158 MB
+# Available Virtual  : 21380 MB
+#-----------------------------------------------------------
+source top_rst_ps7_0_100M_1.tcl -notrace
