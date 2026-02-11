@@ -3,22 +3,22 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Thu Jan 29 16:04:35 2026
-# Process ID         : 2836
-# Current directory  : D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_processing_system7_0_0_synth_1
+# Start of session at: Tue Feb 10 17:09:32 2026
+# Process ID         : 8616
+# Current directory  : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_processing_system7_0_0_synth_1
 # Command line       : vivado.exe -log top_processing_system7_0_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top_processing_system7_0_0.tcl
-# Log file           : D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_processing_system7_0_0_synth_1/top_processing_system7_0_0.vds
-# Journal file       : D:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_processing_system7_0_0_synth_1\vivado.jou
-# Running On         : MDD-ECE-HPG853
+# Log file           : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_processing_system7_0_0_synth_1/top_processing_system7_0_0.vds
+# Journal file       : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_processing_system7_0_0_synth_1\vivado.jou
+# Running On         : MDD-ECE-785KL84
 # Platform           : Windows Server 2016 or Windows 10
 # Operating System   : 22631
-# Processor Detail   : Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz
-# CPU Frequency      : 2904 MHz
-# CPU Physical cores : 8
-# CPU Logical cores  : 16
-# Host memory        : 34058 MB
-# Swap memory        : 5100 MB
-# Total Virtual      : 39158 MB
-# Available Virtual  : 18006 MB
+# Processor Detail   : 13th Gen Intel(R) Core(TM) i7-13700
+# CPU Frequency      : 2112 MHz
+# CPU Physical cores : 16
+# CPU Logical cores  : 24
+# Host memory        : 16853 MB
+# Swap memory        : 14315 MB
+# Total Virtual      : 31168 MB
+# Available Virtual  : 6056 MB
 #-----------------------------------------------------------
 source top_processing_system7_0_0.tcl -notrace

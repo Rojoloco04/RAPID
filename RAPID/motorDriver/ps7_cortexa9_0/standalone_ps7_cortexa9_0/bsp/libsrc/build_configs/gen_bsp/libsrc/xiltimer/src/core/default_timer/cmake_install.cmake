@@ -1,4 +1,4 @@
-# Install script for directory: E:/HardSoftCodesign/Hardsoftcodesign/RAPID/motorDriver/ps7_cortexa9_0/standalone_ps7_cortexa9_0/bsp/libsrc/xiltimer/src/core/default_timer
+# Install script for directory: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/motorDriver/ps7_cortexa9_0/standalone_ps7_cortexa9_0/bsp/libsrc/xiltimer/src/core/default_timer
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

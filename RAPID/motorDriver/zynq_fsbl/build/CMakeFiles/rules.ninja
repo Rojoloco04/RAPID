@@ -52,7 +52,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = C:\Xilinx\2025.1\tps\win64\cmake-3.24.2\bin\cmake.exe --regenerate-during-build -SE:\HardSoftCodesign\Hardsoftcodesign\RAPID\motorDriver\zynq_fsbl -BE:\HardSoftCodesign\Hardsoftcodesign\RAPID\motorDriver\zynq_fsbl\build
+  command = C:\Xilinx\2025.1\tps\win64\cmake-3.24.2\bin\cmake.exe --regenerate-during-build -SC:\Users\mbracker\Documents\RAPID\RAPID\RAPID\motorDriver\zynq_fsbl -BC:\Users\mbracker\Documents\RAPID\RAPID\RAPID\motorDriver\zynq_fsbl\build
   description = Re-running CMake...
   generator = 1
 
