@@ -2,10 +2,10 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
-// Date        : Tue Feb  3 16:57:24 2026
+// Date        : Tue Feb 10 18:21:34 2026
 // Host        : MDD-ECE-785KL84 running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
-//               e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0_sim_netlist.v
+//               c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0_sim_netlist.v
 // Design      : top_Spindle_0_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -75,17 +75,17 @@ module top_Spindle_0_0_Spindle
     INHB,
     INLB,
     INLA,
+    en,
     speed,
     clk,
-    en,
     kill);
   output INHA;
   output INHB;
   output INLB;
   output INLA;
+  input en;
   input [1:0]speed;
   input clk;
-  input en;
   input kill;
 
   wire INHA;
@@ -93,6 +93,7 @@ module top_Spindle_0_0_Spindle
   wire INHB_i_1_n_0;
   wire INLA;
   wire INLA_i_1_n_0;
+  wire INLA_i_2_n_0;
   wire INLB;
   wire INLB_i_1_n_0;
   wire clear;
@@ -103,26 +104,24 @@ module top_Spindle_0_0_Spindle
   wire clk_div_i_3_n_0;
   wire clk_div_i_4_n_0;
   wire clk_div_i_5_n_0;
-  wire clk_div_i_6_n_0;
-  wire clk_div_i_7_n_0;
   wire counter;
   wire \counter[0]_i_10_n_0 ;
-  wire \counter[0]_i_3_n_0 ;
+  wire \counter[0]_i_2_n_0 ;
   wire \counter[0]_i_4_n_0 ;
   wire \counter[0]_i_5_n_0 ;
   wire \counter[0]_i_6_n_0 ;
   wire \counter[0]_i_7_n_0 ;
   wire \counter[0]_i_8_n_0 ;
   wire \counter[0]_i_9_n_0 ;
-  wire [24:0]counter_reg;
-  wire \counter_reg[0]_i_2_n_0 ;
-  wire \counter_reg[0]_i_2_n_1 ;
-  wire \counter_reg[0]_i_2_n_2 ;
-  wire \counter_reg[0]_i_2_n_3 ;
-  wire \counter_reg[0]_i_2_n_4 ;
-  wire \counter_reg[0]_i_2_n_5 ;
-  wire \counter_reg[0]_i_2_n_6 ;
-  wire \counter_reg[0]_i_2_n_7 ;
+  wire [28:0]counter_reg;
+  wire \counter_reg[0]_i_3_n_0 ;
+  wire \counter_reg[0]_i_3_n_1 ;
+  wire \counter_reg[0]_i_3_n_2 ;
+  wire \counter_reg[0]_i_3_n_3 ;
+  wire \counter_reg[0]_i_3_n_4 ;
+  wire \counter_reg[0]_i_3_n_5 ;
+  wire \counter_reg[0]_i_3_n_6 ;
+  wire \counter_reg[0]_i_3_n_7 ;
   wire \counter_reg[12]_i_1_n_0 ;
   wire \counter_reg[12]_i_1_n_1 ;
   wire \counter_reg[12]_i_1_n_2 ;
@@ -147,7 +146,15 @@ module top_Spindle_0_0_Spindle
   wire \counter_reg[20]_i_1_n_5 ;
   wire \counter_reg[20]_i_1_n_6 ;
   wire \counter_reg[20]_i_1_n_7 ;
+  wire \counter_reg[24]_i_1_n_0 ;
+  wire \counter_reg[24]_i_1_n_1 ;
+  wire \counter_reg[24]_i_1_n_2 ;
+  wire \counter_reg[24]_i_1_n_3 ;
+  wire \counter_reg[24]_i_1_n_4 ;
+  wire \counter_reg[24]_i_1_n_5 ;
+  wire \counter_reg[24]_i_1_n_6 ;
   wire \counter_reg[24]_i_1_n_7 ;
+  wire \counter_reg[28]_i_1_n_7 ;
   wire \counter_reg[4]_i_1_n_0 ;
   wire \counter_reg[4]_i_1_n_1 ;
   wire \counter_reg[4]_i_1_n_2 ;
@@ -165,8 +172,10 @@ module top_Spindle_0_0_Spindle
   wire \counter_reg[8]_i_1_n_6 ;
   wire \counter_reg[8]_i_1_n_7 ;
   wire en;
+  wire in_startup;
+  wire in_startup_i_1_n_0;
   wire kill;
-  wire p_0_in;
+  wire p_1_in;
   wire \pwm_counter[0]_i_3_n_0 ;
   wire \pwm_counter[0]_i_4_n_0 ;
   wire \pwm_counter[0]_i_5_n_0 ;
@@ -218,28 +227,101 @@ module top_Spindle_0_0_Spindle
   wire pwm_signal0_carry_n_2;
   wire pwm_signal0_carry_n_3;
   wire [1:0]speed;
+  wire start_check_i_1_n_0;
+  wire start_check_reg_n_0;
+  wire \start_count[0]_i_10_n_0 ;
+  wire \start_count[0]_i_1_n_0 ;
+  wire \start_count[0]_i_4_n_0 ;
+  wire \start_count[0]_i_5_n_0 ;
+  wire \start_count[0]_i_6_n_0 ;
+  wire \start_count[0]_i_7_n_0 ;
+  wire \start_count[0]_i_8_n_0 ;
+  wire \start_count[0]_i_9_n_0 ;
+  wire [27:5]start_count_reg;
+  wire \start_count_reg[0]_i_2_n_0 ;
+  wire \start_count_reg[0]_i_2_n_1 ;
+  wire \start_count_reg[0]_i_2_n_2 ;
+  wire \start_count_reg[0]_i_2_n_3 ;
+  wire \start_count_reg[0]_i_2_n_4 ;
+  wire \start_count_reg[0]_i_2_n_5 ;
+  wire \start_count_reg[0]_i_2_n_6 ;
+  wire \start_count_reg[0]_i_2_n_7 ;
+  wire \start_count_reg[12]_i_1_n_0 ;
+  wire \start_count_reg[12]_i_1_n_1 ;
+  wire \start_count_reg[12]_i_1_n_2 ;
+  wire \start_count_reg[12]_i_1_n_3 ;
+  wire \start_count_reg[12]_i_1_n_4 ;
+  wire \start_count_reg[12]_i_1_n_5 ;
+  wire \start_count_reg[12]_i_1_n_6 ;
+  wire \start_count_reg[12]_i_1_n_7 ;
+  wire \start_count_reg[16]_i_1_n_0 ;
+  wire \start_count_reg[16]_i_1_n_1 ;
+  wire \start_count_reg[16]_i_1_n_2 ;
+  wire \start_count_reg[16]_i_1_n_3 ;
+  wire \start_count_reg[16]_i_1_n_4 ;
+  wire \start_count_reg[16]_i_1_n_5 ;
+  wire \start_count_reg[16]_i_1_n_6 ;
+  wire \start_count_reg[16]_i_1_n_7 ;
+  wire \start_count_reg[20]_i_1_n_0 ;
+  wire \start_count_reg[20]_i_1_n_1 ;
+  wire \start_count_reg[20]_i_1_n_2 ;
+  wire \start_count_reg[20]_i_1_n_3 ;
+  wire \start_count_reg[20]_i_1_n_4 ;
+  wire \start_count_reg[20]_i_1_n_5 ;
+  wire \start_count_reg[20]_i_1_n_6 ;
+  wire \start_count_reg[20]_i_1_n_7 ;
+  wire \start_count_reg[24]_i_1_n_1 ;
+  wire \start_count_reg[24]_i_1_n_2 ;
+  wire \start_count_reg[24]_i_1_n_3 ;
+  wire \start_count_reg[24]_i_1_n_4 ;
+  wire \start_count_reg[24]_i_1_n_5 ;
+  wire \start_count_reg[24]_i_1_n_6 ;
+  wire \start_count_reg[24]_i_1_n_7 ;
+  wire \start_count_reg[4]_i_1_n_0 ;
+  wire \start_count_reg[4]_i_1_n_1 ;
+  wire \start_count_reg[4]_i_1_n_2 ;
+  wire \start_count_reg[4]_i_1_n_3 ;
+  wire \start_count_reg[4]_i_1_n_4 ;
+  wire \start_count_reg[4]_i_1_n_5 ;
+  wire \start_count_reg[4]_i_1_n_6 ;
+  wire \start_count_reg[4]_i_1_n_7 ;
+  wire \start_count_reg[8]_i_1_n_0 ;
+  wire \start_count_reg[8]_i_1_n_1 ;
+  wire \start_count_reg[8]_i_1_n_2 ;
+  wire \start_count_reg[8]_i_1_n_3 ;
+  wire \start_count_reg[8]_i_1_n_4 ;
+  wire \start_count_reg[8]_i_1_n_5 ;
+  wire \start_count_reg[8]_i_1_n_6 ;
+  wire \start_count_reg[8]_i_1_n_7 ;
+  wire \start_count_reg_n_0_[0] ;
+  wire \start_count_reg_n_0_[1] ;
+  wire \start_count_reg_n_0_[2] ;
+  wire \start_count_reg_n_0_[3] ;
+  wire \start_count_reg_n_0_[4] ;
   wire \step[0]_i_1_n_0 ;
   wire \step[1]_i_1_n_0 ;
   wire \step[2]_i_1_n_0 ;
   wire \step_reg_n_0_[0] ;
   wire \step_reg_n_0_[1] ;
-  wire [3:0]\NLW_counter_reg[24]_i_1_CO_UNCONNECTED ;
-  wire [3:1]\NLW_counter_reg[24]_i_1_O_UNCONNECTED ;
+  wire \step_reg_n_0_[2] ;
+  wire [3:0]\NLW_counter_reg[28]_i_1_CO_UNCONNECTED ;
+  wire [3:1]\NLW_counter_reg[28]_i_1_O_UNCONNECTED ;
   wire [3:0]\NLW_pwm_counter_reg[12]_i_1_CO_UNCONNECTED ;
   wire [3:1]\NLW_pwm_counter_reg[12]_i_1_O_UNCONNECTED ;
   wire [3:0]NLW_pwm_signal0_carry_O_UNCONNECTED;
   wire [3:3]NLW_pwm_signal0_carry__0_CO_UNCONNECTED;
   wire [3:0]NLW_pwm_signal0_carry__0_O_UNCONNECTED;
+  wire [3:3]\NLW_start_count_reg[24]_i_1_CO_UNCONNECTED ;
 
   LUT6 #(
-    .INIT(64'h000000008CF20000)) 
+    .INIT(64'hAAA88A8A8AA88A88)) 
     INHB_i_1
-       (.I0(INHB),
-        .I1(p_0_in),
-        .I2(\step_reg_n_0_[0] ),
-        .I3(\step_reg_n_0_[1] ),
-        .I4(en),
-        .I5(kill),
+       (.I0(INLA_i_2_n_0),
+        .I1(in_startup),
+        .I2(\step_reg_n_0_[1] ),
+        .I3(\step_reg_n_0_[0] ),
+        .I4(\step_reg_n_0_[2] ),
+        .I5(INHB),
         .O(INHB_i_1_n_0));
   FDRE INHB_reg
        (.C(clk_div),
@@ -248,15 +330,21 @@ module top_Spindle_0_0_Spindle
         .Q(INHB),
         .R(1'b0));
   LUT6 #(
-    .INIT(64'h0000000080FE0000)) 
+    .INIT(64'hA8AA88AA88AA88A8)) 
     INLA_i_1
-       (.I0(INLA),
-        .I1(\step_reg_n_0_[0] ),
-        .I2(\step_reg_n_0_[1] ),
-        .I3(p_0_in),
-        .I4(en),
-        .I5(kill),
+       (.I0(INLA_i_2_n_0),
+        .I1(in_startup),
+        .I2(INLA),
+        .I3(\step_reg_n_0_[2] ),
+        .I4(\step_reg_n_0_[0] ),
+        .I5(\step_reg_n_0_[1] ),
         .O(INLA_i_1_n_0));
+  LUT2 #(
+    .INIT(4'h2)) 
+    INLA_i_2
+       (.I0(en),
+        .I1(kill),
+        .O(INLA_i_2_n_0));
   FDRE INLA_reg
        (.C(clk_div),
         .CE(1'b1),
@@ -264,14 +352,14 @@ module top_Spindle_0_0_Spindle
         .Q(INLA),
         .R(1'b0));
   LUT6 #(
-    .INIT(64'h00000000B3C20000)) 
+    .INIT(64'hFFFFB0CE00000000)) 
     INLB_i_1
        (.I0(INLB),
-        .I1(\step_reg_n_0_[1] ),
+        .I1(\step_reg_n_0_[2] ),
         .I2(\step_reg_n_0_[0] ),
-        .I3(p_0_in),
-        .I4(en),
-        .I5(kill),
+        .I3(\step_reg_n_0_[1] ),
+        .I4(in_startup),
+        .I5(INLA_i_2_n_0),
         .O(INLB_i_1_n_0));
   FDRE INLB_reg
        (.C(clk_div),
@@ -279,67 +367,49 @@ module top_Spindle_0_0_Spindle
         .D(INLB_i_1_n_0),
         .Q(INLB),
         .R(1'b0));
-  LUT3 #(
-    .INIT(8'h04)) 
+  LUT2 #(
+    .INIT(4'h2)) 
     clk_div_i_1
-       (.I0(clk_div_i_2_n_0),
-        .I1(\counter[0]_i_3_n_0 ),
-        .I2(clk_div_i_3_n_0),
+       (.I0(\counter[0]_i_2_n_0 ),
+        .I1(clk_div_i_2_n_0),
         .O(clk_div_i_1_n_0));
-  LUT5 #(
-    .INIT(32'hFFFFFFFE)) 
+  LUT6 #(
+    .INIT(64'h000000000000777F)) 
     clk_div_i_2
        (.I0(counter_reg[21]),
-        .I1(counter_reg[24]),
-        .I2(counter_reg[22]),
-        .I3(counter_reg[20]),
-        .I4(counter_reg[23]),
+        .I1(counter_reg[20]),
+        .I2(clk_div_i_3_n_0),
+        .I3(clk_div_i_4_n_0),
+        .I4(\counter[0]_i_6_n_0 ),
+        .I5(counter_reg[22]),
         .O(clk_div_i_2_n_0));
   LUT6 #(
-    .INIT(64'h0000000011151111)) 
+    .INIT(64'h00000000FFFFA8AA)) 
     clk_div_i_3
-       (.I0(counter_reg[19]),
-        .I1(counter_reg[18]),
-        .I2(counter_reg[17]),
-        .I3(counter_reg[16]),
-        .I4(clk_div_i_4_n_0),
-        .I5(clk_div_i_2_n_0),
-        .O(clk_div_i_3_n_0));
-  LUT6 #(
-    .INIT(64'hFFFFFFFF11111151)) 
-    clk_div_i_4
-       (.I0(clk_div_i_5_n_0),
-        .I1(counter_reg[10]),
-        .I2(clk_div_i_6_n_0),
-        .I3(counter_reg[9]),
-        .I4(counter_reg[8]),
-        .I5(clk_div_i_7_n_0),
-        .O(clk_div_i_4_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair1" *) 
-  LUT3 #(
-    .INIT(8'hFE)) 
-    clk_div_i_5
        (.I0(counter_reg[11]),
-        .I1(counter_reg[12]),
+        .I1(counter_reg[4]),
+        .I2(counter_reg[3]),
+        .I3(\counter[0]_i_9_n_0 ),
+        .I4(counter_reg[12]),
+        .I5(clk_div_i_5_n_0),
+        .O(clk_div_i_3_n_0));
+  (* SOFT_HLUTNM = "soft_lutpair0" *) 
+  LUT4 #(
+    .INIT(16'hFFFE)) 
+    clk_div_i_4
+       (.I0(counter_reg[18]),
+        .I1(counter_reg[19]),
+        .I2(counter_reg[16]),
+        .I3(counter_reg[17]),
+        .O(clk_div_i_4_n_0));
+  (* SOFT_HLUTNM = "soft_lutpair2" *) 
+  LUT3 #(
+    .INIT(8'h7F)) 
+    clk_div_i_5
+       (.I0(counter_reg[14]),
+        .I1(counter_reg[15]),
         .I2(counter_reg[13]),
         .O(clk_div_i_5_n_0));
-  LUT6 #(
-    .INIT(64'h5555555557FFFFFF)) 
-    clk_div_i_6
-       (.I0(counter_reg[7]),
-        .I1(counter_reg[3]),
-        .I2(counter_reg[2]),
-        .I3(counter_reg[4]),
-        .I4(counter_reg[5]),
-        .I5(counter_reg[6]),
-        .O(clk_div_i_6_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair2" *) 
-  LUT2 #(
-    .INIT(4'h7)) 
-    clk_div_i_7
-       (.I0(counter_reg[15]),
-        .I1(counter_reg[14]),
-        .O(clk_div_i_7_n_0));
   FDRE #(
     .INIT(1'b0)) 
     clk_div_reg
@@ -348,98 +418,102 @@ module top_Spindle_0_0_Spindle
         .D(clk_div_i_1_n_0),
         .Q(clk_div),
         .R(1'b0));
-  LUT6 #(
-    .INIT(64'hFFFFFFFEFFFFFFFF)) 
-    \counter[0]_i_1 
-       (.I0(counter_reg[23]),
-        .I1(counter_reg[20]),
-        .I2(counter_reg[22]),
-        .I3(counter_reg[24]),
-        .I4(counter_reg[21]),
-        .I5(\counter[0]_i_3_n_0 ),
-        .O(counter));
-  LUT5 #(
-    .INIT(32'hFFFEAAAA)) 
-    \counter[0]_i_10 
-       (.I0(counter_reg[4]),
-        .I1(counter_reg[0]),
-        .I2(counter_reg[1]),
-        .I3(counter_reg[2]),
-        .I4(counter_reg[3]),
-        .O(\counter[0]_i_10_n_0 ));
-  LUT6 #(
-    .INIT(64'h55550111FFFFFFFF)) 
-    \counter[0]_i_3 
-       (.I0(\counter[0]_i_5_n_0 ),
-        .I1(\counter[0]_i_6_n_0 ),
-        .I2(counter_reg[11]),
-        .I3(\counter[0]_i_7_n_0 ),
-        .I4(\counter[0]_i_8_n_0 ),
-        .I5(counter_reg[19]),
-        .O(\counter[0]_i_3_n_0 ));
   LUT1 #(
     .INIT(2'h1)) 
-    \counter[0]_i_4 
-       (.I0(counter_reg[0]),
-        .O(\counter[0]_i_4_n_0 ));
-  LUT2 #(
-    .INIT(4'hE)) 
-    \counter[0]_i_5 
-       (.I0(counter_reg[17]),
-        .I1(counter_reg[18]),
-        .O(\counter[0]_i_5_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair1" *) 
-  LUT3 #(
-    .INIT(8'hFE)) 
-    \counter[0]_i_6 
-       (.I0(counter_reg[14]),
-        .I1(counter_reg[12]),
-        .I2(counter_reg[13]),
-        .O(\counter[0]_i_6_n_0 ));
-  LUT6 #(
-    .INIT(64'hFEFFFEFEEEEEEEEE)) 
-    \counter[0]_i_7 
-       (.I0(counter_reg[10]),
-        .I1(counter_reg[9]),
-        .I2(counter_reg[7]),
-        .I3(\counter[0]_i_9_n_0 ),
-        .I4(\counter[0]_i_10_n_0 ),
-        .I5(counter_reg[8]),
-        .O(\counter[0]_i_7_n_0 ));
+    \counter[0]_i_1 
+       (.I0(\counter[0]_i_2_n_0 ),
+        .O(counter));
   (* SOFT_HLUTNM = "soft_lutpair2" *) 
   LUT2 #(
     .INIT(4'h7)) 
-    \counter[0]_i_8 
+    \counter[0]_i_10 
        (.I0(counter_reg[15]),
-        .I1(counter_reg[16]),
+        .I1(counter_reg[14]),
+        .O(\counter[0]_i_10_n_0 ));
+  LUT6 #(
+    .INIT(64'h0000000077777F77)) 
+    \counter[0]_i_2 
+       (.I0(counter_reg[21]),
+        .I1(counter_reg[22]),
+        .I2(\counter[0]_i_4_n_0 ),
+        .I3(\counter[0]_i_5_n_0 ),
+        .I4(counter_reg[17]),
+        .I5(\counter[0]_i_6_n_0 ),
+        .O(\counter[0]_i_2_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair0" *) 
+  LUT3 #(
+    .INIT(8'hFE)) 
+    \counter[0]_i_4 
+       (.I0(counter_reg[20]),
+        .I1(counter_reg[18]),
+        .I2(counter_reg[19]),
+        .O(\counter[0]_i_4_n_0 ));
+  LUT6 #(
+    .INIT(64'hFFFFFFFF0075FFFF)) 
+    \counter[0]_i_5 
+       (.I0(counter_reg[12]),
+        .I1(\counter[0]_i_8_n_0 ),
+        .I2(\counter[0]_i_9_n_0 ),
+        .I3(counter_reg[13]),
+        .I4(counter_reg[16]),
+        .I5(\counter[0]_i_10_n_0 ),
+        .O(\counter[0]_i_5_n_0 ));
+  LUT6 #(
+    .INIT(64'hFFFFFFFFFFFFFFFE)) 
+    \counter[0]_i_6 
+       (.I0(counter_reg[23]),
+        .I1(counter_reg[24]),
+        .I2(counter_reg[28]),
+        .I3(counter_reg[25]),
+        .I4(counter_reg[27]),
+        .I5(counter_reg[26]),
+        .O(\counter[0]_i_6_n_0 ));
+  LUT1 #(
+    .INIT(2'h1)) 
+    \counter[0]_i_7 
+       (.I0(counter_reg[0]),
+        .O(\counter[0]_i_7_n_0 ));
+  LUT6 #(
+    .INIT(64'hFFFFFFFEAAAAAAAA)) 
+    \counter[0]_i_8 
+       (.I0(counter_reg[11]),
+        .I1(counter_reg[2]),
+        .I2(counter_reg[3]),
+        .I3(counter_reg[1]),
+        .I4(counter_reg[0]),
+        .I5(counter_reg[4]),
         .O(\counter[0]_i_8_n_0 ));
-  LUT2 #(
-    .INIT(4'h7)) 
+  LUT6 #(
+    .INIT(64'h0000000000000001)) 
     \counter[0]_i_9 
        (.I0(counter_reg[5]),
         .I1(counter_reg[6]),
+        .I2(counter_reg[10]),
+        .I3(counter_reg[9]),
+        .I4(counter_reg[8]),
+        .I5(counter_reg[7]),
         .O(\counter[0]_i_9_n_0 ));
   FDRE #(
     .INIT(1'b0)) 
     \counter_reg[0] 
        (.C(clk),
-        .CE(1'b1),
-        .D(\counter_reg[0]_i_2_n_7 ),
+        .CE(\counter[0]_i_2_n_0 ),
+        .D(\counter_reg[0]_i_3_n_7 ),
         .Q(counter_reg[0]),
         .R(counter));
   (* ADDER_THRESHOLD = "11" *) 
-  CARRY4 \counter_reg[0]_i_2 
+  CARRY4 \counter_reg[0]_i_3 
        (.CI(1'b0),
-        .CO({\counter_reg[0]_i_2_n_0 ,\counter_reg[0]_i_2_n_1 ,\counter_reg[0]_i_2_n_2 ,\counter_reg[0]_i_2_n_3 }),
+        .CO({\counter_reg[0]_i_3_n_0 ,\counter_reg[0]_i_3_n_1 ,\counter_reg[0]_i_3_n_2 ,\counter_reg[0]_i_3_n_3 }),
         .CYINIT(1'b0),
         .DI({1'b0,1'b0,1'b0,1'b1}),
-        .O({\counter_reg[0]_i_2_n_4 ,\counter_reg[0]_i_2_n_5 ,\counter_reg[0]_i_2_n_6 ,\counter_reg[0]_i_2_n_7 }),
-        .S({counter_reg[3:1],\counter[0]_i_4_n_0 }));
+        .O({\counter_reg[0]_i_3_n_4 ,\counter_reg[0]_i_3_n_5 ,\counter_reg[0]_i_3_n_6 ,\counter_reg[0]_i_3_n_7 }),
+        .S({counter_reg[3:1],\counter[0]_i_7_n_0 }));
   FDRE #(
     .INIT(1'b0)) 
     \counter_reg[10] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[8]_i_1_n_5 ),
         .Q(counter_reg[10]),
         .R(counter));
@@ -447,7 +521,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[11] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[8]_i_1_n_4 ),
         .Q(counter_reg[11]),
         .R(counter));
@@ -455,7 +529,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[12] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[12]_i_1_n_7 ),
         .Q(counter_reg[12]),
         .R(counter));
@@ -471,7 +545,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[13] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[12]_i_1_n_6 ),
         .Q(counter_reg[13]),
         .R(counter));
@@ -479,7 +553,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[14] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[12]_i_1_n_5 ),
         .Q(counter_reg[14]),
         .R(counter));
@@ -487,7 +561,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[15] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[12]_i_1_n_4 ),
         .Q(counter_reg[15]),
         .R(counter));
@@ -495,7 +569,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[16] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[16]_i_1_n_7 ),
         .Q(counter_reg[16]),
         .R(counter));
@@ -511,7 +585,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[17] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[16]_i_1_n_6 ),
         .Q(counter_reg[17]),
         .R(counter));
@@ -519,7 +593,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[18] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[16]_i_1_n_5 ),
         .Q(counter_reg[18]),
         .R(counter));
@@ -527,7 +601,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[19] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[16]_i_1_n_4 ),
         .Q(counter_reg[19]),
         .R(counter));
@@ -535,15 +609,15 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[1] 
        (.C(clk),
-        .CE(1'b1),
-        .D(\counter_reg[0]_i_2_n_6 ),
+        .CE(\counter[0]_i_2_n_0 ),
+        .D(\counter_reg[0]_i_3_n_6 ),
         .Q(counter_reg[1]),
         .R(counter));
   FDRE #(
     .INIT(1'b0)) 
     \counter_reg[20] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[20]_i_1_n_7 ),
         .Q(counter_reg[20]),
         .R(counter));
@@ -559,7 +633,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[21] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[20]_i_1_n_6 ),
         .Q(counter_reg[21]),
         .R(counter));
@@ -567,7 +641,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[22] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[20]_i_1_n_5 ),
         .Q(counter_reg[22]),
         .R(counter));
@@ -575,7 +649,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[23] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[20]_i_1_n_4 ),
         .Q(counter_reg[23]),
         .R(counter));
@@ -583,45 +657,85 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[24] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[24]_i_1_n_7 ),
         .Q(counter_reg[24]),
         .R(counter));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \counter_reg[24]_i_1 
        (.CI(\counter_reg[20]_i_1_n_0 ),
-        .CO(\NLW_counter_reg[24]_i_1_CO_UNCONNECTED [3:0]),
+        .CO({\counter_reg[24]_i_1_n_0 ,\counter_reg[24]_i_1_n_1 ,\counter_reg[24]_i_1_n_2 ,\counter_reg[24]_i_1_n_3 }),
         .CYINIT(1'b0),
         .DI({1'b0,1'b0,1'b0,1'b0}),
-        .O({\NLW_counter_reg[24]_i_1_O_UNCONNECTED [3:1],\counter_reg[24]_i_1_n_7 }),
-        .S({1'b0,1'b0,1'b0,counter_reg[24]}));
+        .O({\counter_reg[24]_i_1_n_4 ,\counter_reg[24]_i_1_n_5 ,\counter_reg[24]_i_1_n_6 ,\counter_reg[24]_i_1_n_7 }),
+        .S(counter_reg[27:24]));
+  FDRE #(
+    .INIT(1'b0)) 
+    \counter_reg[25] 
+       (.C(clk),
+        .CE(\counter[0]_i_2_n_0 ),
+        .D(\counter_reg[24]_i_1_n_6 ),
+        .Q(counter_reg[25]),
+        .R(counter));
+  FDRE #(
+    .INIT(1'b0)) 
+    \counter_reg[26] 
+       (.C(clk),
+        .CE(\counter[0]_i_2_n_0 ),
+        .D(\counter_reg[24]_i_1_n_5 ),
+        .Q(counter_reg[26]),
+        .R(counter));
+  FDRE #(
+    .INIT(1'b0)) 
+    \counter_reg[27] 
+       (.C(clk),
+        .CE(\counter[0]_i_2_n_0 ),
+        .D(\counter_reg[24]_i_1_n_4 ),
+        .Q(counter_reg[27]),
+        .R(counter));
+  FDRE #(
+    .INIT(1'b0)) 
+    \counter_reg[28] 
+       (.C(clk),
+        .CE(\counter[0]_i_2_n_0 ),
+        .D(\counter_reg[28]_i_1_n_7 ),
+        .Q(counter_reg[28]),
+        .R(counter));
+  (* ADDER_THRESHOLD = "11" *) 
+  CARRY4 \counter_reg[28]_i_1 
+       (.CI(\counter_reg[24]_i_1_n_0 ),
+        .CO(\NLW_counter_reg[28]_i_1_CO_UNCONNECTED [3:0]),
+        .CYINIT(1'b0),
+        .DI({1'b0,1'b0,1'b0,1'b0}),
+        .O({\NLW_counter_reg[28]_i_1_O_UNCONNECTED [3:1],\counter_reg[28]_i_1_n_7 }),
+        .S({1'b0,1'b0,1'b0,counter_reg[28]}));
   FDRE #(
     .INIT(1'b0)) 
     \counter_reg[2] 
        (.C(clk),
-        .CE(1'b1),
-        .D(\counter_reg[0]_i_2_n_5 ),
+        .CE(\counter[0]_i_2_n_0 ),
+        .D(\counter_reg[0]_i_3_n_5 ),
         .Q(counter_reg[2]),
         .R(counter));
   FDRE #(
     .INIT(1'b0)) 
     \counter_reg[3] 
        (.C(clk),
-        .CE(1'b1),
-        .D(\counter_reg[0]_i_2_n_4 ),
+        .CE(\counter[0]_i_2_n_0 ),
+        .D(\counter_reg[0]_i_3_n_4 ),
         .Q(counter_reg[3]),
         .R(counter));
   FDRE #(
     .INIT(1'b0)) 
     \counter_reg[4] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[4]_i_1_n_7 ),
         .Q(counter_reg[4]),
         .R(counter));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \counter_reg[4]_i_1 
-       (.CI(\counter_reg[0]_i_2_n_0 ),
+       (.CI(\counter_reg[0]_i_3_n_0 ),
         .CO({\counter_reg[4]_i_1_n_0 ,\counter_reg[4]_i_1_n_1 ,\counter_reg[4]_i_1_n_2 ,\counter_reg[4]_i_1_n_3 }),
         .CYINIT(1'b0),
         .DI({1'b0,1'b0,1'b0,1'b0}),
@@ -631,7 +745,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[5] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[4]_i_1_n_6 ),
         .Q(counter_reg[5]),
         .R(counter));
@@ -639,7 +753,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[6] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[4]_i_1_n_5 ),
         .Q(counter_reg[6]),
         .R(counter));
@@ -647,7 +761,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[7] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[4]_i_1_n_4 ),
         .Q(counter_reg[7]),
         .R(counter));
@@ -655,7 +769,7 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[8] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[8]_i_1_n_7 ),
         .Q(counter_reg[8]),
         .R(counter));
@@ -671,10 +785,27 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \counter_reg[9] 
        (.C(clk),
-        .CE(1'b1),
+        .CE(\counter[0]_i_2_n_0 ),
         .D(\counter_reg[8]_i_1_n_6 ),
         .Q(counter_reg[9]),
         .R(counter));
+  (* SOFT_HLUTNM = "soft_lutpair1" *) 
+  LUT4 #(
+    .INIT(16'hE200)) 
+    in_startup_i_1
+       (.I0(in_startup),
+        .I1(start_check_reg_n_0),
+        .I2(p_1_in),
+        .I3(en),
+        .O(in_startup_i_1_n_0));
+  FDRE #(
+    .INIT(1'b0)) 
+    in_startup_reg
+       (.C(clk),
+        .CE(1'b1),
+        .D(in_startup_i_1_n_0),
+        .Q(in_startup),
+        .R(1'b0));
   LUT4 #(
     .INIT(16'hE000)) 
     \pwm_counter[0]_i_1 
@@ -969,34 +1100,400 @@ module top_Spindle_0_0_Spindle
         .D(pwm_signal0_carry__0_n_1),
         .Q(INHA),
         .R(1'b0));
+  (* SOFT_HLUTNM = "soft_lutpair1" *) 
+  LUT3 #(
+    .INIT(8'h8F)) 
+    start_check_i_1
+       (.I0(start_check_reg_n_0),
+        .I1(p_1_in),
+        .I2(en),
+        .O(start_check_i_1_n_0));
+  FDRE #(
+    .INIT(1'b1)) 
+    start_check_reg
+       (.C(clk),
+        .CE(1'b1),
+        .D(start_check_i_1_n_0),
+        .Q(start_check_reg_n_0),
+        .R(1'b0));
+  LUT3 #(
+    .INIT(8'h4F)) 
+    \start_count[0]_i_1 
+       (.I0(p_1_in),
+        .I1(start_check_reg_n_0),
+        .I2(en),
+        .O(\start_count[0]_i_1_n_0 ));
+  LUT2 #(
+    .INIT(4'h7)) 
+    \start_count[0]_i_10 
+       (.I0(start_count_reg[19]),
+        .I1(start_count_reg[18]),
+        .O(\start_count[0]_i_10_n_0 ));
+  LUT6 #(
+    .INIT(64'h55555555FFFF7757)) 
+    \start_count[0]_i_3 
+       (.I0(start_count_reg[27]),
+        .I1(\start_count[0]_i_5_n_0 ),
+        .I2(start_count_reg[21]),
+        .I3(\start_count[0]_i_6_n_0 ),
+        .I4(\start_count[0]_i_7_n_0 ),
+        .I5(start_count_reg[26]),
+        .O(p_1_in));
+  LUT1 #(
+    .INIT(2'h1)) 
+    \start_count[0]_i_4 
+       (.I0(\start_count_reg_n_0_[0] ),
+        .O(\start_count[0]_i_4_n_0 ));
+  LUT2 #(
+    .INIT(4'hE)) 
+    \start_count[0]_i_5 
+       (.I0(start_count_reg[23]),
+        .I1(start_count_reg[22]),
+        .O(\start_count[0]_i_5_n_0 ));
+  LUT6 #(
+    .INIT(64'h00000000FFFF0455)) 
+    \start_count[0]_i_6 
+       (.I0(start_count_reg[17]),
+        .I1(\start_count[0]_i_8_n_0 ),
+        .I2(\start_count[0]_i_9_n_0 ),
+        .I3(start_count_reg[16]),
+        .I4(\start_count[0]_i_10_n_0 ),
+        .I5(start_count_reg[20]),
+        .O(\start_count[0]_i_6_n_0 ));
+  LUT2 #(
+    .INIT(4'h7)) 
+    \start_count[0]_i_7 
+       (.I0(start_count_reg[25]),
+        .I1(start_count_reg[24]),
+        .O(\start_count[0]_i_7_n_0 ));
+  LUT6 #(
+    .INIT(64'h555555557FFFFFFF)) 
+    \start_count[0]_i_8 
+       (.I0(start_count_reg[10]),
+        .I1(start_count_reg[5]),
+        .I2(start_count_reg[8]),
+        .I3(start_count_reg[6]),
+        .I4(start_count_reg[7]),
+        .I5(start_count_reg[9]),
+        .O(\start_count[0]_i_8_n_0 ));
   LUT5 #(
-    .INIT(32'hFFFFD5FF)) 
+    .INIT(32'hFFFFFFFE)) 
+    \start_count[0]_i_9 
+       (.I0(start_count_reg[11]),
+        .I1(start_count_reg[12]),
+        .I2(start_count_reg[15]),
+        .I3(start_count_reg[14]),
+        .I4(start_count_reg[13]),
+        .O(\start_count[0]_i_9_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[0] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[0]_i_2_n_7 ),
+        .Q(\start_count_reg_n_0_[0] ),
+        .R(\start_count[0]_i_1_n_0 ));
+  (* ADDER_THRESHOLD = "11" *) 
+  CARRY4 \start_count_reg[0]_i_2 
+       (.CI(1'b0),
+        .CO({\start_count_reg[0]_i_2_n_0 ,\start_count_reg[0]_i_2_n_1 ,\start_count_reg[0]_i_2_n_2 ,\start_count_reg[0]_i_2_n_3 }),
+        .CYINIT(1'b0),
+        .DI({1'b0,1'b0,1'b0,1'b1}),
+        .O({\start_count_reg[0]_i_2_n_4 ,\start_count_reg[0]_i_2_n_5 ,\start_count_reg[0]_i_2_n_6 ,\start_count_reg[0]_i_2_n_7 }),
+        .S({\start_count_reg_n_0_[3] ,\start_count_reg_n_0_[2] ,\start_count_reg_n_0_[1] ,\start_count[0]_i_4_n_0 }));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[10] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[8]_i_1_n_5 ),
+        .Q(start_count_reg[10]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[11] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[8]_i_1_n_4 ),
+        .Q(start_count_reg[11]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[12] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[12]_i_1_n_7 ),
+        .Q(start_count_reg[12]),
+        .R(\start_count[0]_i_1_n_0 ));
+  (* ADDER_THRESHOLD = "11" *) 
+  CARRY4 \start_count_reg[12]_i_1 
+       (.CI(\start_count_reg[8]_i_1_n_0 ),
+        .CO({\start_count_reg[12]_i_1_n_0 ,\start_count_reg[12]_i_1_n_1 ,\start_count_reg[12]_i_1_n_2 ,\start_count_reg[12]_i_1_n_3 }),
+        .CYINIT(1'b0),
+        .DI({1'b0,1'b0,1'b0,1'b0}),
+        .O({\start_count_reg[12]_i_1_n_4 ,\start_count_reg[12]_i_1_n_5 ,\start_count_reg[12]_i_1_n_6 ,\start_count_reg[12]_i_1_n_7 }),
+        .S(start_count_reg[15:12]));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[13] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[12]_i_1_n_6 ),
+        .Q(start_count_reg[13]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[14] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[12]_i_1_n_5 ),
+        .Q(start_count_reg[14]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[15] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[12]_i_1_n_4 ),
+        .Q(start_count_reg[15]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[16] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[16]_i_1_n_7 ),
+        .Q(start_count_reg[16]),
+        .R(\start_count[0]_i_1_n_0 ));
+  (* ADDER_THRESHOLD = "11" *) 
+  CARRY4 \start_count_reg[16]_i_1 
+       (.CI(\start_count_reg[12]_i_1_n_0 ),
+        .CO({\start_count_reg[16]_i_1_n_0 ,\start_count_reg[16]_i_1_n_1 ,\start_count_reg[16]_i_1_n_2 ,\start_count_reg[16]_i_1_n_3 }),
+        .CYINIT(1'b0),
+        .DI({1'b0,1'b0,1'b0,1'b0}),
+        .O({\start_count_reg[16]_i_1_n_4 ,\start_count_reg[16]_i_1_n_5 ,\start_count_reg[16]_i_1_n_6 ,\start_count_reg[16]_i_1_n_7 }),
+        .S(start_count_reg[19:16]));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[17] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[16]_i_1_n_6 ),
+        .Q(start_count_reg[17]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[18] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[16]_i_1_n_5 ),
+        .Q(start_count_reg[18]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[19] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[16]_i_1_n_4 ),
+        .Q(start_count_reg[19]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[1] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[0]_i_2_n_6 ),
+        .Q(\start_count_reg_n_0_[1] ),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[20] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[20]_i_1_n_7 ),
+        .Q(start_count_reg[20]),
+        .R(\start_count[0]_i_1_n_0 ));
+  (* ADDER_THRESHOLD = "11" *) 
+  CARRY4 \start_count_reg[20]_i_1 
+       (.CI(\start_count_reg[16]_i_1_n_0 ),
+        .CO({\start_count_reg[20]_i_1_n_0 ,\start_count_reg[20]_i_1_n_1 ,\start_count_reg[20]_i_1_n_2 ,\start_count_reg[20]_i_1_n_3 }),
+        .CYINIT(1'b0),
+        .DI({1'b0,1'b0,1'b0,1'b0}),
+        .O({\start_count_reg[20]_i_1_n_4 ,\start_count_reg[20]_i_1_n_5 ,\start_count_reg[20]_i_1_n_6 ,\start_count_reg[20]_i_1_n_7 }),
+        .S(start_count_reg[23:20]));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[21] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[20]_i_1_n_6 ),
+        .Q(start_count_reg[21]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[22] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[20]_i_1_n_5 ),
+        .Q(start_count_reg[22]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[23] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[20]_i_1_n_4 ),
+        .Q(start_count_reg[23]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[24] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[24]_i_1_n_7 ),
+        .Q(start_count_reg[24]),
+        .R(\start_count[0]_i_1_n_0 ));
+  (* ADDER_THRESHOLD = "11" *) 
+  CARRY4 \start_count_reg[24]_i_1 
+       (.CI(\start_count_reg[20]_i_1_n_0 ),
+        .CO({\NLW_start_count_reg[24]_i_1_CO_UNCONNECTED [3],\start_count_reg[24]_i_1_n_1 ,\start_count_reg[24]_i_1_n_2 ,\start_count_reg[24]_i_1_n_3 }),
+        .CYINIT(1'b0),
+        .DI({1'b0,1'b0,1'b0,1'b0}),
+        .O({\start_count_reg[24]_i_1_n_4 ,\start_count_reg[24]_i_1_n_5 ,\start_count_reg[24]_i_1_n_6 ,\start_count_reg[24]_i_1_n_7 }),
+        .S(start_count_reg[27:24]));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[25] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[24]_i_1_n_6 ),
+        .Q(start_count_reg[25]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[26] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[24]_i_1_n_5 ),
+        .Q(start_count_reg[26]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[27] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[24]_i_1_n_4 ),
+        .Q(start_count_reg[27]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[2] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[0]_i_2_n_5 ),
+        .Q(\start_count_reg_n_0_[2] ),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[3] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[0]_i_2_n_4 ),
+        .Q(\start_count_reg_n_0_[3] ),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[4] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[4]_i_1_n_7 ),
+        .Q(\start_count_reg_n_0_[4] ),
+        .R(\start_count[0]_i_1_n_0 ));
+  (* ADDER_THRESHOLD = "11" *) 
+  CARRY4 \start_count_reg[4]_i_1 
+       (.CI(\start_count_reg[0]_i_2_n_0 ),
+        .CO({\start_count_reg[4]_i_1_n_0 ,\start_count_reg[4]_i_1_n_1 ,\start_count_reg[4]_i_1_n_2 ,\start_count_reg[4]_i_1_n_3 }),
+        .CYINIT(1'b0),
+        .DI({1'b0,1'b0,1'b0,1'b0}),
+        .O({\start_count_reg[4]_i_1_n_4 ,\start_count_reg[4]_i_1_n_5 ,\start_count_reg[4]_i_1_n_6 ,\start_count_reg[4]_i_1_n_7 }),
+        .S({start_count_reg[7:5],\start_count_reg_n_0_[4] }));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[5] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[4]_i_1_n_6 ),
+        .Q(start_count_reg[5]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[6] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[4]_i_1_n_5 ),
+        .Q(start_count_reg[6]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[7] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[4]_i_1_n_4 ),
+        .Q(start_count_reg[7]),
+        .R(\start_count[0]_i_1_n_0 ));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[8] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[8]_i_1_n_7 ),
+        .Q(start_count_reg[8]),
+        .R(\start_count[0]_i_1_n_0 ));
+  (* ADDER_THRESHOLD = "11" *) 
+  CARRY4 \start_count_reg[8]_i_1 
+       (.CI(\start_count_reg[4]_i_1_n_0 ),
+        .CO({\start_count_reg[8]_i_1_n_0 ,\start_count_reg[8]_i_1_n_1 ,\start_count_reg[8]_i_1_n_2 ,\start_count_reg[8]_i_1_n_3 }),
+        .CYINIT(1'b0),
+        .DI({1'b0,1'b0,1'b0,1'b0}),
+        .O({\start_count_reg[8]_i_1_n_4 ,\start_count_reg[8]_i_1_n_5 ,\start_count_reg[8]_i_1_n_6 ,\start_count_reg[8]_i_1_n_7 }),
+        .S(start_count_reg[11:8]));
+  FDRE #(
+    .INIT(1'b0)) 
+    \start_count_reg[9] 
+       (.C(clk),
+        .CE(start_check_reg_n_0),
+        .D(\start_count_reg[8]_i_1_n_6 ),
+        .Q(start_count_reg[9]),
+        .R(\start_count[0]_i_1_n_0 ));
+  LUT6 #(
+    .INIT(64'hFBFFFBF7FBF7FBF7)) 
     \step[0]_i_1 
        (.I0(\step_reg_n_0_[0] ),
-        .I1(p_0_in),
-        .I2(\step_reg_n_0_[1] ),
-        .I3(en),
-        .I4(kill),
+        .I1(en),
+        .I2(kill),
+        .I3(in_startup),
+        .I4(\step_reg_n_0_[2] ),
+        .I5(\step_reg_n_0_[1] ),
         .O(\step[0]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair0" *) 
-  LUT5 #(
-    .INIT(32'h00001A00)) 
+  LUT6 #(
+    .INIT(64'h0C000C0400080008)) 
     \step[1]_i_1 
        (.I0(\step_reg_n_0_[0] ),
-        .I1(p_0_in),
-        .I2(\step_reg_n_0_[1] ),
-        .I3(en),
-        .I4(kill),
+        .I1(en),
+        .I2(kill),
+        .I3(in_startup),
+        .I4(\step_reg_n_0_[2] ),
+        .I5(\step_reg_n_0_[1] ),
         .O(\step[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair0" *) 
-  LUT5 #(
-    .INIT(32'h00002C00)) 
+  LUT6 #(
+    .INIT(64'h0C0000080C0C0000)) 
     \step[2]_i_1 
        (.I0(\step_reg_n_0_[0] ),
-        .I1(p_0_in),
-        .I2(\step_reg_n_0_[1] ),
-        .I3(en),
-        .I4(kill),
+        .I1(en),
+        .I2(kill),
+        .I3(in_startup),
+        .I4(\step_reg_n_0_[2] ),
+        .I5(\step_reg_n_0_[1] ),
         .O(\step[2]_i_1_n_0 ));
   FDRE #(
     .INIT(1'b1)) 
@@ -1020,7 +1517,7 @@ module top_Spindle_0_0_Spindle
        (.C(clk_div),
         .CE(1'b1),
         .D(\step[2]_i_1_n_0 ),
-        .Q(p_0_in),
+        .Q(\step_reg_n_0_[2] ),
         .R(1'b0));
 endmodule
 `ifndef GLBL

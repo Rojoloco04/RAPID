@@ -8,17 +8,15 @@
   **** SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
   **** IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
   **** SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-  **** Start of session at: Tue Feb  3 16:57:28 2026
+  **** Start of session at: Tue Feb 10 18:21:36 2026
     ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
     ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 
 source top_wrapper.tcl -notrace
-create_project: Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 516.914 ; gain = 211.672
 INFO: [IP_Flow 19-234] Refreshing IP repositories
-WARNING: [IP_Flow 19-2248] Failed to load user IP repository 'c:/Users/mbracker/AppData/Roaming/Xilinx/ip_repo'; Can't find the specified path.
-If this directory should no longer be in your list of user repositories, go to the IP Settings dialog and remove it.
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/ip_repo'.
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/2025.1/Vivado/data/ip'.
-INFO: [Project 1-5698] Found the below utility IPs instantiated in block design E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd which have equivalent inline hdl with improved performance and reduced diskspace.
+INFO: [Project 1-5698] Found the below utility IPs instantiated in block design C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd which have equivalent inline hdl with improved performance and reduced diskspace.
 It is recommended to migrate these utility IPs to inline hdl  using the command upgrade_project -migrate_to_inline_hdl.  The utility IPs may be deprecated in future releases.
 More information on inline hdl is available in UG994.
 Utility IP Component Instances:
@@ -28,8 +26,8 @@ top_xlslice_0_3
 top_xlslice_0_4
 top_xlslice_0_5
 top_xlslice_0_6
-Command: read_checkpoint -auto_incremental -incremental E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp
-INFO: [Vivado 12-5825] Read reference checkpoint from E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp for incremental synthesis
+Command: read_checkpoint -auto_incremental -incremental C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp for incremental synthesis
 INFO: [Vivado 12-7989] Please ensure there are no constraint changes
 Command: synth_design -top top_wrapper -part xc7z020clg400-1
 Starting synth_design
@@ -40,57 +38,57 @@ INFO: [Designutils 20-5440] No compile time benefit to using incremental synthes
 INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 33776
+INFO: [Synth 8-7075] Helper process launched with PID 16888
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 1289.125 ; gain = 494.234
+Starting RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:03 . Memory (MB): peak = 1292.887 ; gain = 494.602
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-638] synthesizing module 'top_wrapper' [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd:53]
-INFO: [Synth 8-3491] module 'top' declared at 'e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:15' bound to instance 'top_i' of component 'top' [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd:92]
-INFO: [Synth 8-638] synthesizing module 'top' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:57]
-INFO: [Synth 8-3491] module 'top_Spindle_0_0' declared at 'E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_Spindle_0_0_stub.vhdl:6' bound to instance 'Spindle_0' of component 'top_Spindle_0_0' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:554]
-INFO: [Synth 8-638] synthesizing module 'top_Spindle_0_0' [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_Spindle_0_0_stub.vhdl:32]
-INFO: [Synth 8-3491] module 'top_axi_gpio_0_1' declared at 'E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_axi_gpio_0_1_stub.vhdl:6' bound to instance 'axi_gpio_0' of component 'top_axi_gpio_0_1' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:569]
-INFO: [Synth 8-638] synthesizing module 'top_axi_gpio_0_1' [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_axi_gpio_0_1_stub.vhdl:38]
-INFO: [Synth 8-3491] module 'top_axi_smc_1' declared at 'E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_axi_smc_1_stub.vhdl:6' bound to instance 'axi_smc' of component 'top_axi_smc_1' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:592]
-INFO: [Synth 8-638] synthesizing module 'top_axi_smc_1' [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_axi_smc_1_stub.vhdl:167]
-INFO: [Synth 8-3491] module 'top_processing_system7_0_0' declared at 'E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_processing_system7_0_0_stub.vhdl:6' bound to instance 'processing_system7_0' of component 'top_processing_system7_0_0' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:744]
-INFO: [Synth 8-638] synthesizing module 'top_processing_system7_0_0' [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_processing_system7_0_0_stub.vhdl:87]
-INFO: [Synth 8-3491] module 'top_rst_ps7_0_100M_1' declared at 'E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_rst_ps7_0_100M_1_stub.vhdl:6' bound to instance 'rst_ps7_0_100M' of component 'top_rst_ps7_0_100M_1' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:816]
-INFO: [Synth 8-638] synthesizing module 'top_rst_ps7_0_100M_1' [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_rst_ps7_0_100M_1_stub.vhdl:28]
-INFO: [Synth 8-3491] module 'top_stepperDriver_0_0' declared at 'E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_stepperDriver_0_0_stub.vhdl:6' bound to instance 'stepperDriver_0' of component 'top_stepperDriver_0_0' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:829]
-INFO: [Synth 8-638] synthesizing module 'top_stepperDriver_0_0' [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/.Xil/Vivado-33796-MDD-ECE-785KL84/realtime/top_stepperDriver_0_0_stub.vhdl:28]
-INFO: [Synth 8-3491] module 'top_xlslice_0_1' declared at 'e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_1/synth/top_xlslice_0_1.v:53' bound to instance 'xlslice_0' of component 'top_xlslice_0_1' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:840]
-INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_1' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_1/synth/top_xlslice_0_1.v:53]
-INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_1' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_1/synth/top_xlslice_0_1.v:53]
-INFO: [Synth 8-3491] module 'top_xlslice_0_2' declared at 'e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_2/synth/top_xlslice_0_2.v:53' bound to instance 'xlslice_1' of component 'top_xlslice_0_2' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:845]
-INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_2' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_2/synth/top_xlslice_0_2.v:53]
-INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized0' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized0' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_2' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_2/synth/top_xlslice_0_2.v:53]
-INFO: [Synth 8-3491] module 'top_xlslice_0_3' declared at 'e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_3/synth/top_xlslice_0_3.v:53' bound to instance 'xlslice_2' of component 'top_xlslice_0_3' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:850]
-INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_3' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_3/synth/top_xlslice_0_3.v:53]
-INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized1' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized1' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_3' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_3/synth/top_xlslice_0_3.v:53]
-INFO: [Synth 8-3491] module 'top_xlslice_0_4' declared at 'e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_4/synth/top_xlslice_0_4.v:53' bound to instance 'xlslice_3' of component 'top_xlslice_0_4' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:855]
-INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_4' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_4/synth/top_xlslice_0_4.v:53]
-INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized2' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized2' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_4' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_4/synth/top_xlslice_0_4.v:53]
-INFO: [Synth 8-3491] module 'top_xlslice_0_5' declared at 'e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_5/synth/top_xlslice_0_5.v:53' bound to instance 'xlslice_4' of component 'top_xlslice_0_5' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:860]
-INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_5' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_5/synth/top_xlslice_0_5.v:53]
-INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized3' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized3' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_5' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_5/synth/top_xlslice_0_5.v:53]
-INFO: [Synth 8-3491] module 'top_xlslice_0_6' declared at 'e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_6/synth/top_xlslice_0_6.v:53' bound to instance 'xlslice_5' of component 'top_xlslice_0_6' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:865]
-INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_6' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_6/synth/top_xlslice_0_6.v:53]
-INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized4' [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized4' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
-INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_6' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_6/synth/top_xlslice_0_6.v:53]
-INFO: [Synth 8-256] done synthesizing module 'top' (0#1) [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:57]
-INFO: [Synth 8-256] done synthesizing module 'top_wrapper' (0#1) [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd:53]
+INFO: [Synth 8-638] synthesizing module 'top_wrapper' [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd:53]
+INFO: [Synth 8-3491] module 'top' declared at 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:15' bound to instance 'top_i' of component 'top' [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd:92]
+INFO: [Synth 8-638] synthesizing module 'top' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:57]
+INFO: [Synth 8-3491] module 'top_Spindle_0_0' declared at 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_Spindle_0_0_stub.vhdl:6' bound to instance 'Spindle_0' of component 'top_Spindle_0_0' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:554]
+INFO: [Synth 8-638] synthesizing module 'top_Spindle_0_0' [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_Spindle_0_0_stub.vhdl:32]
+INFO: [Synth 8-3491] module 'top_axi_gpio_0_1' declared at 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_axi_gpio_0_1_stub.vhdl:6' bound to instance 'axi_gpio_0' of component 'top_axi_gpio_0_1' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:569]
+INFO: [Synth 8-638] synthesizing module 'top_axi_gpio_0_1' [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_axi_gpio_0_1_stub.vhdl:38]
+INFO: [Synth 8-3491] module 'top_axi_smc_1' declared at 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_axi_smc_1_stub.vhdl:6' bound to instance 'axi_smc' of component 'top_axi_smc_1' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:592]
+INFO: [Synth 8-638] synthesizing module 'top_axi_smc_1' [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_axi_smc_1_stub.vhdl:167]
+INFO: [Synth 8-3491] module 'top_processing_system7_0_0' declared at 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_processing_system7_0_0_stub.vhdl:6' bound to instance 'processing_system7_0' of component 'top_processing_system7_0_0' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:744]
+INFO: [Synth 8-638] synthesizing module 'top_processing_system7_0_0' [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_processing_system7_0_0_stub.vhdl:87]
+INFO: [Synth 8-3491] module 'top_rst_ps7_0_100M_1' declared at 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_rst_ps7_0_100M_1_stub.vhdl:6' bound to instance 'rst_ps7_0_100M' of component 'top_rst_ps7_0_100M_1' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:816]
+INFO: [Synth 8-638] synthesizing module 'top_rst_ps7_0_100M_1' [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_rst_ps7_0_100M_1_stub.vhdl:28]
+INFO: [Synth 8-3491] module 'top_stepperDriver_0_0' declared at 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_stepperDriver_0_0_stub.vhdl:6' bound to instance 'stepperDriver_0' of component 'top_stepperDriver_0_0' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:829]
+INFO: [Synth 8-638] synthesizing module 'top_stepperDriver_0_0' [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/.Xil/Vivado-11992-MDD-ECE-785KL84/realtime/top_stepperDriver_0_0_stub.vhdl:28]
+INFO: [Synth 8-3491] module 'top_xlslice_0_1' declared at 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_1/synth/top_xlslice_0_1.v:53' bound to instance 'xlslice_0' of component 'top_xlslice_0_1' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:840]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_1' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_1/synth/top_xlslice_0_1.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_1' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_1/synth/top_xlslice_0_1.v:53]
+INFO: [Synth 8-3491] module 'top_xlslice_0_2' declared at 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_2/synth/top_xlslice_0_2.v:53' bound to instance 'xlslice_1' of component 'top_xlslice_0_2' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:845]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_2' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_2/synth/top_xlslice_0_2.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized0' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized0' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_2' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_2/synth/top_xlslice_0_2.v:53]
+INFO: [Synth 8-3491] module 'top_xlslice_0_3' declared at 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_3/synth/top_xlslice_0_3.v:53' bound to instance 'xlslice_2' of component 'top_xlslice_0_3' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:850]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_3' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_3/synth/top_xlslice_0_3.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized1' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized1' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_3' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_3/synth/top_xlslice_0_3.v:53]
+INFO: [Synth 8-3491] module 'top_xlslice_0_4' declared at 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_4/synth/top_xlslice_0_4.v:53' bound to instance 'xlslice_3' of component 'top_xlslice_0_4' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:855]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_4' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_4/synth/top_xlslice_0_4.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized2' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized2' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_4' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_4/synth/top_xlslice_0_4.v:53]
+INFO: [Synth 8-3491] module 'top_xlslice_0_5' declared at 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_5/synth/top_xlslice_0_5.v:53' bound to instance 'xlslice_4' of component 'top_xlslice_0_5' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:860]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_5' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_5/synth/top_xlslice_0_5.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized3' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized3' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_5' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_5/synth/top_xlslice_0_5.v:53]
+INFO: [Synth 8-3491] module 'top_xlslice_0_6' declared at 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_6/synth/top_xlslice_0_6.v:53' bound to instance 'xlslice_5' of component 'top_xlslice_0_6' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:865]
+INFO: [Synth 8-6157] synthesizing module 'top_xlslice_0_6' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_6/synth/top_xlslice_0_6.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xlslice_v1_0_5_xlslice__parameterized4' [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'xlslice_v1_0_5_xlslice__parameterized4' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v:58]
+INFO: [Synth 8-6155] done synthesizing module 'top_xlslice_0_6' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_xlslice_0_6/synth/top_xlslice_0_6.v:53]
+INFO: [Synth 8-256] done synthesizing module 'top' (0#1) [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd:57]
+INFO: [Synth 8-256] done synthesizing module 'top_wrapper' (0#1) [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd:53]
 WARNING: [Synth 8-7129] Port Din[5] in module xlslice_v1_0_5_xlslice__parameterized4 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port Din[4] in module xlslice_v1_0_5_xlslice__parameterized4 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port Din[3] in module xlslice_v1_0_5_xlslice__parameterized4 is either unconnected or has no load
@@ -127,85 +125,85 @@ WARNING: [Synth 8-7129] Port Din[4] in module xlslice_v1_0_5_xlslice is either u
 WARNING: [Synth 8-7129] Port Din[3] in module xlslice_v1_0_5_xlslice is either unconnected or has no load
 WARNING: [Synth 8-7129] Port Din[2] in module xlslice_v1_0_5_xlslice is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:05 . Memory (MB): peak = 1404.195 ; gain = 609.305
+Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:04 . Memory (MB): peak = 1407.754 ; gain = 609.469
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:03 ; elapsed = 00:00:05 . Memory (MB): peak = 1404.195 ; gain = 609.305
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:02 ; elapsed = 00:00:04 . Memory (MB): peak = 1407.754 ; gain = 609.469
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:03 ; elapsed = 00:00:05 . Memory (MB): peak = 1404.195 ; gain = 609.305
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:02 ; elapsed = 00:00:04 . Memory (MB): peak = 1407.754 ; gain = 609.469
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1404.195 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 1407.754 ; gain = 0.000
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
 Initializing timing engine
-Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0/top_processing_system7_0_0_in_context.xdc] for cell 'top_i/processing_system7_0'
-Finished Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0/top_processing_system7_0_0_in_context.xdc] for cell 'top_i/processing_system7_0'
-Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0/top_Spindle_0_0_in_context.xdc] for cell 'top_i/Spindle_0'
-Finished Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0/top_Spindle_0_0_in_context.xdc] for cell 'top_i/Spindle_0'
-Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_stepperDriver_0_0_1/top_stepperDriver_0_0/top_stepperDriver_0_0_in_context.xdc] for cell 'top_i/stepperDriver_0'
-Finished Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_stepperDriver_0_0_1/top_stepperDriver_0_0/top_stepperDriver_0_0_in_context.xdc] for cell 'top_i/stepperDriver_0'
-Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1/top_axi_gpio_0_1_in_context.xdc] for cell 'top_i/axi_gpio_0'
-Finished Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1/top_axi_gpio_0_1_in_context.xdc] for cell 'top_i/axi_gpio_0'
-Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1_in_context.xdc] for cell 'top_i/rst_ps7_0_100M'
-Finished Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1_in_context.xdc] for cell 'top_i/rst_ps7_0_100M'
-Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/top_axi_smc_1/top_axi_smc_1_in_context.xdc] for cell 'top_i/axi_smc'
-Finished Parsing XDC File [e:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/top_axi_smc_1/top_axi_smc_1_in_context.xdc] for cell 'top_i/axi_smc'
-Parsing XDC File [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_baudoutn'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:1]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_ctsn'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:2]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_dcdn'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:3]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_ddis'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:4]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_dsrn'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:5]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_dtrn'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:6]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_out1n'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:7]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_out2n'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:8]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_ri'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:9]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_rtsn'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:10]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_rxd'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:11]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_rxrdyn'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:12]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_txd'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:13]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_txrdyn'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:14]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_0_txd'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:20]
-WARNING: [Vivado 12-584] No ports matched 'uart_rtl_0_rxd'. [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:21]
-Finished Parsing XDC File [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc]
-WARNING: [Project 1-498] One or more constraints failed evaluation while reading constraint file [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc] and the design contains unresolved black boxes. These constraints will be read post-synthesis (as long as their source constraint file is marked as used_in_implementation) and should be applied correctly then. You should review the constraints listed in the file [.Xil/top_wrapper_propImpl.xdc] and check the run log file to verify that these constraints were correctly applied.
-INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/top_wrapper_propImpl.xdc].
+Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0/top_processing_system7_0_0_in_context.xdc] for cell 'top_i/processing_system7_0'
+Finished Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0/top_processing_system7_0_0_in_context.xdc] for cell 'top_i/processing_system7_0'
+Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0/top_Spindle_0_0_in_context.xdc] for cell 'top_i/Spindle_0'
+Finished Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0/top_Spindle_0_0_in_context.xdc] for cell 'top_i/Spindle_0'
+Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_stepperDriver_0_0_1/top_stepperDriver_0_0/top_stepperDriver_0_0_in_context.xdc] for cell 'top_i/stepperDriver_0'
+Finished Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_stepperDriver_0_0_1/top_stepperDriver_0_0/top_stepperDriver_0_0_in_context.xdc] for cell 'top_i/stepperDriver_0'
+Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1/top_axi_gpio_0_1_in_context.xdc] for cell 'top_i/axi_gpio_0'
+Finished Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1/top_axi_gpio_0_1_in_context.xdc] for cell 'top_i/axi_gpio_0'
+Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1_in_context.xdc] for cell 'top_i/rst_ps7_0_100M'
+Finished Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1_in_context.xdc] for cell 'top_i/rst_ps7_0_100M'
+Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/top_axi_smc_1/top_axi_smc_1_in_context.xdc] for cell 'top_i/axi_smc'
+Finished Parsing XDC File [c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/top_axi_smc_1/top_axi_smc_1_in_context.xdc] for cell 'top_i/axi_smc'
+Parsing XDC File [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_baudoutn'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:1]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_ctsn'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:2]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_dcdn'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:3]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_ddis'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:4]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_dsrn'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:5]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_dtrn'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:6]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_out1n'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:7]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_out2n'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:8]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_ri'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:9]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_rtsn'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:10]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_rxd'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:11]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_rxrdyn'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:12]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_txd'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:13]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_txrdyn'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:14]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_0_txd'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:20]
+WARNING: [Vivado 12-584] No ports matched 'uart_rtl_0_rxd'. [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc:21]
+Finished Parsing XDC File [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc]
+WARNING: [Project 1-498] One or more constraints failed evaluation while reading constraint file [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc] and the design contains unresolved black boxes. These constraints will be read post-synthesis (as long as their source constraint file is marked as used_in_implementation) and should be applied correctly then. You should review the constraints listed in the file [.Xil/top_wrapper_propImpl.xdc] and check the run log file to verify that these constraints were correctly applied.
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/top_wrapper_propImpl.xdc].
 Resolution: To avoid this warning, move constraints listed in [.Xil/top_wrapper_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
-Parsing XDC File [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/dont_touch.xdc]
-Finished Parsing XDC File [E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/dont_touch.xdc]
+Parsing XDC File [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/dont_touch.xdc]
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1404.195 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1407.754 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.012 . Memory (MB): peak = 1404.195 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 1407.754 ; gain = 0.000
 WARNING: [Timing 38-316] Clock period '10.000' specified during out-of-context synthesis of instance 'top_i/axi_gpio_0' at clock pin 's_axi_aclk' is different from the actual clock period '8.000', this can lead to different synthesis results.
 INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
 INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:07 ; elapsed = 00:00:12 . Memory (MB): peak = 1404.195 ; gain = 609.305
+Finished Constraint Validation : Time (s): cpu = 00:00:04 ; elapsed = 00:00:09 . Memory (MB): peak = 1407.754 ; gain = 609.469
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7z020clg400-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:07 ; elapsed = 00:00:12 . Memory (MB): peak = 1404.195 ; gain = 609.305
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:04 ; elapsed = 00:00:09 . Memory (MB): peak = 1407.754 ; gain = 609.469
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:07 ; elapsed = 00:00:12 . Memory (MB): peak = 1404.195 ; gain = 609.305
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:04 ; elapsed = 00:00:10 . Memory (MB): peak = 1407.754 ; gain = 609.469
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:12 . Memory (MB): peak = 1404.195 ; gain = 609.305
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:10 . Memory (MB): peak = 1407.754 ; gain = 609.469
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -263,25 +261,25 @@ WARNING: [Synth 8-7129] Port Din[4] in module top_xlslice_0_1 is either unconnec
 WARNING: [Synth 8-7129] Port Din[3] in module top_xlslice_0_1 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port Din[2] in module top_xlslice_0_1 is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:09 ; elapsed = 00:00:14 . Memory (MB): peak = 1417.527 ; gain = 622.637
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:05 ; elapsed = 00:00:11 . Memory (MB): peak = 1415.117 ; gain = 616.832
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:00:19 . Memory (MB): peak = 1594.129 ; gain = 799.238
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:06 ; elapsed = 00:00:15 . Memory (MB): peak = 1592.824 ; gain = 794.539
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:12 ; elapsed = 00:00:19 . Memory (MB): peak = 1594.277 ; gain = 799.387
+Finished Timing Optimization : Time (s): cpu = 00:00:06 ; elapsed = 00:00:15 . Memory (MB): peak = 1593.121 ; gain = 794.836
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:12 ; elapsed = 00:00:19 . Memory (MB): peak = 1604.391 ; gain = 809.500
+Finished Technology Mapping : Time (s): cpu = 00:00:06 ; elapsed = 00:00:15 . Memory (MB): peak = 1603.168 ; gain = 804.883
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -299,37 +297,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:14 ; elapsed = 00:00:22 . Memory (MB): peak = 1839.277 ; gain = 1044.387
+Finished IO Insertion : Time (s): cpu = 00:00:07 ; elapsed = 00:00:17 . Memory (MB): peak = 1837.816 ; gain = 1039.531
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:14 ; elapsed = 00:00:22 . Memory (MB): peak = 1839.277 ; gain = 1044.387
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:07 ; elapsed = 00:00:17 . Memory (MB): peak = 1837.816 ; gain = 1039.531
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:14 ; elapsed = 00:00:22 . Memory (MB): peak = 1839.277 ; gain = 1044.387
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:07 ; elapsed = 00:00:17 . Memory (MB): peak = 1837.816 ; gain = 1039.531
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:14 ; elapsed = 00:00:22 . Memory (MB): peak = 1839.277 ; gain = 1044.387
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:07 ; elapsed = 00:00:17 . Memory (MB): peak = 1837.816 ; gain = 1039.531
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:14 ; elapsed = 00:00:22 . Memory (MB): peak = 1839.277 ; gain = 1044.387
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:07 ; elapsed = 00:00:17 . Memory (MB): peak = 1837.816 ; gain = 1039.531
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:14 ; elapsed = 00:00:22 . Memory (MB): peak = 1839.277 ; gain = 1044.387
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:07 ; elapsed = 00:00:17 . Memory (MB): peak = 1837.816 ; gain = 1039.531
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -361,25 +359,25 @@ Report Cell Usage:
 |8     |OBUF                            |    11|
 +------+--------------------------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:14 ; elapsed = 00:00:22 . Memory (MB): peak = 1839.277 ; gain = 1044.387
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:07 ; elapsed = 00:00:18 . Memory (MB): peak = 1837.816 ; gain = 1039.531
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 36 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:10 ; elapsed = 00:00:20 . Memory (MB): peak = 1839.277 ; gain = 1044.387
-Synthesis Optimization Complete : Time (s): cpu = 00:00:14 ; elapsed = 00:00:22 . Memory (MB): peak = 1839.277 ; gain = 1044.387
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:05 ; elapsed = 00:00:16 . Memory (MB): peak = 1837.816 ; gain = 1039.531
+Synthesis Optimization Complete : Time (s): cpu = 00:00:07 ; elapsed = 00:00:18 . Memory (MB): peak = 1837.816 ; gain = 1039.531
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 1839.277 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1846.906 ; gain = 0.000
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1839.277 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1850.578 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
 Synth Design complete | Checksum: 22cd5b45
 INFO: [Common 17-83] Releasing license: Synthesis
-69 Infos, 90 Warnings, 0 Critical Warnings and 0 Errors encountered.
+70 Infos, 89 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:16 ; elapsed = 00:00:29 . Memory (MB): peak = 1839.277 ; gain = 1276.387
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1839.277 ; gain = 0.000
-INFO: [Common 17-1381] The checkpoint 'E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/top_wrapper.dcp' has been generated.
+synth_design: Time (s): cpu = 00:00:09 ; elapsed = 00:00:24 . Memory (MB): peak = 1850.578 ; gain = 1287.613
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1850.578 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp' has been generated.
 INFO: [Vivado 12-24828] Executing command : report_utilization -file top_wrapper_utilization_synth.rpt -pb top_wrapper_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Tue Feb  3 16:58:08 2026...
+INFO: [Common 17-206] Exiting Vivado at Tue Feb 10 18:22:09 2026...

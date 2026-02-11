@@ -30,7 +30,7 @@ vlog -work xilinx_vip  -incr -mfcu  -sv -L axi_vip_v1_1_21 -L smartconnect_v1_0 
 "C:/Xilinx/2025.1/Vivado/data/xilinx_vip/hdl/clk_vip_if.sv" \
 "C:/Xilinx/2025.1/Vivado/data/xilinx_vip/hdl/rst_vip_if.sv" \
 
-vlog -work xpm  -incr -mfcu  -sv -L axi_vip_v1_1_21 -L smartconnect_v1_0 -L processing_system7_vip_v1_0_23 -L xilinx_vip "+incdir+C:/Xilinx/2025.1/Vivado/data/rsb/busdef" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/ec67/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/6cfa/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/f0b6/hdl/verilog" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/a8e4/hdl/verilog" "+incdir+C:/Xilinx/2025.1/Vivado/data/xilinx_vip/include" \
+vlog -work xpm  -incr -mfcu  -sv -L axi_vip_v1_1_21 -L smartconnect_v1_0 -L processing_system7_vip_v1_0_23 -L xilinx_vip "+incdir+../../../../../../../../../../Xilinx/2025.1/Vivado/data/rsb/busdef" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/ec67/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/6cfa/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/f0b6/hdl/verilog" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/a8e4/hdl/verilog" "+incdir+C:/Xilinx/2025.1/Vivado/data/xilinx_vip/include" \
 "C:/Xilinx/2025.1/Vivado/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv" \
 "C:/Xilinx/2025.1/Vivado/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv" \
 "C:/Xilinx/2025.1/Vivado/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv" \
@@ -55,10 +55,10 @@ vcom -work axi_gpio_v2_0_37  -93  \
 vcom -work xil_defaultlib  -93  \
 "../../../bd/top/ip/top_axi_gpio_0_1/sim/top_axi_gpio_0_1.vhd" \
 
-vlog -work xlslice_v1_0_5  -incr -mfcu  "+incdir+C:/Xilinx/2025.1/Vivado/data/rsb/busdef" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/ec67/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/6cfa/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/f0b6/hdl/verilog" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/a8e4/hdl/verilog" "+incdir+C:/Xilinx/2025.1/Vivado/data/xilinx_vip/include" \
+vlog -work xlslice_v1_0_5  -incr -mfcu  "+incdir+../../../../../../../../../../Xilinx/2025.1/Vivado/data/rsb/busdef" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/ec67/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/6cfa/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/f0b6/hdl/verilog" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/a8e4/hdl/verilog" "+incdir+C:/Xilinx/2025.1/Vivado/data/xilinx_vip/include" \
 "../../../../RAPID.srcs/sources_1/bd/top/ipshared/6792/hdl/xlslice_v1_0_vl_rfs.v" \
 
-vlog -work xil_defaultlib  -incr -mfcu  "+incdir+C:/Xilinx/2025.1/Vivado/data/rsb/busdef" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/ec67/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/6cfa/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/f0b6/hdl/verilog" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/a8e4/hdl/verilog" "+incdir+C:/Xilinx/2025.1/Vivado/data/xilinx_vip/include" \
+vlog -work xil_defaultlib  -incr -mfcu  "+incdir+../../../../../../../../../../Xilinx/2025.1/Vivado/data/rsb/busdef" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/ec67/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/6cfa/hdl" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/f0b6/hdl/verilog" "+incdir+../../../../RAPID.gen/sources_1/bd/top/ipshared/a8e4/hdl/verilog" "+incdir+C:/Xilinx/2025.1/Vivado/data/xilinx_vip/include" \
 "../../../bd/top/ip/top_xlslice_0_1/sim/top_xlslice_0_1.v" \
 "../../../bd/top/ip/top_xlslice_0_2/sim/top_xlslice_0_2.v" \
 "../../../bd/top/ip/top_xlslice_0_3/sim/top_xlslice_0_3.v" \

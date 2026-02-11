@@ -38,13 +38,16 @@ entity Spindle is
 end Spindle;
 
 architecture Behavioral of Spindle is
-signal counter : integer range 0 to 20000000 := 0;
-signal count_max : integer range 500 to 250000000 := 625000;
+signal counter : integer range 0 to 416666668 := 0;
+signal count_max : integer range 500 to 416666668 := 416666668;
 signal clk_div : std_logic := '0';
 signal step : integer range 1 to 6 := 1;
 signal pwm_counter : integer range 0 to 12501 := 0;
 signal pwm_signal : std_logic := '0';
 signal duty_cycle : integer range 0 to 12501 := 6250; -- 100% default
+signal start_check : std_logic := '1';
+signal start_count : integer range 0 to 187500002 := 0;
+signal in_startup : std_logic := '0';
 
 begin
 
@@ -53,7 +56,12 @@ begin
 --             100000 when (speed = "01") else  
 --             50000 when (speed = "10") else   
 --             25000;                           -- Fastest
-count_max <= 625000; --25Hz
+count_max <= 6410256; --14.5Hz - Smoothest/slowest
+--12,820,512 gives 9.75 Hz = too jerky/unusable
+--10,309,278 gives 12.13 Hz = ~1 rotation every 3 seconds - slightly jerky
+--9,387,908 gives 13.32 Hz = 1 rotation every 2.6 seconds
+--6,410,256 gives ~14.5 Hz = 1 rotation everhy 1.8 seconds
+--3,205,128 gives ~39 Hz = 1 RPS
 -- clk divider
 process(clk)
 begin
@@ -90,6 +98,27 @@ begin
     end if;
 end process;
 
+process(clk) --logic for initial startup allign phase
+begin
+    if rising_edge(clk) then
+        if en = '0' then
+            start_check <= '1';
+            start_count <= 0;
+            in_startup <= '0';
+        elsif en = '1' and start_check = '1' then
+            if start_count < 187500000 then
+                in_startup <= '1';
+                start_count <= start_count + 1;
+            else 
+                in_startup <= '0';
+                start_check <= '0';
+                start_count <= 0;
+            end if;
+        end if;
+    end if;
+end process;
+           
+
 -- Duty cycle control 
 duty_cycle <= 1562 when (speed = "00") else  -- 25%
              3125 when (speed = "01") else   --50%
@@ -102,6 +131,11 @@ process(clk_div, en)
 begin
     if rising_edge(clk_div) then
         if (en = '1' and kill='0') then
+            if in_startup = '1' then
+                INLA <= '1';
+                INHB <= '1';
+                INLB <= '1';
+            else 
                 if step = 1 then
                     INLA <= '1';
                     INHB <= '1';
@@ -127,15 +161,17 @@ begin
                     INHB <= '1';
                     INLB <= '0';
                 end if;
-               
+              end if;
             
             -- Increment step 
+         if in_startup = '0' then
             if step >= 6 then
                 step <= 1;
             else
                 step <= step + 1;
             end if;
-            
+         end if;
+         
         else 
             INLA <= '0';
             INHB <= '0';

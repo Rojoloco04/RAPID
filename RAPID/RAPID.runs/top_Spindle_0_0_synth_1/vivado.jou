@@ -3,12 +3,12 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Tue Feb  3 16:56:48 2026
-# Process ID         : 33032
-# Current directory  : E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+# Start of session at: Tue Feb 10 18:21:04 2026
+# Process ID         : 24908
+# Current directory  : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
 # Command line       : vivado.exe -log top_Spindle_0_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top_Spindle_0_0.tcl
-# Log file           : E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/top_Spindle_0_0.vds
-# Journal file       : E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/top_Spindle_0_0_synth_1\vivado.jou
+# Log file           : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/top_Spindle_0_0.vds
+# Journal file       : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1\vivado.jou
 # Running On         : MDD-ECE-785KL84
 # Platform           : Windows Server 2016 or Windows 10
 # Operating System   : 22631
@@ -17,8 +17,8 @@
 # CPU Physical cores : 16
 # CPU Logical cores  : 24
 # Host memory        : 16853 MB
-# Swap memory        : 7727 MB
-# Total Virtual      : 24581 MB
-# Available Virtual  : 2848 MB
+# Swap memory        : 15244 MB
+# Total Virtual      : 32098 MB
+# Available Virtual  : 6566 MB
 #-----------------------------------------------------------
 source top_Spindle_0_0.tcl -notrace

@@ -1,4 +1,4 @@
-# Install script for directory: E:/HardSoftCodesign/Hardsoftcodesign/RAPID/motorDriver/zynq_fsbl/zynq_fsbl_bsp/libsrc/standalone/src/arm/common/gcc
+# Install script for directory: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/motorDriver/zynq_fsbl/zynq_fsbl_bsp/libsrc/standalone/src/arm/common/gcc
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -3,12 +3,12 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Thu Feb  5 16:28:07 2026
-# Process ID         : 31144
-# Current directory  : E:/HardSoftCodesign/Hardsoftcodesign/RAPID
-# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent25640 E:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.xpr
-# Log file           : E:/HardSoftCodesign/Hardsoftcodesign/RAPID/vivado.log
-# Journal file       : E:/HardSoftCodesign/Hardsoftcodesign/RAPID\vivado.jou
+# Start of session at: Tue Feb 10 16:09:44 2026
+# Process ID         : 33856
+# Current directory  : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent30536 C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.xpr
+# Log file           : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/vivado.log
+# Journal file       : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID\vivado.jou
 # Running On         : MDD-ECE-785KL84
 # Platform           : Windows Server 2016 or Windows 10
 # Operating System   : 22631
@@ -17,12 +17,12 @@
 # CPU Physical cores : 16
 # CPU Logical cores  : 24
 # Host memory        : 16853 MB
-# Swap memory        : 3965 MB
-# Total Virtual      : 20819 MB
-# Available Virtual  : 6016 MB
+# Swap memory        : 11296 MB
+# Total Virtual      : 28150 MB
+# Available Virtual  : 5720 MB
 #-----------------------------------------------------------
 start_gui
-open_project E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.xpr
+open_project C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.xpr
 WARNING: [Board 49-26] cannot add Board Part xilinx.com:emb-plus-vpr-4616:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\emb-plus-vpr-4616\1.0\board.xml as part xcve2302-sfva784-2mp-e-s specified in board_part file is either invalid or not available
 WARNING: [Board 49-26] cannot add Board Part xilinx.com:emb-plus-vpr-4616:part0:1.1 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\emb-plus-vpr-4616\1.1\board.xml as part xcve2302-sfva784-2mp-e-s specified in board_part file is either invalid or not available
 WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.4 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\kcu116\1.4\board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
@@ -68,7 +68,7 @@ WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.2 availab
 WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu208ld\production\2.0\board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
 WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu216ld\production\2.0\board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
 WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu670ld\1.0\board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
-WARNING: [filemgmt 56-3] IP Repository Path: Could not find the directory 'c:/Users/mbracker/AppData/Roaming/Xilinx/ip_repo'.
+WARNING: [filemgmt 56-3] IP Repository Path: Could not find the directory 'C:/Users/mbracker/AppData/Roaming/Xilinx/ip_repo'.
 Scanning sources...
 Finished scanning sources
 WARNING: [Board 49-26] cannot add Board Part xilinx.com:emb-plus-vpr-4616:part0:1.0 available at C:/Xilinx/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\emb-plus-vpr-4616\1.0\board.xml as part xcve2302-sfva784-2mp-e-s specified in board_part file is either invalid or not available
@@ -121,7 +121,12 @@ INFO: [IP_Flow 19-234] Refreshing IP repositories
 WARNING: [IP_Flow 19-2248] Failed to load user IP repository 'c:/Users/mbracker/AppData/Roaming/Xilinx/ip_repo'; Can't find the specified path.
 If this directory should no longer be in your list of user repositories, go to the IP Settings dialog and remove it.
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/2025.1/Vivado/data/ip'.
-INFO: [Project 1-5698] Found the below utility IPs instantiated in block design E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd which have equivalent inline hdl with improved performance and reduced diskspace.
+WARNING: [IP_Flow 19-3664] IP 'top_Spindle_0_0' generated file not found 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0.dcp'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'top_Spindle_0_0' generated file not found 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0_stub.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'top_Spindle_0_0' generated file not found 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0_stub.vhdl'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'top_Spindle_0_0' generated file not found 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0_sim_netlist.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'top_Spindle_0_0' generated file not found 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0_sim_netlist.vhdl'. Please regenerate to continue.
+INFO: [Project 1-5698] Found the below utility IPs instantiated in block design C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd which have equivalent inline hdl with improved performance and reduced diskspace.
 It is recommended to migrate these utility IPs to inline hdl  using the command upgrade_project -migrate_to_inline_hdl.  The utility IPs may be deprecated in future releases.
 More information on inline hdl is available in UG994.
 Utility IP Component Instances:
@@ -131,13 +136,1100 @@ top_xlslice_0_3
 top_xlslice_0_4
 top_xlslice_0_5
 top_xlslice_0_6
-open_project: Time (s): cpu = 00:00:04 ; elapsed = 00:00:09 . Memory (MB): peak = 1729.188 ; gain = 266.453
-INFO: [Vivado 12-8231] Launching Vitis
-INFO: [Vivado 12-417] Running vitis
-INFO: [Vivado 12-8232] Vitis launch initiated. Please check console for any further messages.
+open_project: Time (s): cpu = 00:00:01 ; elapsed = 00:00:07 . Memory (MB): peak = 1719.891 ; gain = 256.438
 update_compile_order -fileset sources_1
-INFO: [Vivado 12-8231] Launching Vitis
-INFO: [Vivado 12-417] Running vitis
-INFO: [Vivado 12-8232] Vitis launch initiated. Please check console for any further messages.
-exit
-INFO: [Common 17-206] Exiting Vivado at Thu Feb  5 16:31:17 2026...
+reset_run synth_1
+reset_run top_Spindle_0_0_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 16:10:21 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 16:10:21 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+reset_run top_Spindle_0_0_synth_1
+upgrade_ip [get_ips top_Spindle_0_0]
+WARNING: [Coretcl 2-1042] No IP was identified for upgrade.
+generate_target all [get_files top_Spindle_0_0.xci]
+ERROR: [Vivado 12-3563] The Nested sub-design 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0.xci' can only be generated by its parent sub-design.
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 16:15:56 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 16:15:57 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property  ip_repo_paths  {} [current_project]
+update_ip_catalog
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+set_property  ip_repo_paths  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/ip_repo [current_project]
+update_ip_catalog
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/ip_repo'.
+reset_run synth_1
+reset_run top_Spindle_0_0_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 16:17:30 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 16:17:30 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+clear
+ERROR: [Common 17-53] User Exception: NoC compiler results cannot be obtained. Please open a block diagram  with NoC IP or an elaborated design before executing this command.
+reset_run synth_1
+reset_run top_Spindle_0_0_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 16:18:22 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 16:18:22 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+open_bd_design {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd}
+Reading block design file <C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd>...
+Adding component instance block -- xilinx.com:ip:processing_system7:5.5 - processing_system7_0
+Adding component instance block -- xilinx.com:module_ref:Spindle:1.0 - Spindle_0
+Adding component instance block -- xilinx.com:module_ref:stepperDriver:1.0 - stepperDriver_0
+Adding component instance block -- xilinx.com:ip:axi_gpio:2.0 - axi_gpio_0
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_0
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_1
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_2
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_3
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_4
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_5
+Adding component instance block -- xilinx.com:ip:proc_sys_reset:5.0 - rst_ps7_0_100M
+Adding component instance block -- xilinx.com:ip:smartconnect:1.0 - axi_smc
+Successfully read diagram <top> from block design file <C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd>
+close_bd_design [get_bd_designs top]
+Wrote  : <C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ui/bd_2ae56375.ui> 
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Reading block design file <C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd>...
+Adding component instance block -- xilinx.com:ip:processing_system7:5.5 - processing_system7_0
+Adding component instance block -- xilinx.com:module_ref:Spindle:1.0 - Spindle_0
+Adding component instance block -- xilinx.com:module_ref:stepperDriver:1.0 - stepperDriver_0
+Adding component instance block -- xilinx.com:ip:axi_gpio:2.0 - axi_gpio_0
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_0
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_1
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_2
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_3
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_4
+Adding component instance block -- xilinx.com:ip:xlslice:1.0 - xlslice_5
+Adding component instance block -- xilinx.com:ip:proc_sys_reset:5.0 - rst_ps7_0_100M
+Adding component instance block -- xilinx.com:ip:smartconnect:1.0 - axi_smc
+Successfully read diagram <top> from block design file <C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd>
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+Wrote  : <C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ui/bd_2ae56375.ui> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:03 ; elapsed = 00:00:08 . Memory (MB): peak = 2043.930 ; gain = 0.000
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 16:23:17 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 16:24:27 2026] Launched synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 16:24:27 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+open_hw_manager
+connect_hw_server -allow_non_jtag
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-2222] Launching hw_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+****** Xilinx hw_server v2025.1
+  **** Build date : May  6 2025 at 09:15:36
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:0
+INFO: [Labtools 27-3417] Launching cs_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+
+******** Xilinx cs_server v2025.1.0
+  ****** Build date   : May 13 2025-14:15:27
+    **** Build number : 2025.1.1747163727
+      ** Copyright 2017-2022 Xilinx, Inc. All Rights Reserved.
+      ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+
+
+connect_hw_server: Time (s): cpu = 00:00:00 ; elapsed = 00:00:07 . Memory (MB): peak = 2043.930 ; gain = 0.000
+disconnect_hw_server localhost:3121
+connect_hw_server -allow_non_jtag
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:0
+INFO: [Labtools 27-3417] Launching cs_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+
+******** Xilinx cs_server v2025.1.0
+  ****** Build date   : May 13 2025-14:15:27
+    **** Build number : 2025.1.1747163727
+      ** Copyright 2017-2022 Xilinx, Inc. All Rights Reserved.
+      ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+
+
+disconnect_hw_server localhost:3121
+connect_hw_server -allow_non_jtag
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:0
+INFO: [Labtools 27-3417] Launching cs_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+
+******** Xilinx cs_server v2025.1.0
+  ****** Build date   : May 13 2025-14:15:27
+    **** Build number : 2025.1.1747163727
+      ** Copyright 2017-2022 Xilinx, Inc. All Rights Reserved.
+      ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+
+
+open_hw_target
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/003017BC91A1A
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1435] Device xc7z020 (JTAG device index = 1) is not programmed (DONE status = 0).
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:03 ; elapsed = 00:00:07 . Memory (MB): peak = 2059.215 ; gain = 15.285
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 16:31:22 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+CRITICAL WARNING: [PSU-1]  Parameter : PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_2 has negative value -0.009 . PS DDR interfaces might fail when entering negative DQS skew values. 
+CRITICAL WARNING: [PSU-2]  Parameter : PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_3 has negative value -0.033 . PS DDR interfaces might fail when entering negative DQS skew values. 
+CRITICAL WARNING: [PSU-1]  Parameter : PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_2 has negative value -0.009 . PS DDR interfaces might fail when entering negative DQS skew values. 
+CRITICAL WARNING: [PSU-2]  Parameter : PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_3 has negative value -0.033 . PS DDR interfaces might fail when entering negative DQS skew values. 
+WARNING: [IP_Flow 19-474] Invalid Parameter 'Component_Name'
+CRITICAL WARNING: [PSU-1]  Parameter : PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_2 has negative value -0.009 . PS DDR interfaces might fail when entering negative DQS skew values. 
+CRITICAL WARNING: [PSU-2]  Parameter : PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_3 has negative value -0.033 . PS DDR interfaces might fail when entering negative DQS skew values. 
+CRITICAL WARNING: [PS7-6]  LVCMOS33 (3.3V) is not supported for RGMII interface in Ethernet0. Recommendation is to use 1.8/2.5V IO.
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 16:32:08 2026] Launched synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 16:32:08 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+Wrote  : <C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/ui/bd_2ae56375.ui> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+CRITICAL WARNING: [xilinx.com:ip:processing_system7:5.5-1] top_processing_system7_0_0: Critical Warning:- LVCMOS33 (3.3V) is not supported for RGMII interface in Ethernet0. Recommendation is to use 1.8/2.5V IO.
+WARNING: [IP_Flow 19-5160] IP 'top_processing_system7_0_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Any Language' outputs instead.
+WARNING: [IP_Flow 19-5160] IP 'top_processing_system7_0_0' detected simulation language mismatch. Simulation type 'tlm_dpi' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Any Language' outputs instead.
+INFO: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'M_AXI_GP0'. A default connection has been created.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block processing_system7_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:10 ; elapsed = 00:00:19 . Memory (MB): peak = 2193.555 ; gain = 30.746
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 top_processing_system7_0_0_synth_1 -jobs 24
+[Tue Feb 10 17:09:06 2026] Launched top_Spindle_0_0_synth_1, top_processing_system7_0_0_synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+top_processing_system7_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_processing_system7_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:09:29 2026] Launched top_processing_system7_0_0_synth_1, top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_processing_system7_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_processing_system7_0_0_synth_1/runme.log
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:09:29 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:00:00 ; elapsed = 00:00:05 . Memory (MB): peak = 2193.555 ; gain = 0.000
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:03 ; elapsed = 00:00:08 . Memory (MB): peak = 2199.602 ; gain = 0.000
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 17:15:19 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+reset_run top_Spindle_0_0_synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:15:51 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:15:51 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+report_ip_status -name ip_status 
+close_hw_manager
+reset_run synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+reset_run top_Spindle_0_0_synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:17:07 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:17:07 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+reset_run synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+reset_run top_Spindle_0_0_synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:03 ; elapsed = 00:00:07 . Memory (MB): peak = 2232.746 ; gain = 0.141
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 17:17:46 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:18:33 2026] Launched synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:18:33 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+open_hw_manager
+connect_hw_server -allow_non_jtag
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:0
+INFO: [Labtools 27-3417] Launching cs_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+
+******** Xilinx cs_server v2025.1.0
+  ****** Build date   : May 13 2025-14:15:27
+    **** Build number : 2025.1.1747163727
+      ** Copyright 2017-2022 Xilinx, Inc. All Rights Reserved.
+      ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+
+
+open_hw_target
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/003017BC91A1A
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:02 ; elapsed = 00:00:08 . Memory (MB): peak = 2253.203 ; gain = 5.883
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 17:22:44 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:23:37 2026] Launched synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:23:37 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:02 ; elapsed = 00:00:08 . Memory (MB): peak = 2280.930 ; gain = 1.168
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 17:27:57 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:28:38 2026] Launched synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:28:38 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:03 ; elapsed = 00:00:08 . Memory (MB): peak = 2313.844 ; gain = 0.000
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 17:32:49 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:33:33 2026] Launched synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:33:33 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:03 ; elapsed = 00:00:08 . Memory (MB): peak = 2344.965 ; gain = 0.074
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 17:38:05 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:38:57 2026] Launched synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:38:57 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:03 ; elapsed = 00:00:08 . Memory (MB): peak = 2367.473 ; gain = 9.605
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 17:43:01 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:43:17 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:43:17 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:02 ; elapsed = 00:00:08 . Memory (MB): peak = 2393.574 ; gain = 0.930
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 17:49:28 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:49:47 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:49:47 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:03 ; elapsed = 00:00:08 . Memory (MB): peak = 2422.965 ; gain = 0.094
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 17:56:22 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 17:57:23 2026] Launched synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 17:57:23 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:04 ; elapsed = 00:00:08 . Memory (MB): peak = 2501.496 ; gain = 57.625
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 18:13:39 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 18:14:41 2026] Launched synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 18:14:41 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+INFO: [IP_Flow 19-5107] Inferred bus interface 'clk' of definition 'xilinx.com:signal:clock:1.0' (from Xilinx Repository).
+WARNING: [IP_Flow 19-5661] Bus Interface 'clk' does not have any bus interfaces associated with it.
+WARNING: [IP_Flow 19-11770] Clock interface 'clk' has no FREQ_HZ parameter.
+Upgrading 'C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd'
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1
+
+INFO: [IP_Flow 19-3420] Updated top_Spindle_0_0 to use current project options
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M01_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-2670] Found an incomplete address path from address space '/processing_system7_0/Data' to master interface '/axi_smc/M02_AXI'. Please either complete or remove this path to resolve.
+WARNING: [BD 41-702] Propagation TCL tries to overwrite USER strength parameter PCW_M_AXI_GP0_FREQMHZ(10) on '/processing_system7_0' with propagated value(125). Command ignored
+INFO: [BD 5-943] Reserving offset range <0x4120_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] top_axi_smc_1: SmartConnect top_axi_smc_1 is in Low-Area Mode.
+Wrote  : <C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.srcs\sources_1\bd\top\top.bd> 
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/sim/top.vhd
+VHDL Output written to : c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+INFO: [BD 41-1029] Generation completed for the IP Integrator block Spindle_0 .
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_0, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_1, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_2, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_3, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_4, which is locked by user.
+INFO: [BD 41-1982] Skipping generation for the cell xlslice_5, which is locked by user.
+WARNING: [IP_Flow 19-5160] IP 'bd_74fb_one_0' detected simulation language mismatch. Simulation type 'rtl' does not support 'VHDL' outputs (see project's "simulator_language" property), delivering 'Verilog' outputs instead.
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/hw_handoff/top_axi_smc_1.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/synth/top_axi_smc_1.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hw_handoff/top.hwh
+Generated Hardware Definition File c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/synth/top.hwdef
+generate_target: Time (s): cpu = 00:00:03 ; elapsed = 00:00:08 . Memory (MB): peak = 2504.797 ; gain = 2.000
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP top_axi_smc_1, cache-ID = 0ce0a16f2f9c6f42; cache size = 37.866 MB.
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+[Tue Feb 10 18:20:41 2026] Launched top_Spindle_0_0_synth_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp with file C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+[Tue Feb 10 18:20:56 2026] Launched top_Spindle_0_0_synth_1, synth_1...
+Run output will be captured here:
+top_Spindle_0_0_synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/top_Spindle_0_0_synth_1/runme.log
+synth_1: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/runme.log
+[Tue Feb 10 18:20:56 2026] Launched impl_1...
+Run output will be captured here: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.

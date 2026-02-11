@@ -25,7 +25,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1'
+HD_PWD='C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

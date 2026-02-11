@@ -1,4 +1,4 @@
-set_property SRC_FILE_INFO {cfile:E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc rfile:../../../RAPID.srcs/constrs_1/new/RAPID.xdc id:1} [current_design]
+set_property SRC_FILE_INFO {cfile:C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc rfile:../../../RAPID.srcs/constrs_1/new/RAPID.xdc id:1} [current_design]
 set_property src_info {type:XDC file:1 line:1 export:INPUT save:INPUT read:READ} [current_design]
 set_property IOSTANDARD LVCMOS33 [get_ports uart_rtl_baudoutn]
 set_property src_info {type:XDC file:1 line:2 export:INPUT save:INPUT read:READ} [current_design]

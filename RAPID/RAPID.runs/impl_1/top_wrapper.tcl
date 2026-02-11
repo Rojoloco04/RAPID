@@ -1,5 +1,5 @@
 namespace eval ::optrace {
-  variable script "E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/impl_1/top_wrapper.tcl"
+  variable script "C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.tcl"
   variable category "vivado_impl"
 }
 
@@ -116,22 +116,22 @@ OPTRACE "create in-memory project" START { }
   set_param project.singleFileAddWarning.threshold 0
 OPTRACE "create in-memory project" END { }
 OPTRACE "set parameters" START { }
-  set_property webtalk.parent_dir E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/wt [current_project]
-  set_property parent.project_path E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.xpr [current_project]
-  set_property ip_repo_paths c:/Users/mbracker/AppData/Roaming/Xilinx/ip_repo [current_project]
+  set_property webtalk.parent_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/wt [current_project]
+  set_property parent.project_path C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.xpr [current_project]
+  set_property ip_repo_paths C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/ip_repo [current_project]
   update_ip_catalog
-  set_property ip_output_repo E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.cache/ip [current_project]
+  set_property ip_output_repo C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
   set_property XPM_LIBRARIES {XPM_CDC XPM_FIFO XPM_MEMORY} [current_project]
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
-  add_files -quiet E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
+  add_files -quiet C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.dcp
   set_msg_config -source 4 -id {BD 41-1661} -limit 0
   set_param project.isImplRun true
-  add_files E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/sources_1/bd/top/top.bd
+  add_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd
   set_param project.isImplRun false
 OPTRACE "read constraints: implementation" START { }
-  read_xdc E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc
+  read_xdc C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc
 OPTRACE "read constraints: implementation" END { }
 OPTRACE "read constraints: implementation_pre" START { }
 OPTRACE "read constraints: implementation_pre" END { }

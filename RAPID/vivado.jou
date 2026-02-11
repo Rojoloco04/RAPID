@@ -3,12 +3,12 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Thu Feb  5 16:28:07 2026
-# Process ID         : 31144
-# Current directory  : E:/HardSoftCodesign/Hardsoftcodesign/RAPID
-# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent25640 E:\HardSoftCodesign\Hardsoftcodesign\RAPID\RAPID.xpr
-# Log file           : E:/HardSoftCodesign/Hardsoftcodesign/RAPID/vivado.log
-# Journal file       : E:/HardSoftCodesign/Hardsoftcodesign/RAPID\vivado.jou
+# Start of session at: Tue Feb 10 16:09:44 2026
+# Process ID         : 33856
+# Current directory  : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent30536 C:\Users\mbracker\Documents\RAPID\RAPID\RAPID\RAPID.xpr
+# Log file           : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/vivado.log
+# Journal file       : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID\vivado.jou
 # Running On         : MDD-ECE-785KL84
 # Platform           : Windows Server 2016 or Windows 10
 # Operating System   : 22631
@@ -17,10 +17,304 @@
 # CPU Physical cores : 16
 # CPU Logical cores  : 24
 # Host memory        : 16853 MB
-# Swap memory        : 3965 MB
-# Total Virtual      : 20819 MB
-# Available Virtual  : 6016 MB
+# Swap memory        : 11296 MB
+# Total Virtual      : 28150 MB
+# Available Virtual  : 5720 MB
 #-----------------------------------------------------------
 start_gui
-open_project E:/HardSoftCodesign/Hardsoftcodesign/RAPID/RAPID.xpr
+open_project C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.xpr
 update_compile_order -fileset sources_1
+reset_run synth_1
+reset_run top_Spindle_0_0_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+reset_run top_Spindle_0_0_synth_1
+upgrade_ip [get_ips top_Spindle_0_0]
+generate_target all [get_files top_Spindle_0_0.xci]
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property  ip_repo_paths  {} [current_project]
+update_ip_catalog
+set_property  ip_repo_paths  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/ip_repo [current_project]
+update_ip_catalog
+reset_run synth_1
+reset_run top_Spindle_0_0_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+clear
+reset_run synth_1
+reset_run top_Spindle_0_0_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+open_bd_design {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd}
+close_bd_design [get_bd_designs top]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+disconnect_hw_server localhost:3121
+connect_hw_server -allow_non_jtag
+disconnect_hw_server localhost:3121
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 top_processing_system7_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+wait_on_run top_processing_system7_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+reset_run top_Spindle_0_0_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+report_ip_status -name ip_status 
+close_hw_manager
+reset_run synth_1
+reset_run top_Spindle_0_0_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+reset_run synth_1
+reset_run top_Spindle_0_0_synth_1
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+report_ip_status -name ip_status 
+update_module_reference [get_ips  top_Spindle_0_0]
+generate_target all [get_files  C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+catch { config_ip_cache -export [get_ips -all top_axi_smc_1] }
+export_ip_user_files -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd]
+launch_runs top_Spindle_0_0_synth_1 -jobs 24
+wait_on_run top_Spindle_0_0_synth_1
+export_simulation -lib_map_path [list {modelsim=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/modelsim} {questa=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/questa} {riviera=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/riviera} {activehdl=C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/compile_simlib/activehdl}] -of_objects [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd] -directory C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files -ipstatic_source_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.ip_user_files/ipstatic -use_ip_compiled_libs -force -quiet
+report_ip_status -name ip_status 
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 24
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
