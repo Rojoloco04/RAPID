@@ -28,7 +28,7 @@
 					"psDevice": "Auto Detect"
 				},
 				"resetAPU": false,
-				"bitstreamFile": "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\RAPID.runs\\impl_1\\top_wrapper.bit",
+				"bitstreamFile": "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\RAPID.runs\\impl_1\\top_wrapper.bit",
 				"zynqInitialization": {
 					"isFsbl": false,
 					"usingFSBL": {

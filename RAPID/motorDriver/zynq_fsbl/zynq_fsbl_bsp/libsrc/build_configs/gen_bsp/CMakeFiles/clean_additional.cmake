@@ -3,17 +3,17 @@ cmake_minimum_required(VERSION 3.16)
 
 if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
   file(REMOVE_RECURSE
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\diskio.h"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\ff.h"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\ffconf.h"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\sleep.h"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\xilffs.h"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\xilffs_config.h"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\xilrsa.h"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\xiltimer.h"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\xtimer_config.h"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\lib\\libxilffs.a"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\lib\\libxilrsa.a"
-  "C:\\Users\\mbracker\\Documents\\RAPID\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\lib\\libxiltimer.a"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\diskio.h"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\ff.h"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\ffconf.h"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\sleep.h"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\xilffs.h"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\xilffs_config.h"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\xilrsa.h"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\xiltimer.h"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\include\\xtimer_config.h"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\lib\\libxilffs.a"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\lib\\libxilrsa.a"
+  "C:\\Users\\jparrack\\Desktop\\RAPID\\RAPID\\motorDriver\\zynq_fsbl\\zynq_fsbl_bsp\\lib\\libxiltimer.a"
   )
 endif()
