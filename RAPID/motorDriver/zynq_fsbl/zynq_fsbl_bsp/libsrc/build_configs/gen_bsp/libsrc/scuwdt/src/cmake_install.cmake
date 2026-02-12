@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/motorDriver/zynq_fsbl/zynq_fsbl_bsp/libsrc/scuwdt/src
+# Install script for directory: C:/Users/jparrack/Desktop/RAPID/RAPID/motorDriver/zynq_fsbl/zynq_fsbl_bsp/libsrc/scuwdt/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

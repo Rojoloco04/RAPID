@@ -42,4 +42,4 @@ set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==top_rst_ps7
 # IP: bd/top/ip/top_axi_smc_1/top_axi_smc_1.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==top_axi_smc_1 || ORIG_REF_NAME==top_axi_smc_1} -quiet] -quiet
 
-# XDC: c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/top_ooc.xdc
+# XDC: c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/top_ooc.xdc

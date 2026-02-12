@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.tcl"
+  variable script "C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.runs/synth_1/top_wrapper.tcl"
   variable category "vivado_synth"
 }
 
@@ -56,10 +56,7 @@ if {$::dispatch::connected} {
 }
 
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_param chipscope.maxJobs 6
 set_param general.usePosixSpawnForFork 1
-set_param bd.open.in_stealth_mode 1
-set_param xicom.use_bs_reader 1
 set_msg_config  -id {Common 17-1257}  -string {{ERROR: [Common 17-1257] Failed to create directory 'C'.}}  -suppress 
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7z020clg400-1
@@ -68,55 +65,55 @@ set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
 set_msg_config -source 4 -id {IP_Flow 19-2162} -severity warning -new_severity info
-set_property webtalk.parent_dir C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/wt [current_project]
-set_property parent.project_path C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.xpr [current_project]
+set_property webtalk.parent_dir C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.cache/wt [current_project]
+set_property parent.project_path C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.xpr [current_project]
 set_property XPM_LIBRARIES {XPM_CDC XPM_FIFO XPM_MEMORY} [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language VHDL [current_project]
-set_property ip_repo_paths c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/ip_repo [current_project]
+set_property ip_repo_paths c:/Users/jparrack/Desktop/RAPID/RAPID/ip_repo [current_project]
 update_ip_catalog
-set_property ip_output_repo c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.cache/ip [current_project]
+set_property ip_output_repo c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
-read_vhdl -library xil_defaultlib C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
-add_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1_board.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1_board.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_1/bd_74fb_psr_aclk_0_board.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_2/bd_74fb_arinsw_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_3/bd_74fb_rinsw_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_4/bd_74fb_awinsw_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_5/bd_74fb_winsw_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_6/bd_74fb_binsw_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_7/bd_74fb_aroutsw_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_8/bd_74fb_routsw_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_9/bd_74fb_awoutsw_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_10/bd_74fb_woutsw_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_11/bd_74fb_boutsw_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_12/bd_74fb_arni_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_13/bd_74fb_rni_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_14/bd_74fb_awni_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_15/bd_74fb_wni_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_16/bd_74fb_bni_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_20/bd_74fb_s00a2s_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_21/bd_74fb_sarn_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_22/bd_74fb_srn_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_23/bd_74fb_sawn_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_24/bd_74fb_swn_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_25/bd_74fb_sbn_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_26/bd_74fb_m00s2a_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_27/bd_74fb_m00arn_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_28/bd_74fb_m00rn_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_29/bd_74fb_m00awn_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_30/bd_74fb_m00wn_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_31/bd_74fb_m00bn_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/ooc.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/smartconnect.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/top_ooc.xdc]
+read_vhdl -library xil_defaultlib C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/hdl/top_wrapper.vhd
+add_files C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.srcs/sources_1/bd/top/top.bd
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_processing_system7_0_0_1/top_processing_system7_0_0.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1_board.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_gpio_0_1/top_axi_gpio_0_1_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1_board.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_rst_ps7_0_100M_1/top_rst_ps7_0_100M_1_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_1/bd_74fb_psr_aclk_0_board.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_2/bd_74fb_arinsw_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_3/bd_74fb_rinsw_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_4/bd_74fb_awinsw_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_5/bd_74fb_winsw_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_6/bd_74fb_binsw_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_7/bd_74fb_aroutsw_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_8/bd_74fb_routsw_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_9/bd_74fb_awoutsw_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_10/bd_74fb_woutsw_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_11/bd_74fb_boutsw_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_12/bd_74fb_arni_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_13/bd_74fb_rni_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_14/bd_74fb_awni_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_15/bd_74fb_wni_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_16/bd_74fb_bni_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_20/bd_74fb_s00a2s_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_21/bd_74fb_sarn_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_22/bd_74fb_srn_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_23/bd_74fb_sawn_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_24/bd_74fb_swn_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_25/bd_74fb_sbn_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_26/bd_74fb_m00s2a_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_27/bd_74fb_m00arn_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_28/bd_74fb_m00rn_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_29/bd_74fb_m00awn_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_30/bd_74fb_m00wn_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/bd_0/ip/ip_31/bd_74fb_m00bn_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/smartconnect.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.gen/sources_1/bd/top/top_ooc.xdc]
 
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -127,14 +124,14 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc
-set_property used_in_implementation false [get_files C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc]
+read_xdc C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc
+set_property used_in_implementation false [get_files C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc]
 
 read_xdc dont_touch.xdc
 set_property used_in_implementation false [get_files dont_touch.xdc]
 set_param ips.enableIPCacheLiteLoad 1
 
-read_checkpoint -auto_incremental -incremental C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp
+read_checkpoint -auto_incremental -incremental C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.srcs/utils_1/imports/synth_1/top_wrapper.dcp
 close [open __synthesis_is_running__ w]
 
 OPTRACE "synth_design" START { }

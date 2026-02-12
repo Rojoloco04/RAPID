@@ -3,22 +3,22 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Tue Feb 10 18:22:16 2026
-# Process ID         : 36548
-# Current directory  : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1
+# Start of session at: Thu Feb 12 15:46:50 2026
+# Process ID         : 30864
+# Current directory  : C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.runs/impl_1
 # Command line       : vivado.exe -log top_wrapper.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source top_wrapper.tcl -notrace
-# Log file           : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.vdi
-# Journal file       : C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.runs/impl_1\vivado.jou
-# Running On         : MDD-ECE-785KL84
+# Log file           : C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.runs/impl_1/top_wrapper.vdi
+# Journal file       : C:/Users/jparrack/Desktop/RAPID/RAPID/RAPID.runs/impl_1\vivado.jou
+# Running On         : MDD-ECE-HP3853
 # Platform           : Windows Server 2016 or Windows 10
 # Operating System   : 22631
-# Processor Detail   : 13th Gen Intel(R) Core(TM) i7-13700
-# CPU Frequency      : 2112 MHz
-# CPU Physical cores : 16
-# CPU Logical cores  : 24
-# Host memory        : 16853 MB
-# Swap memory        : 15244 MB
-# Total Virtual      : 32098 MB
-# Available Virtual  : 6491 MB
+# Processor Detail   : Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz
+# CPU Frequency      : 2904 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 34058 MB
+# Swap memory        : 7262 MB
+# Total Virtual      : 41320 MB
+# Available Virtual  : 7289 MB
 #-----------------------------------------------------------
 source top_wrapper.tcl -notrace

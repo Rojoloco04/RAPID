@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/mbracker/Documents/RAPID/RAPID/RAPID/motorDriver/ps7_cortexa9_0/standalone_ps7_cortexa9_0/bsp/libsrc/uartps/src
+# Install script for directory: C:/Users/jparrack/Desktop/RAPID/RAPID/motorDriver/ps7_cortexa9_0/standalone_ps7_cortexa9_0/bsp/libsrc/uartps/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
