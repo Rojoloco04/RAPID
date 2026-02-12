@@ -10,3 +10,19 @@ status = platform.build()
 comp = client.get_component(name="motorDriver_SW")
 comp.build()
 
+status = platform.build()
+
+comp.build()
+
+status = platform.build()
+
+comp.build()
+
+status = platform.build()
+
+comp.build()
+
+status = platform.build()
+
+comp.build()
+

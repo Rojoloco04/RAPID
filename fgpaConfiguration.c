@@ -11,25 +11,46 @@
 
 XGpio gpio;
 
-int input_check(const char* prompt, int min, int max){
+int input_check(const char* prompt, int min, int max)
+{
+    char buf[16];
+    int idx = 0;
     int value;
-    int result;
 
-    while (1){
+    while (1) {
         xil_printf("%s", prompt);
-        result = scanf("%d", &value);
+        idx = 0;
 
-        //clear input buffer when invalid input
-        int c;
-        while ((c=getchar()) != '\n' && c != EOF);
-        if (result == 1 && value >= min && value <= max){
+        while (1) {
+            char c = inbyte();   // blocking UART read
+
+            if (c == '\r' || c == '\n') {
+                buf[idx] = '\0';
+                xil_printf("\r\n");
+                break;
+            }
+
+            // handle backspace
+            if ((c == 0x08 || c == 0x7F) && idx > 0) {
+                idx--;
+                xil_printf("\b \b");
+                continue;
+            }
+
+            if (idx < sizeof(buf) - 1) {
+                buf[idx++] = c;
+                xil_printf("%c", c); // echo
+            }
+        }
+
+        if (sscanf(buf, "%d", &value) == 1 && value >= min && value <= max) {
             return value;
         }
-        else{
-            xil_printf("Invalid input. Please enter value between %d and %d.\r\n",min,max);
-        }
+
+        xil_printf("Invalid input. Please enter value between %d and %d.\r\n", min, max);
     }
 }
+
 
 void help_query(){
        xil_printf("\r\nValid commands:\
@@ -48,7 +69,7 @@ int main()
     int Status;
     u32 config = 0x00000000;
     char command;
-    int scan_result;
+
 
     // initialize GPIO
     Status = XGpio_Initialize(&gpio, 0);

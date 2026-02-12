@@ -2,7 +2,7 @@ import sys
 import re
 import math
 from pathlib import Path
-from PySide6.QtCore import QProcess, QTimer, Qt
+from PySide6.QtCore import QProcess, QTimer
 from PySide6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QLineEdit, QLabel, QFileDialog, QPlainTextEdit
@@ -12,7 +12,6 @@ import pyqtgraph as pg
 ACK_RE = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+nm,\s+theta=(?P<t>-?\d+)\s+udeg")
 FPGA_RE = re.compile(r"\[FPGA\]\s+(?P<msg>.*)")
 CRC_RE  = re.compile(r"\[RX\]\s+CRC mismatch.*")
-TX_RE   = re.compile(r"\[TX\]\s+r=(?P<r>-?\d+)\s+nm,\s+theta=(?P<t>-?\d+)\s+deg")
 
 
 def polar_to_xy(r_list, theta_deg_list):
@@ -34,14 +33,12 @@ class Dashboard(QWidget):
         self.proc.setProcessChannelMode(QProcess.MergedChannels)
         self.proc.readyReadStandardOutput.connect(self.on_ready_read)
         self.proc.finished.connect(self.on_finished)
+        self.proc.errorOccurred.connect(self.on_error)
 
         self.ack_count = 0
-        self.tx_count = 0
-
+        self.crc_count = 0
         self.ack_r = []
         self.ack_theta_deg = []
-        self.tx_r = []
-        self.tx_theta_deg = []
 
         # --- UI ---
         root = QVBoxLayout(self)
@@ -82,30 +79,24 @@ class Dashboard(QWidget):
         root.addLayout(row3)
 
         row4 = QHBoxLayout()
-        self.lbl_tx = QLabel("TX: 0")
         self.lbl_ack = QLabel("ACK: 0")
+        self.lbl_crc = QLabel("CRC: 0")
         self.lbl_status = QLabel("Status: idle")
-        row4.addWidget(self.lbl_tx)
         row4.addWidget(self.lbl_ack)
+        row4.addWidget(self.lbl_crc)
         row4.addStretch(1)
         row4.addWidget(self.lbl_status)
         root.addLayout(row4)
 
-        # Plot: polar points displayed in XY plane (circle view)
+        # Plot: ACK points displayed in XY plane (circle view)
         self.plot = pg.PlotWidget()
         self.plot.setLabel("bottom", "X (nm)")
         self.plot.setLabel("left", "Y (nm)")
         self.plot.showGrid(x=True, y=True, alpha=0.2)
-
-        # lock aspect so circles look like circles
         self.plot.setAspectLocked(True)
 
         self.curve_ack = self.plot.plot([], [], pen=None, symbol="o", symbolSize=6)
-        self.curve_tx  = self.plot.plot([], [], pen=None, symbol="t", symbolSize=6)
-
-        # optional: reference circle (updated dynamically)
         self.ref_circle = self.plot.plot([], [], pen=pg.mkPen(width=1))
-
         root.addWidget(self.plot, 1)
 
         # Log output
@@ -139,13 +130,11 @@ class Dashboard(QWidget):
 
     def clear(self):
         self.ack_count = 0
-        self.tx_count = 0
+        self.crc_count = 0
         self.ack_r.clear()
         self.ack_theta_deg.clear()
-        self.tx_r.clear()
-        self.tx_theta_deg.clear()
-        self.lbl_tx.setText("TX: 0")
         self.lbl_ack.setText("ACK: 0")
+        self.lbl_crc.setText("CRC: 0")
         self.log.clear()
         self.refresh_plot()
 
@@ -166,6 +155,9 @@ class Dashboard(QWidget):
         self.lbl_status.setText("Status: running")
         self.set_running_ui(True)
 
+        # helpful if you use relative paths like input.gds
+        self.proc.setWorkingDirectory(str(Path(exe).parent))
+
         self.proc.setProgram(exe)
         self.proc.setArguments(args)
         self.proc.start()
@@ -177,6 +169,11 @@ class Dashboard(QWidget):
             if not self.proc.waitForFinished(1000):
                 self.proc.kill()
         self.lbl_status.setText("Status: idle")
+        self.set_running_ui(False)
+
+    def on_error(self, _err):
+        self.append_log(f"[GUI] Process error: {self.proc.errorString()}")
+        self.lbl_status.setText("Status: error")
         self.set_running_ui(False)
 
     def on_finished(self):
@@ -200,47 +197,22 @@ class Dashboard(QWidget):
                 self.lbl_ack.setText(f"ACK: {self.ack_count}")
                 continue
 
-            m = TX_RE.search(line)
-            if m:
-                r = int(m.group("r"))
-                t_deg = float(m.group("t"))
-                self.tx_r.append(r)
-                self.tx_theta_deg.append(t_deg)
-                self.tx_count += 1
-                self.lbl_tx.setText(f"TX: {self.tx_count}")
+            if CRC_RE.search(line):
+                self.crc_count += 1
+                self.lbl_crc.setText(f"CRC: {self.crc_count}")
                 continue
 
-            if CRC_RE.search(line):
-                # you could increment a CRC counter here
-                pass
-
-            m = FPGA_RE.search(line)
-            if m:
-                # optional: show FPGA status in header
-                pass
+            # FPGA lines are optional; already in log
+            _ = FPGA_RE.search(line)
 
     def refresh_plot(self):
-        # ACK points (from FPGA): polar -> XY
         if self.ack_theta_deg:
             ax, ay = polar_to_xy(self.ack_r, self.ack_theta_deg)
             self.curve_ack.setData(ax, ay)
         else:
             self.curve_ack.setData([], [])
 
-        # TX points (optional, if you emit [TX] lines): polar -> XY
-        if self.tx_theta_deg:
-            tx, ty = polar_to_xy(self.tx_r, self.tx_theta_deg)
-            self.curve_tx.setData(tx, ty)
-        else:
-            self.curve_tx.setData([], [])
-
-        # reference circle at max observed radius (ACK or TX)
-        rmax = 0
-        if self.ack_r:
-            rmax = max(rmax, max(self.ack_r))
-        if self.tx_r:
-            rmax = max(rmax, max(self.tx_r))
-
+        rmax = max(self.ack_r) if self.ack_r else 0
         if rmax > 0:
             n = 256
             xs = [rmax * math.cos(2 * math.pi * i / n) for i in range(n + 1)]
