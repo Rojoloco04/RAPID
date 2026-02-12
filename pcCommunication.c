@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <windows.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -65,15 +64,7 @@ static HANDLE open_serial_rw(const char *com_name, int baud) {
     snprintf(path, sizeof(path), "\\\\.\\%s", com_name);
 
     // windows treats COM ports as files
-    HANDLE h = CreateFileA(
-        path,
-        GENERIC_READ | GENERIC_WRITE,
-        0,              // exclusive access
-        NULL,
-        OPEN_EXISTING,
-        0,
-        NULL
-    );
+    HANDLE h = CreateFileA(path, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (h == INVALID_HANDLE_VALUE) return INVALID_HANDLE_VALUE;
 
     // configuration
@@ -98,7 +89,7 @@ static HANDLE open_serial_rw(const char *com_name, int baud) {
     t.WriteTotalTimeoutMultiplier = 10;
     SetCommTimeouts(h, &t);
 
-    // optional: clear buffers
+    // clear buffers
     PurgeComm(h, PURGE_RXCLEAR | PURGE_TXCLEAR);
 
     return h; // handle for COM port
@@ -106,13 +97,12 @@ static HANDLE open_serial_rw(const char *com_name, int baud) {
 
 // send a single polar point to FPGA
 static int send_polar_point(HANDLE h, double r_nm, double theta_deg) {
-    // encode as integers to keep FPGA logic simple:
-    // r in nanometers (rounded)
-    // theta in microdegrees (deg * 1e6)
+    // r in nanometers
+    // theta in microdegrees
     int32_t r_i32 = (int32_t)llround(r_nm);
     int32_t t_i32 = (int32_t)llround(theta_deg * 1000000.0);
 
-    uint8_t frame[2 + 1 + 1 + 8 + 1]; // SOF(2) + TYPE + LEN + PAYLOAD(8) + CRC
+    uint8_t frame[13]; // SOF(2) + TYPE + LEN + PAYLOAD(8) + CRC
     size_t idx = 0;
 
     // packing into frame
@@ -133,7 +123,23 @@ static int send_polar_point(HANDLE h, double r_nm, double theta_deg) {
 typedef struct {
     HANDLE h;
     volatile LONG running;
+    volatile LONG ack_count;     // ACK tracking for stop-and-wait
+    volatile LONG last_ack_tick; // GetTickCount() at time of last ACK
 } ReaderCtx;
+
+// wait until ack_count reaches target, or timeout (ms) expires
+static int wait_for_ack(volatile LONG *ack_count, LONG target, DWORD timeout_ms) {
+    DWORD start = GetTickCount();
+
+    for (;;) {
+        LONG cur = InterlockedCompareExchange((volatile LONG *)ack_count, 0, 0);
+        if (cur >= target) return 1;
+
+        if ((GetTickCount() - start) > timeout_ms) return 0;
+
+        Sleep(1); // tiny yield to avoid burning CPU
+    }
+}
 
 static DWORD WINAPI reader_thread(LPVOID param) {
     ReaderCtx *ctx = (ReaderCtx *)param;
@@ -175,9 +181,15 @@ static DWORD WINAPI reader_thread(LPVOID param) {
                 len = b;
                 pay_i = 0;
 
-                if (len == 0) st = S_CRC;
-                else if (len <= sizeof(payload)) st = S_PAYLOAD;
-                else st = S_AA; // invalid length
+                if (len == 0) {
+                    st = S_CRC;
+                }
+                else if ((size_t)len > sizeof(payload)) {
+                    st = S_AA;
+                }
+                else {
+                    st = S_PAYLOAD;
+                }
                 break;
 
             case S_PAYLOAD:
@@ -218,6 +230,10 @@ static DWORD WINAPI reader_thread(LPVOID param) {
                     int32_t theta_udeg = unpack_i32_le(&payload[4]);
 
                     printf("[ACK] r=%ld nm, theta=%ld udeg\n", (long)r_nm, (long)theta_udeg);
+
+                    // update tracking for stop-and-wait + idle timeouts
+                    InterlockedIncrement(&ctx->ack_count);
+                    InterlockedExchange(&ctx->last_ack_tick, (LONG)GetTickCount());
                 }
                 else {
                     printf("[RX] type=0x%02X len=%u\n", type, len);
@@ -234,7 +250,6 @@ static DWORD WINAPI reader_thread(LPVOID param) {
 
     return 0;
 }
-
 
 int main(int argc, char **argv) {
     const char *port = (argc >= 2) ? argv[1] : "COM25";
@@ -263,10 +278,12 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    // start reader thread (replaces PuTTY)
+    // start reader thread
     ReaderCtx ctx;
     ctx.h = h;
     ctx.running = 1;
+    ctx.ack_count = 0;
+    ctx.last_ack_tick = (LONG)GetTickCount();
 
     HANDLE th = CreateThread(NULL, 0, reader_thread, &ctx, 0, NULL);
     if (!th) {
@@ -279,6 +296,8 @@ int main(int argc, char **argv) {
     printf("Sending %zu polar points over %s...\n", count, port);
 
     for (size_t i = 0; i < count; i++) {
+        LONG target_ack = (LONG)(i + 1);
+
         if (!send_polar_point(h, polar[i].r, polar[i].theta)) {
             fprintf(stderr, "UART send failed at i=%zu\n", i);
 
@@ -291,11 +310,22 @@ int main(int argc, char **argv) {
             return 1;
         }
 
-        // Sleep(1);
+        // wait for FPGA to ACK this point before sending next
+        if (!wait_for_ack(&ctx.ack_count, target_ack, 2000)) {
+            fprintf(stderr, "Timeout waiting for ACK %ld (i=%zu)\n", (long)target_ack, i);
+
+            InterlockedExchange(&ctx.running, 0);
+            WaitForSingleObject(th, INFINITE);
+            CloseHandle(th);
+
+            CloseHandle(h);
+            free(polar);
+            return 1;
+        }
     }
 
-    printf("Done sending. Waiting briefly for FPGA responses...\n");
-    Sleep(250);
+    printf("Done sending points\n");
+    printf("ACKs received: %ld\n", (long)ctx.ack_count);
 
     // stop reader and clean up
     InterlockedExchange(&ctx.running, 0);

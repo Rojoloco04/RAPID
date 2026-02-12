@@ -315,22 +315,18 @@ static void receive_points_forever(XUartPs *Uart) {
             continue;
         }
 
-        // handle point frames
+        // Handle point frames
         if (type == 0x01 && len == 0x08) {
             int32_t r_nm       = unpack_i32_le(&payload[0]);
             int32_t theta_udeg = unpack_i32_le(&payload[4]);
 
-            // send ACK echo back (type 0x81) with same payload
+            // Send ACK echo back (type 0x81) with same payload
             send_frame(Uart, 0x81, payload, 0x08);
-
-            // send debug as framed text (does NOT corrupt binary stream)
-            send_debug_str(Uart, "RX point OK");
 
             // TODO: use r_nm and theta_udeg for motor control
             (void)r_nm;
             (void)theta_udeg;
-        }
-        else {
+        } else {
             send_debug_str(Uart, "Unknown frame type/len");
         }
     }

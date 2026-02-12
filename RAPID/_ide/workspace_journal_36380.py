@@ -1,4 +1,4 @@
-# 2026-02-12T16:20:28.590828400
+# 2026-02-12T15:46:15.743727600
 import vitis
 
 client = vitis.create_client()
@@ -9,4 +9,6 @@ status = platform.build()
 
 comp = client.get_component(name="motorDriver_SW")
 comp.build()
+
+vitis.dispose()
 
