@@ -19,9 +19,7 @@
 //   TYPE 0xF0 LEN N    = debug string
 
 // compile with:
-// gcc -O2 -Wall -Wextra -o uartTX.exe uartTX.c inputParser.c -lm
-
-/* ---------- tiny helpers ---------- */
+// gcc -O2 -Wall -Wextra -o transmission.exe pcCommunication.c inputParser.c -lm
 
 // CRC8 XOR calculation
 static uint8_t crc8_xor(const uint8_t *data, size_t len) {
@@ -293,8 +291,6 @@ int main(int argc, char **argv) {
             return 1;
         }
 
-        // tiny spacing helps if you flood the UART
-        // (tune/remove as needed)
         // Sleep(1);
     }
 
