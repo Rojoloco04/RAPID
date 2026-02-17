@@ -19,7 +19,7 @@
  *   TYPE 0xF0 LEN N     – debug / status string
  *
  * Compile (MinGW / MSYS2 UCRT64):
- *   gcc -O2 -Wall -Wextra -o transmission.exe pcCommunication.c inputParser.c -lm
+ *   gcc -O2 -Wall -Wextra -o RAPID.exe pcCommunication.c inputParser.c -lm
  */
 
 #include <windows.h>

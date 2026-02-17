@@ -1,7 +1,7 @@
 """
 gui.py – Real-time UART polar-coordinate visualizer.
 
-Launches transmission.exe as a child process, parses its stdout for ACK /
+Launches RAPID.exe as a child process, parses its stdout for ACK /
 CRC / FPGA log lines, and plots acknowledged points on an XY scatter chart
 (converted from polar coordinates).
 
@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (
 import pyqtgraph as pg
 
 # ---------------------------------------------------------------------------
-# Regex patterns for parsing transmission.exe stdout
+# Regex patterns for parsing RAPID.exe stdout
 # ---------------------------------------------------------------------------
 #   [ACK] r=<int> nm, theta=<int> udeg   – acknowledged polar point
 #   [FPGA] <text>                         – debug message from FPGA
@@ -89,7 +89,7 @@ class GUI(QWidget):
 
     def _build_exe_row(self, parent):
         row = QHBoxLayout()
-        self.exe_path = QLineEdit(str(Path(__file__).parent.parent / "build" / "transmission.exe"))
+        self.exe_path = QLineEdit(str(Path(__file__).parent.parent / "build" / "RAPID.exe"))
         btn = QPushButton("Browse EXE")
         btn.clicked.connect(self._pick_exe)
         row.addWidget(QLabel("Sender EXE:"))
@@ -194,7 +194,7 @@ class GUI(QWidget):
         self._refresh_plot()
 
     def start(self):
-        """Validate inputs and launch transmission.exe as a child process."""
+        """Validate inputs and launch RAPID.exe as a child process."""
         exe  = self.exe_path.text().strip()
         port = self.port.text().strip()
         gds  = self.gds_file.text().strip()
