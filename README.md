@@ -26,7 +26,7 @@ input.gds  ──►  inputParser  ──►  pcCommunication  ──►  UART  
 ```
 RAPID/
 ├── src/
-│   ├── pcCommunication.c     # PC-side UART sender (compiled → transmission.exe)
+│   ├── pcCommunication.c     # PC-side UART sender (compiled → RAPID.exe)
 │   ├── inputParser.c/h       # GDS2 parser: XY coordinates → polar points
 │   ├── fpgaCommunication.c   # Zynq PS UART receiver + ACK (Vitis bare-metal)
 │   ├── fgpaConfiguration.c   # Zynq PS interactive motor configuration (Vitis bare-metal)
@@ -66,11 +66,11 @@ pip install -r requirements.txt
 
 ## Building & running
 
-### 1 — Build `transmission.exe`
+### 1 — Build `RAPID.exe`
 ```
 make
 ```
-Output: `build/transmission.exe`
+Output: `build/RAPID.exe`
 
 ### 2 — Launch the GUI
 ```
@@ -82,7 +82,7 @@ python src/gui.py
 ```
 The GUI will:
 - Let you select the COM port and GDS file
-- Launch `transmission.exe` as a subprocess
+- Launch `RAPID.exe` as a subprocess
 - Plot each acknowledged polar point on a live XY scatter chart
 - Display ACK / CRC error counters and a scrolling log
 

@@ -2,7 +2,7 @@
  * fpgaCommunication.c – FPGA-side UART receiver for the RAPID system.
  *
  * Runs on the Zynq PS (ARM Cortex-A9).  Listens on the PS UART for
- * framed polar-coordinate point packets sent by the PC (transmission.exe),
+ * framed polar-coordinate point packets sent by the PC (RAPID.exe),
  * validates each packet's CRC, and echoes the payload back as an ACK so
  * the sender knows the point was received.
  *

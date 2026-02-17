@@ -1,7 +1,7 @@
 # =============================================================================
 # Makefile – RAPID PC-side build
 #
-# Builds transmission.exe: the PC utility that reads a GDS input file,
+# Builds RAPID.exe: the PC utility that reads a GDS input file,
 # converts coordinates to polar, and streams them over UART to the FPGA.
 #
 # Requirements:
@@ -9,7 +9,7 @@
 #   Windows (uses Win32 serial API)
 #
 # Usage:
-#   make                       – build build/transmission.exe
+#   make                       – build build/RAPID.exe
 #   make clean                 – remove build artefacts
 #   make run                   – build and run (uses default PORT and FILE below)
 #   make run PORT=COM3 FILE=my.gds
@@ -35,7 +35,7 @@ SRCDIR   := src
 BUILDDIR := build
 
 # ---- Target ------------------------------------------------------------------
-TARGET  := $(BUILDDIR)/transmission.exe
+TARGET  := $(BUILDDIR)/RAPID.exe
 
 # ---- Sources -----------------------------------------------------------------
 SRCS    := $(SRCDIR)/pcCommunication.c $(SRCDIR)/inputParser.c
@@ -68,7 +68,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c | $(BUILDDIR)
 # Pull in generated header dependency files (silently ignored on first build)
 -include $(DEPS)
 
-# Run transmission.exe directly
+# Run RAPID.exe directly
 run: $(TARGET)
 	./$(TARGET) $(PORT) $(FILE)
 
