@@ -1,4 +1,4 @@
-#include "xgpio.h"
+﻿#include "xgpio.h"
 #include "xil_printf.h"
 #include "xparameters.h"
 #include "platform.h"
@@ -196,10 +196,10 @@ int main()
 */
 
 /*
- * fpgaCommunication.c – FPGA-side UART receiver for the RAPID system.
+ * fpgaCommunication.c - FPGA-side UART receiver for the RAPID system.
  *
  * Runs on the Zynq PS (ARM Cortex-A9).  Listens on the PS UART for
- * framed polar-coordinate point packets sent by the PC (transmission.exe),
+ * framed polar-coordinate point packets sent by the PC (RAPID.exe),
  * validates each packet's CRC, and echoes the payload back as an ACK so
  * the sender knows the point was received.
  *
@@ -207,12 +207,12 @@ int main()
  *   SOF (0xAA 0x55) | TYPE (1 B) | LEN (1 B) | PAYLOAD (LEN B) | CRC8
  *
  * Incoming (PC → FPGA):
- *   TYPE 0x01, LEN 0x08 – polar point
+ *   TYPE 0x01, LEN 0x08 - polar point
  *     r_nm       (int32, little-endian, nanometres)
  *     theta_udeg (int32, little-endian, microdegrees)
  *
  * Outgoing (FPGA → PC):
- *   TYPE 0x81, LEN 0x08 – ACK (echo of the received payload)
+ *   TYPE 0x81, LEN 0x08 - ACK (echo of the received payload)
  */
 
 #include "platform.h"
@@ -361,7 +361,7 @@ static void receive_loop(XUartPs *uart)
             chk[2 + i] = payload[i];
 
         if (crc8_xor(chk, 2u + len) != rx_crc)
-            continue;   /* CRC mismatch – drop frame */
+            continue;   /* CRC mismatch - drop frame */
 
         /* ---- dispatch valid packet ---- */
         if (type == TYPE_POINT && len == POINT_LEN) {
@@ -388,10 +388,10 @@ int main(void)
     /* ---- initialise PS UART ---- */
     XUartPs_Config *cfg = XUartPs_LookupConfig(UART_BASEADDR);
     if (!cfg)
-        for (;;) ;   /* halt – no UART config found */
+        for (;;) ;   /* halt - no UART config found */
 
     if (XUartPs_CfgInitialize(&Uart_Ps, cfg, cfg->BaseAddress) != XST_SUCCESS)
-        for (;;) ;   /* halt – UART init failed */
+        for (;;) ;   /* halt - UART init failed */
 
     XUartPs_SetBaudRate(&Uart_Ps, BAUD_RATE);
     XUartPs_SetOperMode(&Uart_Ps, XUARTPS_OPER_MODE_NORMAL);

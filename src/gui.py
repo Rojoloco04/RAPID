@@ -1,5 +1,5 @@
-"""
-gui.py – Real-time UART polar-coordinate visualizer.
+﻿"""
+gui.py - Real-time UART polar-coordinate visualizer.
 
 Launches RAPID.exe as a child process, parses its stdout for ACK /
 CRC / FPGA log lines, and plots acknowledged points on an XY scatter chart
@@ -24,9 +24,9 @@ import pyqtgraph as pg
 # ---------------------------------------------------------------------------
 # Regex patterns for parsing RAPID.exe stdout
 # ---------------------------------------------------------------------------
-#   [ACK] r=<int> nm, theta=<int> udeg   – acknowledged polar point
-#   [FPGA] <text>                         – debug message from FPGA
-#   [RX] CRC mismatch ...                 – checksum failure
+#   [ACK] r=<int> nm, theta=<int> udeg   - acknowledged polar point
+#   [FPGA] <text>                         - debug message from FPGA
+#   [RX] CRC mismatch ...                 - checksum failure
 ACK_RE  = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+nm,\s+theta=(?P<t>-?\d+)\s+udeg")
 FPGA_RE = re.compile(r"\[FPGA\]\s+(?P<msg>.*)")
 CRC_RE  = re.compile(r"\[RX\]\s+CRC mismatch")

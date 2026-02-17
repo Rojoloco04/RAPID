@@ -1,5 +1,5 @@
-# =============================================================================
-# Makefile – RAPID PC-side build
+﻿# =============================================================================
+# Makefile - RAPID PC-side build
 #
 # Builds RAPID.exe: the PC utility that reads a GDS input file,
 # converts coordinates to polar, and streams them over UART to the FPGA.
@@ -9,16 +9,16 @@
 #   Windows (uses Win32 serial API)
 #
 # Usage:
-#   make                       – build build/RAPID.exe
-#   make clean                 – remove build artefacts
-#   make run                   – build and run (uses default PORT and FILE below)
+#   make                       - build build/RAPID.exe
+#   make clean                 - remove build artefacts
+#   make run                   - build and run (uses default PORT and FILE below)
 #   make run PORT=COM3 FILE=my.gds
-#   make gui                   – launch the Python GUI (requires venv)
+#   make gui                   - launch the Python GUI (requires venv)
 #
 # Project layout:
-#   src/        – all source files (C and Python)
-#   build/      – compiled output (generated, not committed)
-#   input.gds   – default input file
+#   src/        - all source files (C and Python)
+#   build/      - compiled output (generated, not committed)
+#   input.gds   - default input file
 #
 # Note:
 #   src/fpgaCommunication.c and src/fgpaConfiguration.c target the Zynq PS
