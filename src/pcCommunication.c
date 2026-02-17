@@ -1,5 +1,5 @@
-/*
- * pcCommunication.c – PC-side UART sender for the RAPID system.
+﻿/*
+ * pcCommunication.c - PC-side UART sender for the RAPID system.
  *
  * Reads polar coordinates from a GDS input file (via inputParser), frames
  * each point into a binary packet, and streams them over a serial COM port
@@ -15,8 +15,8 @@
  *   theta_udeg (int32, little-endian, microdegrees)
  *
  * Incoming responses from FPGA:
- *   TYPE 0x81 LEN 0x08  – ACK echo of the point payload
- *   TYPE 0xF0 LEN N     – debug / status string
+ *   TYPE 0x81 LEN 0x08  - ACK echo of the point payload
+ *   TYPE 0xF0 LEN N     - debug / status string
  *
  * Compile (MinGW / MSYS2 UCRT64):
  *   gcc -O2 -Wall -Wextra -o RAPID.exe pcCommunication.c inputParser.c -lm
@@ -137,7 +137,7 @@ static HANDLE open_serial(const char *com_name, int baud) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Packet framing – transmit                                         */
+/*  Packet framing - transmit                                         */
 /* ------------------------------------------------------------------ */
 
 /** Build and send a single polar-point frame over the serial link. */
@@ -192,7 +192,7 @@ static int wait_for_ack(ReaderCtx *ctx, LONG target, DWORD timeout_ms) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Reader thread – packet framing state machine                      */
+/*  Reader thread - packet framing state machine                      */
 /* ------------------------------------------------------------------ */
 
 /** States for the byte-level receive state machine. */
@@ -385,7 +385,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    printf("Done – %zu points sent, %ld ACKs received.\n",
+    printf("Done - %zu points sent, %ld ACKs received.\n",
            count, (long)ctx.ack_count);
 
     cleanup(&ctx, th, h, polar);
