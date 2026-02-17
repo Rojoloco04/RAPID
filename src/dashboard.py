@@ -89,7 +89,7 @@ class Dashboard(QWidget):
 
     def _build_exe_row(self, parent):
         row = QHBoxLayout()
-        self.exe_path = QLineEdit(str(Path("build/transmission.exe").absolute()))
+        self.exe_path = QLineEdit(str(Path(__file__).parent.parent / "build" / "transmission.exe"))
         btn = QPushButton("Browse EXE")
         btn.clicked.connect(self._pick_exe)
         row.addWidget(QLabel("Sender EXE:"))
