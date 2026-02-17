@@ -1,12 +1,12 @@
 """
-dashboard.py – Real-time UART polar-coordinate visualizer.
+gui.py – Real-time UART polar-coordinate visualizer.
 
 Launches transmission.exe as a child process, parses its stdout for ACK /
 CRC / FPGA log lines, and plots acknowledged points on an XY scatter chart
 (converted from polar coordinates).
 
 Usage:
-    python dashboard.py
+    python gui.py
 """
 
 import sys
@@ -46,14 +46,14 @@ def polar_to_xy(r_list, theta_deg_list):
 
 
 # ---------------------------------------------------------------------------
-# Main dashboard widget
+# Main GUI widget
 # ---------------------------------------------------------------------------
-class Dashboard(QWidget):
-    """Single-window dashboard: controls, live XY plot, and scrolling log."""
+class GUI(QWidget):
+    """Single-window GUI: controls, live XY plot, and scrolling log."""
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("UART Polar Dashboard")
+        self.setWindowTitle("UART Polar GUI")
 
         # ---- subprocess state ----
         self.proc = QProcess(self)
@@ -305,7 +305,7 @@ class Dashboard(QWidget):
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    w = Dashboard()
+    w = GUI()
     w.resize(1100, 700)
     w.show()
     sys.exit(app.exec())
