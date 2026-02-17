@@ -1,3 +1,27 @@
+/*
+ * pcCommunication.c – PC-side UART sender for the RAPID system.
+ *
+ * Reads polar coordinates from a GDS input file (via inputParser), frames
+ * each point into a binary packet, and streams them over a serial COM port
+ * to the FPGA.  A background reader thread receives framed responses (ACKs,
+ * debug strings, etc.) and implements stop-and-wait flow control so the
+ * next point is only sent after the FPGA acknowledges the previous one.
+ *
+ * Packet wire format (both directions):
+ *   SOF (0xAA 0x55) | TYPE (1 B) | LEN (1 B) | PAYLOAD (LEN B) | CRC8
+ *
+ * Outgoing TYPE 0x01, LEN 0x08:
+ *   r_nm       (int32, little-endian, nanometres)
+ *   theta_udeg (int32, little-endian, microdegrees)
+ *
+ * Incoming responses from FPGA:
+ *   TYPE 0x81 LEN 0x08  – ACK echo of the point payload
+ *   TYPE 0xF0 LEN N     – debug / status string
+ *
+ * Compile (MinGW / MSYS2 UCRT64):
+ *   gcc -O2 -Wall -Wextra -o transmission.exe pcCommunication.c inputParser.c -lm
+ */
+
 #include <windows.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -6,170 +30,207 @@
 
 #include "inputParser.h"
 
-// packet format:
-// SOF (0xAA 0x55)  TYPE  LEN  PAYLOAD (LEN bytes)  CRC8 (XOR over TYPE+LEN+PAYLOAD)
-//
-// TYPE 0x01, LEN 0x08 payload layout:
-//   r_nm       (int32 little-endian)
-//   theta_udeg (int32 little-endian)
-//
-// FPGA may reply with framed messages on the same UART:
-//   TYPE 0x81 LEN 0x08 = ACK echo of payload
-//   TYPE 0xF0 LEN N    = debug string
+/* ------------------------------------------------------------------ */
+/*  Constants                                                         */
+/* ------------------------------------------------------------------ */
 
-// compile with:
-// gcc -O2 -Wall -Wextra -o transmission.exe pcCommunication.c inputParser.c -lm
+#define SOF_BYTE_1   0xAA
+#define SOF_BYTE_2   0x55
+#define TYPE_POINT   0x01   /* outgoing polar-point payload   */
+#define TYPE_ACK     0x81   /* FPGA acknowledgement           */
+#define TYPE_DEBUG   0xF0   /* FPGA debug string              */
+#define POINT_LEN    0x08   /* payload length for a point     */
+#define FRAME_SIZE   13     /* SOF(2) + TYPE + LEN + PAYLOAD(8) + CRC */
+#define RX_BUF_SIZE  256    /* serial read buffer (bulk reads)   */
+#define ACK_TIMEOUT  2000   /* ms to wait for each ACK           */
+#define BAUD_RATE    115200
 
-// CRC8 XOR calculation
+/* ------------------------------------------------------------------ */
+/*  CRC / serialisation helpers                                       */
+/* ------------------------------------------------------------------ */
+
+/** XOR-based CRC-8 over a byte buffer. */
 static uint8_t crc8_xor(const uint8_t *data, size_t len) {
     uint8_t c = 0;
-    for (size_t i = 0; i < len; i++) c ^= data[i];
+    for (size_t i = 0; i < len; i++)
+        c ^= data[i];
     return c;
 }
 
-// pack 32b integer into 4 byte array (little-endian)
+/** Pack a 32-bit signed integer into 4 bytes, little-endian. */
 static void pack_i32_le(uint8_t out[4], int32_t v) {
-    out[0] = (uint8_t)(v & 0xFF);
-    out[1] = (uint8_t)((v >> 8) & 0xFF);
-    out[2] = (uint8_t)((v >> 16) & 0xFF);
-    out[3] = (uint8_t)((v >> 24) & 0xFF);
+    out[0] = (uint8_t)(v);
+    out[1] = (uint8_t)(v >> 8);
+    out[2] = (uint8_t)(v >> 16);
+    out[3] = (uint8_t)(v >> 24);
 }
 
-// unpack 4 bytes (little-endian) into int32
+/** Unpack 4 little-endian bytes into a 32-bit signed integer. */
 static int32_t unpack_i32_le(const uint8_t b[4]) {
     return (int32_t)(
-        ((uint32_t)b[0]) |
-        ((uint32_t)b[1] << 8) |
+        ((uint32_t)b[0])       |
+        ((uint32_t)b[1] << 8)  |
         ((uint32_t)b[2] << 16) |
         ((uint32_t)b[3] << 24)
     );
 }
 
-// write to the UART channel at handle h (ensures full buffer is sent)
+/* ------------------------------------------------------------------ */
+/*  Low-level serial I/O                                              */
+/* ------------------------------------------------------------------ */
+
+/** Write the full contents of buf to the serial handle. */
 static int write_all(HANDLE h, const uint8_t *buf, size_t len) {
     size_t sent = 0;
     while (sent < len) {
         DWORD wrote = 0;
-        if (!WriteFile(h, buf + sent, (DWORD)(len - sent), &wrote, NULL)) {
+        if (!WriteFile(h, buf + sent, (DWORD)(len - sent), &wrote, NULL))
             return 0;
-        }
         sent += (size_t)wrote;
     }
     return 1;
 }
 
-// using windows routines to open UART over COM port
-static HANDLE open_serial_rw(const char *com_name, int baud) {
+/**
+ * Open a COM port for bidirectional 8N1 communication.
+ *
+ * Read timeouts are kept short so the reader thread can respond quickly
+ * without blocking forever when no data is available.
+ */
+static HANDLE open_serial(const char *com_name, int baud) {
     char path[64];
     snprintf(path, sizeof(path), "\\\\.\\%s", com_name);
 
-    // windows treats COM ports as files
-    HANDLE h = CreateFileA(path, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-    if (h == INVALID_HANDLE_VALUE) return INVALID_HANDLE_VALUE;
+    HANDLE h = CreateFileA(
+        path, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+    if (h == INVALID_HANDLE_VALUE)
+        return INVALID_HANDLE_VALUE;
 
-    // configuration
-    // windows requires you to read the control state before writing it back
-    DCB dcb = {0}; // device control block
+    /* configure 8N1 at the requested baud rate */
+    DCB dcb = {0};
     dcb.DCBlength = sizeof(dcb);
-    if (!GetCommState(h, &dcb)) { CloseHandle(h); return INVALID_HANDLE_VALUE; } // read
-
+    if (!GetCommState(h, &dcb))          { CloseHandle(h); return INVALID_HANDLE_VALUE; }
     dcb.BaudRate = baud;
     dcb.ByteSize = 8;
     dcb.Parity   = NOPARITY;
     dcb.StopBits = ONESTOPBIT;
+    if (!SetCommState(h, &dcb))          { CloseHandle(h); return INVALID_HANDLE_VALUE; }
 
-    if (!SetCommState(h, &dcb)) { CloseHandle(h); return INVALID_HANDLE_VALUE; } // write
-
-    // timeouts so reads don't block forever
-    COMMTIMEOUTS t = {0};
-    t.ReadIntervalTimeout = 50;
-    t.ReadTotalTimeoutConstant = 50;
-    t.ReadTotalTimeoutMultiplier = 10;
-    t.WriteTotalTimeoutConstant = 2000;
+    /*
+     * Timeouts: ReadIntervalTimeout = MAXDWORD with the other two read
+     * values set to 0 gives "return immediately with whatever is in the
+     * driver buffer" behaviour — the fastest non-blocking read pattern
+     * on Windows.  The reader thread yields with Sleep(1) when nothing
+     * was available, which keeps CPU usage near zero while still
+     * providing sub-millisecond response when data arrives.
+     */
+    COMMTIMEOUTS t  = {0};
+    t.ReadIntervalTimeout         = MAXDWORD;
+    t.ReadTotalTimeoutConstant    = 0;
+    t.ReadTotalTimeoutMultiplier  = 0;
+    t.WriteTotalTimeoutConstant   = 2000;
     t.WriteTotalTimeoutMultiplier = 10;
     SetCommTimeouts(h, &t);
 
-    // clear buffers
     PurgeComm(h, PURGE_RXCLEAR | PURGE_TXCLEAR);
-
-    return h; // handle for COM port
+    return h;
 }
 
-// send a single polar point to FPGA
-static int send_polar_point(HANDLE h, double r_nm, double theta_deg) {
-    // r in nanometers
-    // theta in microdegrees
-    int32_t r_i32 = (int32_t)llround(r_nm);
-    int32_t t_i32 = (int32_t)llround(theta_deg * 1000000.0);
+/* ------------------------------------------------------------------ */
+/*  Packet framing – transmit                                         */
+/* ------------------------------------------------------------------ */
 
-    uint8_t frame[13]; // SOF(2) + TYPE + LEN + PAYLOAD(8) + CRC
+/** Build and send a single polar-point frame over the serial link. */
+static int send_polar_point(HANDLE h, double r_nm, double theta_deg) {
+    int32_t r_i32 = (int32_t)llround(r_nm);
+    int32_t t_i32 = (int32_t)llround(theta_deg * 1e6); /* degrees → microdegrees */
+
+    uint8_t frame[FRAME_SIZE];
     size_t idx = 0;
 
-    // packing into frame
-    frame[idx++] = 0xAA; // SOF
-    frame[idx++] = 0x55; // SOF
-    frame[idx++] = 0x01; // TYPE (point)
-    frame[idx++] = 0x08; // LEN
+    frame[idx++] = SOF_BYTE_1;
+    frame[idx++] = SOF_BYTE_2;
+    frame[idx++] = TYPE_POINT;
+    frame[idx++] = POINT_LEN;
+    pack_i32_le(&frame[idx], r_i32);  idx += 4;
+    pack_i32_le(&frame[idx], t_i32);  idx += 4;
+    frame[idx++] = crc8_xor(&frame[2], 2 + POINT_LEN); /* CRC over TYPE+LEN+PAYLOAD */
 
-    pack_i32_le(&frame[idx], r_i32); idx += 4;
-    pack_i32_le(&frame[idx], t_i32); idx += 4;
-
-    // CRC over [TYPE][LEN][PAYLOAD...]
-    frame[idx++] = crc8_xor(&frame[2], 10); // TYPE(1) + LEN(1) + PAYLOAD(8)
-
-    return write_all(h, frame, sizeof(frame)); // write entire packet
+    return write_all(h, frame, FRAME_SIZE);
 }
 
+/* ------------------------------------------------------------------ */
+/*  Reader thread context & ACK signalling                            */
+/* ------------------------------------------------------------------ */
+
 typedef struct {
-    HANDLE h;
-    volatile LONG running;
-    volatile LONG ack_count;     // ACK tracking for stop-and-wait
-    volatile LONG last_ack_tick; // GetTickCount() at time of last ACK
+    HANDLE          h;             /* serial port handle              */
+    volatile LONG   running;       /* 1 while thread should run       */
+    volatile LONG   ack_count;     /* total ACKs received so far      */
+    HANDLE          ack_event;     /* signalled on every new ACK      */
 } ReaderCtx;
 
-// wait until ack_count reaches target, or timeout (ms) expires
-static int wait_for_ack(volatile LONG *ack_count, LONG target, DWORD timeout_ms) {
-    DWORD start = GetTickCount();
+/**
+ * Block until ack_count >= target, or timeout_ms elapses.
+ * Uses an auto-reset event so we wake instantly when an ACK arrives
+ * instead of polling with Sleep(1).
+ */
+static int wait_for_ack(ReaderCtx *ctx, LONG target, DWORD timeout_ms) {
+    DWORD deadline = GetTickCount() + timeout_ms;
 
     for (;;) {
-        LONG cur = InterlockedCompareExchange((volatile LONG *)ack_count, 0, 0);
-        if (cur >= target) return 1;
+        if (InterlockedCompareExchange(&ctx->ack_count, 0, 0) >= target)
+            return 1;
 
-        if ((GetTickCount() - start) > timeout_ms) return 0;
+        DWORD remaining = deadline - GetTickCount();
+        if ((int)remaining <= 0)
+            return 0;
 
-        Sleep(1); // tiny yield to avoid burning CPU
+        /* sleep until the reader thread signals an ACK (or timeout) */
+        WaitForSingleObject(ctx->ack_event, remaining);
     }
 }
 
+/* ------------------------------------------------------------------ */
+/*  Reader thread – packet framing state machine                      */
+/* ------------------------------------------------------------------ */
+
+/** States for the byte-level receive state machine. */
+enum rx_state { S_SOF1, S_SOF2, S_TYPE, S_LEN, S_PAYLOAD, S_CRC };
+
+/**
+ * Background thread: reads serial data in bulk, runs it through a
+ * framing state machine, and dispatches complete packets.
+ */
 static DWORD WINAPI reader_thread(LPVOID param) {
     ReaderCtx *ctx = (ReaderCtx *)param;
 
-    // simple byte-at-a-time state machine for framed UART data
-    enum { S_AA, S_55, S_TYPE, S_LEN, S_PAYLOAD, S_CRC } st = S_AA;
-
-    uint8_t type = 0, len = 0, crc = 0;
+    enum rx_state st = S_SOF1;
+    uint8_t type = 0, len = 0;
     uint8_t payload[255];
     uint8_t pay_i = 0;
 
-    for (;;) {
-        if (InterlockedCompareExchange(&ctx->running, 1, 1) == 0) break;
+    uint8_t rxbuf[RX_BUF_SIZE];
 
-        uint8_t b;
+    while (InterlockedCompareExchange(&ctx->running, 1, 1)) {
+        /* bulk read — returns immediately with 0..RX_BUF_SIZE bytes */
         DWORD got = 0;
-
-        if (!ReadFile(ctx->h, &b, 1, &got, NULL) || got != 1) {
-            Sleep(1);
+        if (!ReadFile(ctx->h, rxbuf, sizeof(rxbuf), &got, NULL) || got == 0) {
+            Sleep(1);   /* nothing available; yield briefly */
             continue;
         }
 
-        switch (st) {
-            case S_AA:
-                if (b == 0xAA) st = S_55;
+        /* feed every received byte through the state machine */
+        for (DWORD bi = 0; bi < got; bi++) {
+            uint8_t b = rxbuf[bi];
+
+            switch (st) {
+            case S_SOF1:
+                if (b == SOF_BYTE_1) st = S_SOF2;
                 break;
 
-            case S_55:
-                if (b == 0x55) st = S_TYPE;
-                else st = S_AA;
+            case S_SOF2:
+                st = (b == SOF_BYTE_2) ? S_TYPE : S_SOF1;
                 break;
 
             case S_TYPE:
@@ -178,18 +239,9 @@ static DWORD WINAPI reader_thread(LPVOID param) {
                 break;
 
             case S_LEN:
-                len = b;
+                len   = b;
                 pay_i = 0;
-
-                if (len == 0) {
-                    st = S_CRC;
-                }
-                else if ((size_t)len > sizeof(payload)) {
-                    st = S_AA;
-                }
-                else {
-                    st = S_PAYLOAD;
-                }
+                st = (len == 0) ? S_CRC : S_PAYLOAD;
                 break;
 
             case S_PAYLOAD:
@@ -198,69 +250,84 @@ static DWORD WINAPI reader_thread(LPVOID param) {
                 break;
 
             case S_CRC: {
-                crc = b;
-
-                // checksum buffer = [type][len][payload...]
+                /* verify CRC over [TYPE, LEN, PAYLOAD...] */
                 uint8_t chk[2 + 255];
                 chk[0] = type;
                 chk[1] = len;
                 for (uint8_t i = 0; i < len; i++) chk[2 + i] = payload[i];
 
-                uint8_t expect = crc8_xor(chk, (size_t)(2 + len));
-                if (expect != crc) {
-                    fprintf(stderr, "[RX] CRC mismatch (type=0x%02X, len=%u)\n", type, len);
-                    st = S_AA;
+                if (crc8_xor(chk, 2 + len) != b) {
+                    fprintf(stderr,
+                        "[RX] CRC mismatch (type=0x%02X, len=%u)\n", type, len);
+                    st = S_SOF1;
                     break;
                 }
 
-                // handle a couple known response types
-                if (type == 0xF0) {
-                    // debug text from FPGA
+                /* ---- dispatch valid packet ---- */
+                if (type == TYPE_DEBUG) {
+                    /* FPGA debug / status string */
                     char msg[256];
                     uint8_t n = (len < 255) ? len : 255;
-
                     for (uint8_t i = 0; i < n; i++) msg[i] = (char)payload[i];
-                    msg[n] = 0;
-
+                    msg[n] = '\0';
                     printf("[FPGA] %s\n", msg);
                 }
-                else if (type == 0x81 && len == 0x08) {
-                    // ACK echo of point payload
-                    int32_t r_nm = unpack_i32_le(&payload[0]);
+                else if (type == TYPE_ACK && len == POINT_LEN) {
+                    /* ACK echo — log and signal the sender */
+                    int32_t r_nm       = unpack_i32_le(&payload[0]);
                     int32_t theta_udeg = unpack_i32_le(&payload[4]);
+                    printf("[ACK] r=%ld nm, theta=%ld udeg\n",
+                           (long)r_nm, (long)theta_udeg);
 
-                    printf("[ACK] r=%ld nm, theta=%ld udeg\n", (long)r_nm, (long)theta_udeg);
-
-                    // update tracking for stop-and-wait + idle timeouts
                     InterlockedIncrement(&ctx->ack_count);
-                    InterlockedExchange(&ctx->last_ack_tick, (LONG)GetTickCount());
+                    SetEvent(ctx->ack_event);  /* wake wait_for_ack() */
                 }
                 else {
                     printf("[RX] type=0x%02X len=%u\n", type, len);
                 }
 
-                st = S_AA;
+                st = S_SOF1;
             } break;
 
             default:
-                st = S_AA;
+                st = S_SOF1;
                 break;
+            }
         }
     }
 
     return 0;
 }
 
+/* ------------------------------------------------------------------ */
+/*  Cleanup helper                                                    */
+/* ------------------------------------------------------------------ */
+
+/** Stop reader thread and release all handles / memory. */
+static void cleanup(ReaderCtx *ctx, HANDLE thread, HANDLE port, PolarPoint *polar) {
+    InterlockedExchange(&ctx->running, 0);
+    SetEvent(ctx->ack_event);              /* unblock wait_for_ack if stuck */
+    WaitForSingleObject(thread, INFINITE);
+    CloseHandle(thread);
+    CloseHandle(ctx->ack_event);
+    CloseHandle(port);
+    free(polar);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Entry point                                                       */
+/* ------------------------------------------------------------------ */
+
 int main(int argc, char **argv) {
-    // disable stdout buffering so QProcess / pipes get data immediately
+    /* disable C-runtime buffering so the dashboard gets lines instantly */
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
 
-    const char *port = (argc >= 2) ? argv[1] : "COM25";
-    const char *file = (argc >= 3) ? argv[2] : "input.gds";
+    const char *port_name = (argc >= 2) ? argv[1] : "COM25";
+    const char *file      = (argc >= 3) ? argv[2] : "input.gds";
 
+    /* ---- parse input file ---- */
     size_t count = 0;
-
     Coordinate *coords = getCoordinates(file, &count);
     if (!coords || count == 0) {
         fprintf(stderr, "Failed to parse coordinates from %s\n", file);
@@ -269,74 +336,58 @@ int main(int argc, char **argv) {
 
     PolarPoint *polar = convertToPolar(coords, count);
     free(coords);
-
     if (!polar) {
         fprintf(stderr, "Failed to convert to polar\n");
         return 1;
     }
 
-    HANDLE h = open_serial_rw(port, 115200);
+    /* ---- open serial port ---- */
+    HANDLE h = open_serial(port_name, BAUD_RATE);
     if (h == INVALID_HANDLE_VALUE) {
-        fprintf(stderr, "Failed to open %s\n", port);
+        fprintf(stderr, "Failed to open %s\n", port_name);
         free(polar);
         return 1;
     }
 
-    // start reader thread
+    /* ---- start reader thread ---- */
     ReaderCtx ctx;
-    ctx.h = h;
-    ctx.running = 1;
+    ctx.h         = h;
+    ctx.running   = 1;
     ctx.ack_count = 0;
-    ctx.last_ack_tick = (LONG)GetTickCount();
+    ctx.ack_event = CreateEvent(NULL, FALSE, FALSE, NULL); /* auto-reset */
 
     HANDLE th = CreateThread(NULL, 0, reader_thread, &ctx, 0, NULL);
     if (!th) {
         fprintf(stderr, "Failed to create reader thread\n");
+        CloseHandle(ctx.ack_event);
         CloseHandle(h);
         free(polar);
         return 1;
     }
 
-    printf("Sending %zu polar points over %s...\n", count, port);
+    /* ---- send points with stop-and-wait flow control ---- */
+    printf("Sending %zu polar points over %s...\n", count, port_name);
 
     for (size_t i = 0; i < count; i++) {
         LONG target_ack = (LONG)(i + 1);
 
         if (!send_polar_point(h, polar[i].r, polar[i].theta)) {
             fprintf(stderr, "UART send failed at i=%zu\n", i);
-
-            InterlockedExchange(&ctx.running, 0);
-            WaitForSingleObject(th, INFINITE);
-            CloseHandle(th);
-
-            CloseHandle(h);
-            free(polar);
+            cleanup(&ctx, th, h, polar);
             return 1;
         }
 
-        // wait for FPGA to ACK this point before sending next
-        if (!wait_for_ack(&ctx.ack_count, target_ack, 2000)) {
-            fprintf(stderr, "Timeout waiting for ACK %ld (i=%zu)\n", (long)target_ack, i);
-
-            InterlockedExchange(&ctx.running, 0);
-            WaitForSingleObject(th, INFINITE);
-            CloseHandle(th);
-
-            CloseHandle(h);
-            free(polar);
+        if (!wait_for_ack(&ctx, target_ack, ACK_TIMEOUT)) {
+            fprintf(stderr, "Timeout waiting for ACK %ld (i=%zu)\n",
+                    (long)target_ack, i);
+            cleanup(&ctx, th, h, polar);
             return 1;
         }
     }
 
-    printf("Done sending points\n");
-    printf("ACKs received: %ld\n", (long)ctx.ack_count);
+    printf("Done – %zu points sent, %ld ACKs received.\n",
+           count, (long)ctx.ack_count);
 
-    // stop reader and clean up
-    InterlockedExchange(&ctx.running, 0);
-    WaitForSingleObject(th, INFINITE);
-    CloseHandle(th);
-
-    CloseHandle(h);
-    free(polar);
+    cleanup(&ctx, th, h, polar);
     return 0;
 }
