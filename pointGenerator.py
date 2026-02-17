@@ -1,3 +1,7 @@
+# script to generate sample input for testing. 
+# Generates points on a circle of radius R, centered at the origin, 
+# with N points evenly spaced around the circle.
+
 import math
 
 R = 5000
