@@ -252,6 +252,10 @@ static DWORD WINAPI reader_thread(LPVOID param) {
 }
 
 int main(int argc, char **argv) {
+    // disable stdout buffering so QProcess / pipes get data immediately
+    setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(stderr, NULL, _IONBF, 0);
+
     const char *port = (argc >= 2) ? argv[1] : "COM25";
     const char *file = (argc >= 3) ? argv[2] : "input.gds";
 
