@@ -13,7 +13,7 @@
 #   make clean                 – remove build artefacts
 #   make run                   – build and run (uses default PORT and FILE below)
 #   make run PORT=COM3 FILE=my.gds
-#   make dashboard             – launch the Python dashboard (requires venv)
+#   make gui                   – launch the Python GUI (requires venv)
 #
 # Project layout:
 #   src/        – all source files (C and Python)
@@ -48,7 +48,7 @@ FILE    := input.gds
 
 # ==============================================================================
 
-.PHONY: all clean run dashboard
+.PHONY: all clean run gui
 
 all: $(TARGET)
 
@@ -72,15 +72,15 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c | $(BUILDDIR)
 run: $(TARGET)
 	./$(TARGET) $(PORT) $(FILE)
 
-# Launch the Python dashboard (activates venv if not already active)
+# Launch the Python GUI (activates venv if not already active)
 VENV_PYTHON := venv/Scripts/python
 SYSTEM_PYTHON := python
 
-dashboard:
+gui:
 	@if [ -f venv/Scripts/python.exe ]; then \
-		$(VENV_PYTHON) src/dashboard.py; \
+		$(VENV_PYTHON) src/gui.py; \
 	else \
-		$(SYSTEM_PYTHON) src/dashboard.py; \
+		$(SYSTEM_PYTHON) src/gui.py; \
 	fi
 
 # Remove all build artefacts
