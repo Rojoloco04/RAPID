@@ -1,20 +1,42 @@
+"""
+dashboard.py – Real-time UART polar-coordinate visualizer.
+
+Launches transmission.exe as a child process, parses its stdout for ACK /
+CRC / FPGA log lines, and plots acknowledged points on an XY scatter chart
+(converted from polar coordinates).
+
+Usage:
+    python dashboard.py
+"""
+
 import sys
 import re
 import math
 from pathlib import Path
+
 from PySide6.QtCore import QProcess, QTimer
 from PySide6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
-    QPushButton, QLineEdit, QLabel, QFileDialog, QPlainTextEdit
+    QPushButton, QLineEdit, QLabel, QFileDialog, QPlainTextEdit,
 )
 import pyqtgraph as pg
 
-ACK_RE = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+nm,\s+theta=(?P<t>-?\d+)\s+udeg")
+# ---------------------------------------------------------------------------
+# Regex patterns for parsing transmission.exe stdout
+# ---------------------------------------------------------------------------
+#   [ACK] r=<int> nm, theta=<int> udeg   – acknowledged polar point
+#   [FPGA] <text>                         – debug message from FPGA
+#   [RX] CRC mismatch ...                 – checksum failure
+ACK_RE  = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+nm,\s+theta=(?P<t>-?\d+)\s+udeg")
 FPGA_RE = re.compile(r"\[FPGA\]\s+(?P<msg>.*)")
-CRC_RE  = re.compile(r"\[RX\]\s+CRC mismatch.*")
+CRC_RE  = re.compile(r"\[RX\]\s+CRC mismatch")
+
+# Number of segments used to draw the reference circle on the plot
+_CIRCLE_PTS = 256
 
 
 def polar_to_xy(r_list, theta_deg_list):
+    """Convert parallel lists of (r, theta°) into (x, y) cartesian lists."""
     xs, ys = [], []
     for r, th in zip(r_list, theta_deg_list):
         rad = math.radians(th)
@@ -23,218 +45,264 @@ def polar_to_xy(r_list, theta_deg_list):
     return xs, ys
 
 
+# ---------------------------------------------------------------------------
+# Main dashboard widget
+# ---------------------------------------------------------------------------
 class Dashboard(QWidget):
+    """Single-window dashboard: controls, live XY plot, and scrolling log."""
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("UART Polar Dashboard")
 
-        # --- state ---
+        # ---- subprocess state ----
         self.proc = QProcess(self)
-        self.proc.setProcessChannelMode(QProcess.MergedChannels)
-        self.proc.readyReadStandardOutput.connect(self.on_ready_read)
-        self.proc.finished.connect(self.on_finished)
-        self.proc.errorOccurred.connect(self.on_error)
+        self.proc.setProcessChannelMode(QProcess.MergedChannels)  # combine stdout+stderr
+        self.proc.readyReadStandardOutput.connect(self._on_ready_read)
+        self.proc.finished.connect(self._on_finished)
+        self.proc.errorOccurred.connect(self._on_error)
 
+        # ---- data state ----
         self.ack_count = 0
         self.crc_count = 0
-        self.ack_r = []
-        self.ack_theta_deg = []
-        self._read_buf = ""  # accumulate partial lines between reads
+        self.ack_r: list[float] = []          # radii of ACK'd points (nm)
+        self.ack_theta_deg: list[float] = []   # angles of ACK'd points (degrees)
+        self._read_buf = ""                    # partial-line accumulation buffer
+        self._plot_dirty = False               # flag: new data since last repaint
 
-        # --- UI ---
+        # ---- build UI ----
         root = QVBoxLayout(self)
+        self._build_exe_row(root)
+        self._build_port_file_row(root)
+        self._build_button_row(root)
+        self._build_status_row(root)
+        self._build_plot(root)
+        self._build_log(root)
 
-        row1 = QHBoxLayout()
+        # Repaint the plot at a fixed interval rather than on every ACK
+        self._plot_timer = QTimer(self)
+        self._plot_timer.setInterval(100)  # 10 Hz refresh
+        self._plot_timer.timeout.connect(self._refresh_plot)
+        self._plot_timer.start()
+
+    # ---- UI construction helpers ----
+
+    def _build_exe_row(self, parent):
+        row = QHBoxLayout()
         self.exe_path = QLineEdit(str(Path("transmission.exe").absolute()))
-        btn_exe = QPushButton("Browse EXE")
-        btn_exe.clicked.connect(self.pick_exe)
-        row1.addWidget(QLabel("Sender EXE:"))
-        row1.addWidget(self.exe_path, 1)
-        row1.addWidget(btn_exe)
-        root.addLayout(row1)
+        btn = QPushButton("Browse EXE")
+        btn.clicked.connect(self._pick_exe)
+        row.addWidget(QLabel("Sender EXE:"))
+        row.addWidget(self.exe_path, 1)
+        row.addWidget(btn)
+        parent.addLayout(row)
 
-        row2 = QHBoxLayout()
+    def _build_port_file_row(self, parent):
+        row = QHBoxLayout()
         self.port = QLineEdit("COM25")
         self.gds_file = QLineEdit("input.gds")
-        btn_file = QPushButton("Browse File")
-        btn_file.clicked.connect(self.pick_file)
-        row2.addWidget(QLabel("Port:"))
-        row2.addWidget(self.port)
-        row2.addWidget(QLabel("File:"))
-        row2.addWidget(self.gds_file, 1)
-        row2.addWidget(btn_file)
-        root.addLayout(row2)
+        btn = QPushButton("Browse File")
+        btn.clicked.connect(self._pick_file)
+        row.addWidget(QLabel("Port:"))
+        row.addWidget(self.port)
+        row.addWidget(QLabel("File:"))
+        row.addWidget(self.gds_file, 1)
+        row.addWidget(btn)
+        parent.addLayout(row)
 
-        row3 = QHBoxLayout()
+    def _build_button_row(self, parent):
+        row = QHBoxLayout()
         self.btn_start = QPushButton("Start")
-        self.btn_stop = QPushButton("Stop")
+        self.btn_stop  = QPushButton("Stop")
         self.btn_stop.setEnabled(False)
         self.btn_clear = QPushButton("Clear")
         self.btn_start.clicked.connect(self.start)
         self.btn_stop.clicked.connect(self.stop)
         self.btn_clear.clicked.connect(self.clear)
-        row3.addWidget(self.btn_start)
-        row3.addWidget(self.btn_stop)
-        row3.addWidget(self.btn_clear)
-        row3.addStretch(1)
-        root.addLayout(row3)
+        row.addWidget(self.btn_start)
+        row.addWidget(self.btn_stop)
+        row.addWidget(self.btn_clear)
+        row.addStretch(1)
+        parent.addLayout(row)
 
-        row4 = QHBoxLayout()
-        self.lbl_ack = QLabel("ACK: 0")
-        self.lbl_crc = QLabel("CRC: 0")
+    def _build_status_row(self, parent):
+        row = QHBoxLayout()
+        self.lbl_ack    = QLabel("ACK: 0")
+        self.lbl_crc    = QLabel("CRC: 0")
         self.lbl_status = QLabel("Status: idle")
-        row4.addWidget(self.lbl_ack)
-        row4.addWidget(self.lbl_crc)
-        row4.addStretch(1)
-        row4.addWidget(self.lbl_status)
-        root.addLayout(row4)
+        row.addWidget(self.lbl_ack)
+        row.addWidget(self.lbl_crc)
+        row.addStretch(1)
+        row.addWidget(self.lbl_status)
+        parent.addLayout(row)
 
-        # Plot: ACK points displayed in XY plane (circle view)
+    def _build_plot(self, parent):
+        """Create the pyqtgraph scatter plot with a reference circle."""
         self.plot = pg.PlotWidget()
         self.plot.setLabel("bottom", "X (nm)")
-        self.plot.setLabel("left", "Y (nm)")
+        self.plot.setLabel("left",   "Y (nm)")
         self.plot.showGrid(x=True, y=True, alpha=0.2)
         self.plot.setAspectLocked(True)
+        self.curve_ack   = self.plot.plot([], [], pen=None, symbol="o", symbolSize=6)
+        self.ref_circle  = self.plot.plot([], [], pen=pg.mkPen(width=1))
+        parent.addWidget(self.plot, 1)
 
-        self.curve_ack = self.plot.plot([], [], pen=None, symbol="o", symbolSize=6)
-        self.ref_circle = self.plot.plot([], [], pen=pg.mkPen(width=1))
-        root.addWidget(self.plot, 1)
-
-        # Log output
+    def _build_log(self, parent):
         self.log = QPlainTextEdit()
         self.log.setReadOnly(True)
         self.log.setMaximumBlockCount(3000)
-        root.addWidget(self.log, 1)
+        parent.addWidget(self.log, 1)
 
-        # refresh plot timer (so we don't redraw on every byte)
-        self.timer = QTimer(self)
-        self.timer.setInterval(100)
-        self.timer.timeout.connect(self.refresh_plot)
-        self.timer.start()
+    # ---- file dialogs ----
 
-    def pick_exe(self):
-        p, _ = QFileDialog.getOpenFileName(self, "Select sender exe", "", "Executable (*.exe);;All files (*)")
+    def _pick_exe(self):
+        p, _ = QFileDialog.getOpenFileName(
+            self, "Select sender exe", "", "Executable (*.exe);;All files (*)")
         if p:
             self.exe_path.setText(p)
 
-    def pick_file(self):
-        p, _ = QFileDialog.getOpenFileName(self, "Select input file", "", "All files (*)")
+    def _pick_file(self):
+        p, _ = QFileDialog.getOpenFileName(
+            self, "Select input file", "", "All files (*)")
         if p:
             self.gds_file.setText(p)
 
-    def append_log(self, s: str):
-        self.log.appendPlainText(s.rstrip())
+    # ---- helpers ----
 
-    def set_running_ui(self, running: bool):
+    def _append_log(self, text: str):
+        """Add one line to the scrolling log pane."""
+        self.log.appendPlainText(text.rstrip())
+
+    def _set_running(self, running: bool):
+        """Toggle button enable state based on process running/stopped."""
         self.btn_start.setEnabled(not running)
         self.btn_stop.setEnabled(running)
 
+    # ---- public actions ----
+
     def clear(self):
+        """Reset all counters, data buffers, and the plot."""
         self.ack_count = 0
         self.crc_count = 0
         self.ack_r.clear()
         self.ack_theta_deg.clear()
         self._read_buf = ""
+        self._plot_dirty = True
         self.lbl_ack.setText("ACK: 0")
         self.lbl_crc.setText("CRC: 0")
         self.log.clear()
-        self.refresh_plot()
+        self._refresh_plot()
 
     def start(self):
-        exe = self.exe_path.text().strip()
+        """Validate inputs and launch transmission.exe as a child process."""
+        exe  = self.exe_path.text().strip()
         port = self.port.text().strip()
-        f = self.gds_file.text().strip()
+        gds  = self.gds_file.text().strip()
 
         if not exe or not Path(exe).exists():
-            self.append_log("[GUI] EXE path invalid.")
+            self._append_log("[GUI] EXE path invalid.")
             return
 
         args = [port]
-        if f:
-            args.append(f)
+        if gds:
+            args.append(gds)
 
-        self.append_log(f"[GUI] Starting: {exe} {' '.join(args)}")
+        self._append_log(f"[GUI] Starting: {exe} {' '.join(args)}")
         self.lbl_status.setText("Status: running")
-        self.set_running_ui(True)
+        self._set_running(True)
 
-        # helpful if you use relative paths like input.gds
+        # set working directory so relative paths (e.g. input.gds) resolve
         self.proc.setWorkingDirectory(str(Path(exe).parent))
-
         self.proc.setProgram(exe)
         self.proc.setArguments(args)
         self.proc.start()
 
     def stop(self):
+        """Gracefully terminate, then kill if the process doesn't exit."""
         if self.proc.state() != QProcess.NotRunning:
-            self.append_log("[GUI] Stopping process...")
+            self._append_log("[GUI] Stopping process...")
             self.proc.terminate()
             if not self.proc.waitForFinished(1000):
                 self.proc.kill()
         self.lbl_status.setText("Status: idle")
-        self.set_running_ui(False)
+        self._set_running(False)
 
-    def on_error(self, _err):
-        self.append_log(f"[GUI] Process error: {self.proc.errorString()}")
+    # ---- QProcess signal handlers ----
+
+    def _on_error(self, _err):
+        self._append_log(f"[GUI] Process error: {self.proc.errorString()}")
         self.lbl_status.setText("Status: error")
-        self.set_running_ui(False)
+        self._set_running(False)
 
-    def on_finished(self):
-        # flush any leftover partial line in the buffer
+    def _on_finished(self):
+        # flush any leftover partial line sitting in the read buffer
         if self._read_buf.strip():
             self._process_line(self._read_buf)
         self._read_buf = ""
-        self.append_log("[GUI] Process finished.")
+        self._append_log("[GUI] Process finished.")
         self.lbl_status.setText("Status: idle")
-        self.set_running_ui(False)
+        self._set_running(False)
 
-    def on_ready_read(self):
-        data = bytes(self.proc.readAllStandardOutput()).decode(errors="replace")
-        self._read_buf += data
+    def _on_ready_read(self):
+        """Accumulate stdout data; dispatch only complete newline-terminated lines."""
+        self._read_buf += bytes(self.proc.readAllStandardOutput()).decode(errors="replace")
 
-        # only process complete lines (ending with \n); keep the trailing fragment
         while "\n" in self._read_buf:
             line, self._read_buf = self._read_buf.split("\n", 1)
             self._process_line(line)
 
-    def _process_line(self, line: str):
-        self.append_log(line)
+    # ---- line parser ----
 
+    def _process_line(self, line: str):
+        """Parse a single output line and update counters / data lists."""
+        self._append_log(line)
+
+        # check for ACK line → extract polar coords and store
         m = ACK_RE.search(line)
         if m:
-            r = int(m.group("r"))
+            r_nm   = int(m.group("r"))
             t_udeg = int(m.group("t"))
-            t_deg = t_udeg / 1e6
-            self.ack_r.append(r)
-            self.ack_theta_deg.append(t_deg)
+            self.ack_r.append(r_nm)
+            self.ack_theta_deg.append(t_udeg / 1e6)  # microdegrees → degrees
             self.ack_count += 1
             self.lbl_ack.setText(f"ACK: {self.ack_count}")
+            self._plot_dirty = True
             return
 
+        # check for CRC error line
         if CRC_RE.search(line):
             self.crc_count += 1
             self.lbl_crc.setText(f"CRC: {self.crc_count}")
+
+    # ---- plot updates ----
+
+    def _refresh_plot(self):
+        """Redraw the scatter plot and reference circle (called by timer)."""
+        if not self._plot_dirty:
             return
+        self._plot_dirty = False
 
-        # FPGA lines are optional; already in log
-        _ = FPGA_RE.search(line)
-
-    def refresh_plot(self):
+        # update ACK scatter points
         if self.ack_theta_deg:
             ax, ay = polar_to_xy(self.ack_r, self.ack_theta_deg)
             self.curve_ack.setData(ax, ay)
         else:
             self.curve_ack.setData([], [])
 
+        # draw a reference circle at the maximum radius
         rmax = max(self.ack_r) if self.ack_r else 0
         if rmax > 0:
-            n = 256
-            xs = [rmax * math.cos(2 * math.pi * i / n) for i in range(n + 1)]
-            ys = [rmax * math.sin(2 * math.pi * i / n) for i in range(n + 1)]
+            angles = [2 * math.pi * i / _CIRCLE_PTS for i in range(_CIRCLE_PTS + 1)]
+            xs = [rmax * math.cos(a) for a in angles]
+            ys = [rmax * math.sin(a) for a in angles]
             self.ref_circle.setData(xs, ys)
         else:
             self.ref_circle.setData([], [])
 
 
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     w = Dashboard()
