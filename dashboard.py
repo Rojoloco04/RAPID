@@ -39,6 +39,7 @@ class Dashboard(QWidget):
         self.crc_count = 0
         self.ack_r = []
         self.ack_theta_deg = []
+        self._read_buf = ""  # accumulate partial lines between reads
 
         # --- UI ---
         root = QVBoxLayout(self)
@@ -133,6 +134,7 @@ class Dashboard(QWidget):
         self.crc_count = 0
         self.ack_r.clear()
         self.ack_theta_deg.clear()
+        self._read_buf = ""
         self.lbl_ack.setText("ACK: 0")
         self.lbl_crc.setText("CRC: 0")
         self.log.clear()
@@ -177,33 +179,44 @@ class Dashboard(QWidget):
         self.set_running_ui(False)
 
     def on_finished(self):
+        # flush any leftover partial line in the buffer
+        if self._read_buf.strip():
+            self._process_line(self._read_buf)
+        self._read_buf = ""
         self.append_log("[GUI] Process finished.")
         self.lbl_status.setText("Status: idle")
         self.set_running_ui(False)
 
     def on_ready_read(self):
         data = bytes(self.proc.readAllStandardOutput()).decode(errors="replace")
-        for line in data.splitlines():
-            self.append_log(line)
+        self._read_buf += data
 
-            m = ACK_RE.search(line)
-            if m:
-                r = int(m.group("r"))
-                t_udeg = int(m.group("t"))
-                t_deg = t_udeg / 1e6
-                self.ack_r.append(r)
-                self.ack_theta_deg.append(t_deg)
-                self.ack_count += 1
-                self.lbl_ack.setText(f"ACK: {self.ack_count}")
-                continue
+        # only process complete lines (ending with \n); keep the trailing fragment
+        while "\n" in self._read_buf:
+            line, self._read_buf = self._read_buf.split("\n", 1)
+            self._process_line(line)
 
-            if CRC_RE.search(line):
-                self.crc_count += 1
-                self.lbl_crc.setText(f"CRC: {self.crc_count}")
-                continue
+    def _process_line(self, line: str):
+        self.append_log(line)
 
-            # FPGA lines are optional; already in log
-            _ = FPGA_RE.search(line)
+        m = ACK_RE.search(line)
+        if m:
+            r = int(m.group("r"))
+            t_udeg = int(m.group("t"))
+            t_deg = t_udeg / 1e6
+            self.ack_r.append(r)
+            self.ack_theta_deg.append(t_deg)
+            self.ack_count += 1
+            self.lbl_ack.setText(f"ACK: {self.ack_count}")
+            return
+
+        if CRC_RE.search(line):
+            self.crc_count += 1
+            self.lbl_crc.setText(f"CRC: {self.crc_count}")
+            return
+
+        # FPGA lines are optional; already in log
+        _ = FPGA_RE.search(line)
 
     def refresh_plot(self):
         if self.ack_theta_deg:
