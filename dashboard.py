@@ -89,7 +89,7 @@ class Dashboard(QWidget):
 
     def _build_exe_row(self, parent):
         row = QHBoxLayout()
-        self.exe_path = QLineEdit(str(Path("transmission.exe").absolute()))
+        self.exe_path = QLineEdit(str(Path("build/transmission.exe").absolute()))
         btn = QPushButton("Browse EXE")
         btn.clicked.connect(self._pick_exe)
         row.addWidget(QLabel("Sender EXE:"))
@@ -211,8 +211,8 @@ class Dashboard(QWidget):
         self.lbl_status.setText("Status: running")
         self._set_running(True)
 
-        # set working directory so relative paths (e.g. input.gds) resolve
-        self.proc.setWorkingDirectory(str(Path(exe).parent))
+        # keep working directory at the project root so input.gds resolves correctly
+        self.proc.setWorkingDirectory(str(Path(exe).parent.parent))
         self.proc.setProgram(exe)
         self.proc.setArguments(args)
         self.proc.start()
