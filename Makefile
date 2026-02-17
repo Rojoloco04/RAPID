@@ -9,14 +9,20 @@
 #   Windows (uses Win32 serial API)
 #
 # Usage:
-#   make              – build transmission.exe
-#   make clean        – remove build artefacts
-#   make run          – build and run (uses default PORT and FILE below)
+#   make                       – build build/transmission.exe
+#   make clean                 – remove build artefacts
+#   make run                   – build and run (uses default PORT and FILE below)
 #   make run PORT=COM3 FILE=my.gds
+#   make dashboard             – launch the Python dashboard (requires venv)
+#
+# Project layout:
+#   src/        – all source files (C and Python)
+#   build/      – compiled output (generated, not committed)
+#   input.gds   – default input file
 #
 # Note:
-#   fpgaCommunication.c and fgpaConfiguration.c target the Zynq PS bare-metal
-#   environment and must be built inside Xilinx Vitis / SDK, not here.
+#   src/fpgaCommunication.c and src/fgpaConfiguration.c target the Zynq PS
+#   bare-metal environment and must be built inside Xilinx Vitis / SDK, not here.
 # =============================================================================
 
 # ---- Toolchain ---------------------------------------------------------------
@@ -24,15 +30,16 @@ CC      := gcc
 CFLAGS  := -O2 -Wall -Wextra -std=c11
 LDFLAGS := -lm
 
-# ---- Build directory ---------------------------------------------------------
+# ---- Directories -------------------------------------------------------------
+SRCDIR   := src
 BUILDDIR := build
 
 # ---- Target ------------------------------------------------------------------
 TARGET  := $(BUILDDIR)/transmission.exe
 
 # ---- Sources -----------------------------------------------------------------
-SRCS    := pcCommunication.c inputParser.c
-OBJS    := $(addprefix $(BUILDDIR)/, $(SRCS:.c=.o))
+SRCS    := $(SRCDIR)/pcCommunication.c $(SRCDIR)/inputParser.c
+OBJS    := $(SRCS:$(SRCDIR)/%.c=$(BUILDDIR)/%.o)
 DEPS    := $(OBJS:.o=.d)
 
 # ---- Runtime defaults (override on command line) -----------------------------
@@ -41,7 +48,7 @@ FILE    := input.gds
 
 # ==============================================================================
 
-.PHONY: all clean run
+.PHONY: all clean run dashboard
 
 all: $(TARGET)
 
@@ -55,15 +62,26 @@ $(TARGET): $(OBJS)
 	@echo "Built $@"
 
 # Compile into build/ with automatic dependency tracking
-$(BUILDDIR)/%.o: %.c | $(BUILDDIR)
+$(BUILDDIR)/%.o: $(SRCDIR)/%.c | $(BUILDDIR)
 	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
 
 # Pull in generated header dependency files (silently ignored on first build)
 -include $(DEPS)
 
-# Run the built executable
+# Run transmission.exe directly
 run: $(TARGET)
 	./$(TARGET) $(PORT) $(FILE)
+
+# Launch the Python dashboard (activates venv if not already active)
+VENV_PYTHON := venv/Scripts/python
+SYSTEM_PYTHON := python
+
+dashboard:
+	@if [ -f venv/Scripts/python.exe ]; then \
+		$(VENV_PYTHON) src/dashboard.py; \
+	else \
+		$(SYSTEM_PYTHON) src/dashboard.py; \
+	fi
 
 # Remove all build artefacts
 clean:
