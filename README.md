@@ -15,7 +15,7 @@ RAPID reads a GDS2 input file, converts the XY coordinates to polar form, and tr
 input.gds  ──►  inputParser  ──►  pcCommunication  ──►  UART  ──►  fpgaCommunication
                 (XY → polar)       (frame + send)                    (receive + ACK)
                                          ▲                                  │
-                                    gui.py  ◄────── ACK log ──────────┘
+                                    gui.py  ◄────── ACK log ────────────────┘
                                   (live XY scatter)
 ```
 
