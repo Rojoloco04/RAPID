@@ -57,12 +57,15 @@ ENTITY top_stepperDriver_0_0 IS
   PORT (
     clk : IN STD_LOGIC;
     dir : IN STD_LOGIC;
+    dir_out : OUT STD_LOGIC;
     en : IN STD_LOGIC;
-    phA1 : OUT STD_LOGIC;
-    phB1 : OUT STD_LOGIC;
-    phA2 : OUT STD_LOGIC;
-    phB2 : OUT STD_LOGIC;
-    reset : IN STD_LOGIC
+    pwm_out_step : OUT STD_LOGIC;
+    prox_in : IN STD_LOGIC;
+    zero_req : IN STD_LOGIC;
+    en_out : OUT STD_LOGIC;
+    num_steps : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+    step_go : IN STD_LOGIC;
+    M : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
   );
 END top_stepperDriver_0_0;
 
@@ -73,12 +76,15 @@ ARCHITECTURE top_stepperDriver_0_0_arch OF top_stepperDriver_0_0 IS
     PORT (
       clk : IN STD_LOGIC;
       dir : IN STD_LOGIC;
+      dir_out : OUT STD_LOGIC;
       en : IN STD_LOGIC;
-      phA1 : OUT STD_LOGIC;
-      phB1 : OUT STD_LOGIC;
-      phA2 : OUT STD_LOGIC;
-      phB2 : OUT STD_LOGIC;
-      reset : IN STD_LOGIC
+      pwm_out_step : OUT STD_LOGIC;
+      prox_in : IN STD_LOGIC;
+      zero_req : IN STD_LOGIC;
+      en_out : OUT STD_LOGIC;
+      num_steps : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      step_go : IN STD_LOGIC;
+      M : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
     );
   END COMPONENT stepperDriver;
   ATTRIBUTE X_CORE_INFO : STRING;
@@ -94,20 +100,20 @@ ARCHITECTURE top_stepperDriver_0_0_arch OF top_stepperDriver_0_0 IS
   ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF clk: SIGNAL IS "xilinx.com:signal:clock:1.0 clk CLK";
   ATTRIBUTE X_INTERFACE_MODE OF clk: SIGNAL IS "slave clk";
-  ATTRIBUTE X_INTERFACE_PARAMETER OF clk: SIGNAL IS "XIL_INTERFACENAME clk, ASSOCIATED_RESET reset, FREQ_HZ 125000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN top_processing_system7_0_0_FCLK_CLK0, INSERT_VIP 0";
-  ATTRIBUTE X_INTERFACE_INFO OF reset: SIGNAL IS "xilinx.com:signal:reset:1.0 reset RST";
-  ATTRIBUTE X_INTERFACE_MODE OF reset: SIGNAL IS "slave reset";
-  ATTRIBUTE X_INTERFACE_PARAMETER OF reset: SIGNAL IS "XIL_INTERFACENAME reset, POLARITY ACTIVE_LOW, INSERT_VIP 0";
+  ATTRIBUTE X_INTERFACE_PARAMETER OF clk: SIGNAL IS "XIL_INTERFACENAME clk, FREQ_HZ 1.25e+08, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN top_processing_system7_0_0_FCLK_CLK0, INSERT_VIP 0";
 BEGIN
   U0 : stepperDriver
     PORT MAP (
       clk => clk,
       dir => dir,
+      dir_out => dir_out,
       en => en,
-      phA1 => phA1,
-      phB1 => phB1,
-      phA2 => phA2,
-      phB2 => phB2,
-      reset => reset
+      pwm_out_step => pwm_out_step,
+      prox_in => prox_in,
+      zero_req => zero_req,
+      en_out => en_out,
+      num_steps => num_steps,
+      step_go => step_go,
+      M => M
     );
 END top_stepperDriver_0_0_arch;
