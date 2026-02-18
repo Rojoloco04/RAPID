@@ -74,7 +74,7 @@ vcom -work proc_sys_reset_v5_0_17 -93  -incr \
 
 vcom -work xil_defaultlib -93  -incr \
 "../../../bd/top/ip/top_rst_ps7_0_100M_1/sim/top_rst_ps7_0_100M_1.vhd" \
-"../../../bd/top/ip/top_axi_smc_1/top_axi_smc_1_sim_netlist.vhdl" \
+"c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/top_axi_smc_1_sim_netlist.vhdl" \
 "../../../bd/top/sim/top.vhd" \
 
 vlog -work xil_defaultlib \

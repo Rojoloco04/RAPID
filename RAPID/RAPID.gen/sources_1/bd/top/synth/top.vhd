@@ -2,7 +2,7 @@
 --Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
---Date        : Tue Feb 10 18:20:37 2026
+--Date        : Tue Feb 17 18:18:56 2026
 --Host        : MDD-ECE-785KL84 running 64-bit major release  (build 9200)
 --Command     : generate_target top.bd
 --Design      : top
@@ -148,12 +148,15 @@ architecture STRUCTURE of top is
   port (
     clk : in STD_LOGIC;
     dir : in STD_LOGIC;
+    dir_out : out STD_LOGIC;
     en : in STD_LOGIC;
-    phA1 : out STD_LOGIC;
-    phB1 : out STD_LOGIC;
-    phA2 : out STD_LOGIC;
-    phB2 : out STD_LOGIC;
-    reset : in STD_LOGIC
+    pwm_out_step : out STD_LOGIC;
+    prox_in : in STD_LOGIC;
+    zero_req : in STD_LOGIC;
+    en_out : out STD_LOGIC;
+    num_steps : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    step_go : in STD_LOGIC;
+    M : out STD_LOGIC_VECTOR ( 1 downto 0 )
   );
   end component top_stepperDriver_0_0;
   component top_axi_gpio_0_1 is
@@ -522,6 +525,10 @@ architecture STRUCTURE of top is
   signal NLW_rst_ps7_0_100M_bus_struct_reset_UNCONNECTED : STD_LOGIC_VECTOR ( 0 to 0 );
   signal NLW_rst_ps7_0_100M_interconnect_aresetn_UNCONNECTED : STD_LOGIC_VECTOR ( 0 to 0 );
   signal NLW_rst_ps7_0_100M_peripheral_reset_UNCONNECTED : STD_LOGIC_VECTOR ( 0 to 0 );
+  signal NLW_stepperDriver_0_dir_out_UNCONNECTED : STD_LOGIC;
+  signal NLW_stepperDriver_0_en_out_UNCONNECTED : STD_LOGIC;
+  signal NLW_stepperDriver_0_pwm_out_step_UNCONNECTED : STD_LOGIC;
+  signal NLW_stepperDriver_0_M_UNCONNECTED : STD_LOGIC_VECTOR ( 1 downto 0 );
   attribute X_INTERFACE_INFO : string;
   attribute X_INTERFACE_INFO of DDR_cas_n : signal is "xilinx.com:interface:ddrx:1.0 DDR CAS_N";
   attribute X_INTERFACE_INFO of DDR_ck_n : signal is "xilinx.com:interface:ddrx:1.0 DDR CK_N";
@@ -828,14 +835,17 @@ rst_ps7_0_100M: component top_rst_ps7_0_100M_1
     );
 stepperDriver_0: component top_stepperDriver_0_0
      port map (
+      M(1 downto 0) => NLW_stepperDriver_0_M_UNCONNECTED(1 downto 0),
       clk => processing_system7_0_FCLK_CLK0,
       dir => xlslice_3_Dout(0),
+      dir_out => NLW_stepperDriver_0_dir_out_UNCONNECTED,
       en => xlslice_4_Dout(0),
-      phA1 => phA1,
-      phA2 => phA2,
-      phB1 => phB1,
-      phB2 => phB2,
-      reset => xlslice_5_Dout(0)
+      en_out => NLW_stepperDriver_0_en_out_UNCONNECTED,
+      num_steps(31 downto 0) => B"00000000000000000000000000000000",
+      prox_in => '0',
+      pwm_out_step => NLW_stepperDriver_0_pwm_out_step_UNCONNECTED,
+      step_go => '0',
+      zero_req => '0'
     );
 xlslice_0: component top_xlslice_0_1
      port map (

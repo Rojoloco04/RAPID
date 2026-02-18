@@ -4,7 +4,7 @@ vhdl xil_defaultlib  \
 "../../../bd/top/ip/top_stepperDriver_0_0_1/sim/top_stepperDriver_0_0.vhd" \
 "../../../bd/top/ip/top_axi_gpio_0_1/sim/top_axi_gpio_0_1.vhd" \
 "../../../bd/top/ip/top_rst_ps7_0_100M_1/sim/top_rst_ps7_0_100M_1.vhd" \
-"../../../bd/top/ip/top_axi_smc_1/top_axi_smc_1_sim_netlist.vhdl" \
+"c:/Users/mbracker/Documents/RAPID/RAPID/RAPID/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/top_axi_smc_1_sim_netlist.vhdl" \
 "../../../bd/top/sim/top.vhd" \
 
 # Do not sort compile order
