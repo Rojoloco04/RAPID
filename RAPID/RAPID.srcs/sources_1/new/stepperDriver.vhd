@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 entity stepperDriver is
     Port (clk: in std_logic; -- 125MHz
@@ -10,7 +11,7 @@ entity stepperDriver is
         prox_in : in std_logic;
         zero_req : in std_logic; -- '1' to request re-zero of sled
         en_out : out std_logic; --enable signal sent to DRV8834's sleep pin
-        num_steps : in integer range 0 to 1000000; --number of steps to run motor for
+        num_steps : in std_logic_vector(31 downto 0); --number of steps to run motor for
         step_go : in std_logic; -- logic '1' to begin steps
         M : out std_logic_vector(1 downto 0));
 end stepperDriver;
@@ -48,6 +49,9 @@ signal dir_sig : std_logic := '0';
 signal en_sig : std_logic := '0';
 signal wakeup_counter : integer range 0 to 150001 := 0; --wakeup counter from exiting sleep mode
 
+-- convert std_logic_vector port to integer for internal use
+signal num_steps_int : integer range 0 to 1000000 := 0;
+
 --Have vivado place prox_sync1 and prox_sync2 near each other in same slice - minimize routing delay
 --Also prevents merging
 attribute ASYNC_REG : string;
@@ -55,6 +59,9 @@ attribute ASYNC_REG of prox_sync1 : signal is "TRUE";
 attribute ASYNC_REG of prox_sync2 : signal is "TRUE";
 
 begin
+
+num_steps_int <= to_integer(unsigned(num_steps));
+
 --normal run clock div
 process(clk)
 begin
@@ -147,9 +154,9 @@ begin
             en_sig <= '0';
             --detect rising edge of step_go
             if step_go ='1' and step_go_prev = '0' then
-                if num_steps > 0 and en = '1' then
+                if num_steps_int > 0 and en = '1' then
                     wakeup_counter <= 0;
-                    steps_remaining <= num_steps;
+                    steps_remaining <= num_steps_int;
                     state <= WAKEUP;
                 end if;
             end if;
@@ -197,8 +204,8 @@ begin
             dir_sig <= dir; 
             en_sig <= '0'; --place motor driver in sleep mode
             if step_go = '1' and step_go_prev = '0' then
-                if num_steps > 0 and en = '1' then
-                    steps_remaining <= num_steps;
+                if num_steps_int > 0 and en = '1' then
+                    steps_remaining <= num_steps_int;
                     wakeup_counter <= 0;
                     state <= WAKEUP;
                 end if;

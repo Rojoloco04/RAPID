@@ -85,6 +85,30 @@ compile_commands.json
 .vitisWorkspace.json
 
 # ============================================
+# vitis_workspace build artifacts
+# ============================================
+
+# Workspace-level IDE files
+vitis_workspace/_ide/
+vitis_workspace/.rigel_lopper/
+
+# Platform project (RAPID) — all generated from .xsa
+vitis_workspace/RAPID/export/
+vitis_workspace/RAPID/hw/
+vitis_workspace/RAPID/logs/
+vitis_workspace/RAPID/ps7_cortexa9_0/
+vitis_workspace/RAPID/resources/
+vitis_workspace/RAPID/zynq_fsbl/
+
+# Application build output
+vitis_workspace/fpgaCommunication/build/
+vitis_workspace/fpgaCommunication/.cache/
+vitis_workspace/fpgaCommunication/_ide/
+vitis_workspace/fpgaCommunication/compile_commands.json
+vitis_workspace/systemControl/build/
+vitis_workspace/systemControl/_ide/
+
+# ============================================
 # IP Packager generated files (keep source HDL)
 # ============================================
 RAPID/ip_repo/src/top_clk_wiz_0/
