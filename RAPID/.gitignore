@@ -1,21 +1,29 @@
-# Ignore build output directory
-/build
-/export
+# Vivado/Vitis build artifacts (handled by root .gitignore)
+# This file kept minimal — see root .gitignore for full rules
 
-# Ignore object files and dependent files
-.o
-.d
+# Build output
+/build/
+/export/
 
-#Ignore logs folder and log files
-/logs
-.log
+# Object and dependency files
+*.o
+*.d
 
-#Ignore lock files
-.lock
+# Logs
+/logs/
+*.log
+*.jou
 
-.bin
-.pdi
+# Lock files
+*.lock
+
+# Binary artifacts
+*.bin
+*.pdi
+
+# Vitis workspace
 .vitisWorkspace.json
 
-_ide/logs
-_ide/.wsdata
+# IDE generated
+_ide/logs/
+_ide/.wsdata/
