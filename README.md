@@ -35,7 +35,11 @@ RAPID/
 ├── input.gds                 # Default GDS2 input file
 ├── Makefile                  # PC-side build
 ├── requirements.txt          # Python dependencies
-└── RAPID/                    # Xilinx Vivado / Vitis project files
+├── vitis_workspace/          # Xilinx Vitis workspace (FPGA software)
+│   ├── RAPID/                # Platform project (generated from .xsa)
+│   ├── fpgaCommunication/    # Application project — UART receiver
+│   └── systemControl/        # Application project — motor control
+└── RAPID/                    # Xilinx Vivado project files (FPGA hardware)
 ```
 
 ---
@@ -63,12 +67,56 @@ pip install -r requirements.txt
 
 ### FPGA
 
-- Xilinx Vivado + Vitis (tested on the Zynq-7000 series)
-- `src/fpgaCommunication.c` and `src/systemControl.c` must be built inside a Vitis bare-metal project - they are **not** part of the PC Makefile.
+- Xilinx Vivado 2025.1 (or compatible)
+- Xilinx Vitis 2025.1 (or compatible)
+- Target device: Arty Z7-20 (xc7z020clg400-1)
+- `src/fpgaCommunication.c` and `src/systemControl.c` must be built inside a Vitis bare-metal project — they are **not** part of the PC Makefile.
 
 ---
 
 ## Building & running
+
+### 0 - Build the FPGA hardware & software (after cloning)
+
+After cloning the repo, the Vivado project needs to regenerate its outputs before you can program the board.
+
+#### Hardware (Vivado)
+
+1. Open the Vivado project: **File → Open Project →** `RAPID/RAPID.xpr`
+2. In the **Sources** panel, expand **Design Sources** and locate the block design `top.bd`
+3. **Generate the HDL wrapper:**
+   - Right-click `top` (the `.bd` file) → **Create HDL Wrapper…**
+   - Select **"Let Vivado manage wrapper and auto-update"** → OK
+4. **Set the wrapper as the top module:**
+   - Right-click the newly created `top_wrapper` → **Set as Top**
+5. **If IP are out of date:** click **Reports → Report IP Status** → select all → **Upgrade Selected**
+6. **Run Synthesis:** Flow Navigator → **Run Synthesis** (wait for completion)
+7. **Run Implementation:** Flow Navigator → **Run Implementation** (wait for completion)
+8. **Generate Bitstream:** Flow Navigator → **Generate Bitstream** (wait for completion)
+9. **Export the hardware definition:**
+   - **File → Export → Export Hardware…**
+   - Check **Include bitstream** → save as `.xsa` (e.g., `top_wrapper.xsa`)
+
+#### Software (Vitis)
+
+The Vitis workspace is already set up at `vitis_workspace/` with three components:
+- **RAPID** — platform project (built from the exported `.xsa`)
+- **fpgaCommunication** — UART receiver application
+- **systemControl** — motor/spindle control application
+
+1. Launch Vitis: **Tools → Launch Vitis IDE** (from Vivado), or open Vitis independently
+2. **Open the existing workspace:** **File → Open Workspace →** `vitis_workspace/`
+3. **Update the platform** (if you re-exported the `.xsa`):
+   - Right-click the **RAPID** platform project → **Update Hardware Specification** → select the new `.xsa`
+   - **Build** the platform project
+4. **Build the application projects:**
+   - Right-click **fpgaCommunication** → **Build Project**
+   - Right-click **systemControl** → **Build Project**
+5. **Program the FPGA & run:**
+   - Connect the Arty Z7 via USB
+   - Right-click the desired application → **Run As → Launch on Hardware**
+
+> **Note:** The XDC constraints file at `RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc` contains all pin and I/O standard assignments. If you change the block design port names, update the XDC to match.
 
 ### 1 - Build `RAPID.exe`
 
