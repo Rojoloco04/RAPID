@@ -11,15 +11,17 @@ entity stepperDriver is
         prox_in : in std_logic;
         zero_req : in std_logic; -- '1' to request re-zero of sled
         en_out : out std_logic; --enable signal sent to DRV8834's sleep pin
-        num_steps : in std_logic_vector(31 downto 0); --number of steps to run motor for
+        num_steps : in std_logic_vector(20 downto 0); --number of steps to run motor for -1,048,576
         step_go : in std_logic; -- logic '1' to begin steps
-        M : out std_logic_vector(1 downto 0));
+        M : out std_logic_vector(1 downto 0);
+        step_total_out : out std_logic_vector(20 downto 0));
 end stepperDriver;
 
 architecture Behavioral of stepperDriver is
 --constants for clock and clock dividers
 constant base_clk : integer := 125000000;
 constant run_freq : integer := 125000; --set for 1kHz for testing
+constant zero_freq : integer := 12500000; --set 10 Hz for zeroing process
 --state logic for zero mode vs normal
 type state_t is (ZEROING, IDLE, WAKEUP, RUNNING, DONE);
 signal state : state_t := ZEROING;
@@ -51,9 +53,10 @@ signal wakeup_counter : integer range 0 to 150001 := 0; --wakeup counter from ex
 
 -- convert std_logic_vector port to integer for internal use
 signal num_steps_int : integer range 0 to 1000000 := 0;
+signal step_total : integer range 0 to 100000000 := 0; --counter to keep track of sled position
 
 --Have vivado place prox_sync1 and prox_sync2 near each other in same slice - minimize routing delay
---Also prevents merging
+--Also prevents optimizing flipflops away
 attribute ASYNC_REG : string;
 attribute ASYNC_REG of prox_sync1 : signal is "TRUE";
 attribute ASYNC_REG of prox_sync2 : signal is "TRUE";
@@ -84,10 +87,10 @@ end process;
 process(clk)
 begin
     if rising_edge(clk) then
-        if zero_counter < (base_clk / 2) then
+        if zero_counter < (zero_freq / 2) then
             zero_clk <= '0';
             zero_counter <= zero_counter + 1;
-        elsif (zero_counter >= (base_clk/2)) and (zero_counter < base_clk) then
+        elsif (zero_counter >= (zero_freq/2)) and (zero_counter < zero_freq) then
             zero_clk <= '1';
             zero_counter <= zero_counter + 1;
         else
@@ -145,6 +148,7 @@ begin
             end if;
             
             if prox_stable = '1' then
+            step_total <= 0;
                 state <= IDLE;
             end if;
             
@@ -191,6 +195,11 @@ begin
             --count step on each falling edge of run_clk - decrement after full pulse
             if run_clk = '0' and run_clk_prev = '1' then
                 steps_remaining <= steps_remaining - 1;
+                if dir ='1' then
+                    step_total <= step_total + 1;
+                else 
+                    step_total <= step_total -1;
+                end if;
             end if; 
         end if;
         
