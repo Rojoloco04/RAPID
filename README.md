@@ -106,9 +106,8 @@ The Vitis workspace is already set up at `vitis_workspace/` with three component
 
 1. Launch Vitis: **Tools → Launch Vitis IDE** (from Vivado), or open Vitis independently
 2. **Open the existing workspace:** **File → Open Workspace →** `vitis_workspace/`
-3. **Update the platform** (if you re-exported the `.xsa`):
-   - Right-click the **RAPID** platform project → **Update Hardware Specification** → select the new `.xsa`
-   - **Build** the platform project
+3. **Build the platform**:
+   - **File → New Component → Platform → Select the 'top_wrapper.xsa' file → Build**
 4. **Build the application projects:**
    - Right-click **fpgaCommunication** → **Build Project**
    - Right-click **systemControl** → **Build Project**
