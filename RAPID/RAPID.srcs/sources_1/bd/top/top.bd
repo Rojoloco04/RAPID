@@ -22,7 +22,9 @@
       "xlslice_4": "",
       "xlslice_5": "",
       "rst_ps7_0_100M": "",
-      "axi_smc": ""
+      "axi_smc": "",
+      "xlslice_6": "",
+      "xlslice_7": ""
     },
     "interface_ports": {
       "DDR": {
@@ -2184,7 +2186,7 @@
           },
           "num_steps": {
             "direction": "I",
-            "left": "31",
+            "left": "20",
             "right": "0"
           },
           "step_go": {
@@ -2193,6 +2195,11 @@
           "M": {
             "direction": "O",
             "left": "1",
+            "right": "0"
+          },
+          "step_total_out": {
+            "direction": "O",
+            "left": "20",
             "right": "0"
           }
         }
@@ -2205,11 +2212,17 @@
         "inst_hier_path": "axi_gpio_0",
         "has_run_ip_tcl": "true",
         "parameters": {
+          "C_ALL_INPUTS_2": {
+            "value": "1"
+          },
           "C_ALL_OUTPUTS": {
             "value": "1"
           },
           "C_GPIO_WIDTH": {
-            "value": "7"
+            "value": "28"
+          },
+          "C_IS_DUAL": {
+            "value": "1"
           }
         }
       },
@@ -2228,7 +2241,7 @@
             "value": "0"
           },
           "DIN_WIDTH": {
-            "value": "7"
+            "value": "27"
           },
           "DOUT_WIDTH": {
             "value": "2"
@@ -2250,7 +2263,7 @@
             "value": "2"
           },
           "DIN_WIDTH": {
-            "value": "7"
+            "value": "27"
           },
           "DOUT_WIDTH": {
             "value": "1"
@@ -2272,7 +2285,7 @@
             "value": "3"
           },
           "DIN_WIDTH": {
-            "value": "7"
+            "value": "27"
           },
           "DOUT_WIDTH": {
             "value": "1"
@@ -2294,7 +2307,7 @@
             "value": "4"
           },
           "DIN_WIDTH": {
-            "value": "7"
+            "value": "27"
           },
           "DOUT_WIDTH": {
             "value": "1"
@@ -2316,7 +2329,7 @@
             "value": "5"
           },
           "DIN_WIDTH": {
-            "value": "7"
+            "value": "27"
           },
           "DOUT_WIDTH": {
             "value": "1"
@@ -2338,7 +2351,7 @@
             "value": "6"
           },
           "DIN_WIDTH": {
-            "value": "7"
+            "value": "27"
           },
           "DOUT_WIDTH": {
             "value": "1"
@@ -2451,6 +2464,50 @@
             }
           }
         }
+      },
+      "xlslice_6": {
+        "vlnv": "xilinx.com:ip:xlslice:1.0",
+        "ip_revision": "5",
+        "xci_name": "top_xlslice_5_0",
+        "xci_path": "ip\\top_xlslice_5_0\\top_xlslice_5_0.xci",
+        "inst_hier_path": "xlslice_6",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "DIN_FROM": {
+            "value": "26"
+          },
+          "DIN_TO": {
+            "value": "7"
+          },
+          "DIN_WIDTH": {
+            "value": "27"
+          },
+          "DOUT_WIDTH": {
+            "value": "20"
+          }
+        }
+      },
+      "xlslice_7": {
+        "vlnv": "xilinx.com:ip:xlslice:1.0",
+        "ip_revision": "5",
+        "xci_name": "top_xlslice_6_0",
+        "xci_path": "ip\\top_xlslice_6_0\\top_xlslice_6_0.xci",
+        "inst_hier_path": "xlslice_7",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "DIN_FROM": {
+            "value": "26"
+          },
+          "DIN_TO": {
+            "value": "26"
+          },
+          "DIN_WIDTH": {
+            "value": "27"
+          },
+          "DOUT_WIDTH": {
+            "value": "1"
+          }
+        }
       }
     },
     "interface_nets": {
@@ -2530,7 +2587,9 @@
           "xlslice_2/Din",
           "xlslice_3/Din",
           "xlslice_4/Din",
-          "xlslice_5/Din"
+          "xlslice_5/Din",
+          "xlslice_6/Din",
+          "xlslice_7/Din"
         ]
       },
       "kill_0_1": {
@@ -2593,6 +2652,12 @@
           "pwm_out_step_0"
         ]
       },
+      "stepperDriver_0_step_total_out": {
+        "ports": [
+          "stepperDriver_0/step_total_out",
+          "axi_gpio_0/gpio2_io_i"
+        ]
+      },
       "xlslice_0_Dout": {
         "ports": [
           "xlslice_0/Dout",
@@ -2625,7 +2690,20 @@
       },
       "xlslice_5_Dout": {
         "ports": [
-          "xlslice_5/Dout"
+          "xlslice_5/Dout",
+          "stepperDriver_0/zero_req"
+        ]
+      },
+      "xlslice_6_Dout": {
+        "ports": [
+          "xlslice_6/Dout",
+          "stepperDriver_0/num_steps"
+        ]
+      },
+      "xlslice_7_Dout": {
+        "ports": [
+          "xlslice_7/Dout",
+          "stepperDriver_0/step_go"
         ]
       }
     },
