@@ -26,9 +26,9 @@ entity Spindle is
     Port (  clk : in STD_LOGIC; -- 125 MHz
             en : in STD_LOGIC; --enable 
             en_spindle : out STD_LOGIC; --enable for DRV8323
-            dir : in STD_LOGIC; --motor direction; "0" forward, "1" backwards
-            speed : in STD_LOGIC_VECTOR(1 downto 0); -- speed control 4 options
-            kill : in STD_LOGIC; --safety kill switch
+--            dir : in STD_LOGIC; --motor direction; "0" forward, "1" backwards
+--            speed : in STD_LOGIC_VECTOR(1 downto 0); -- speed control 4 options
+--            kill : in STD_LOGIC; --safety kill switch
             INHA : out STD_LOGIC;  -- PWM input
             INLA : out STD_LOGIC;  -- State input 
             INHB : out STD_LOGIC;  -- State input 
@@ -64,6 +64,7 @@ count_max <= 6410256; --14.5Hz - Smoothest/slowest
 --3,205,128 gives ~39 Hz = 1 RPS
 -- clk divider
 process(clk)
+--clock div
 begin
     if rising_edge(clk) then
         if counter < (count_max / 2) then
@@ -90,7 +91,7 @@ begin
             pwm_counter <= 0;
         end if;
         
-        if pwm_counter < duty_cycle then
+        if pwm_counter < 3125 then
             pwm_signal <= '1';
         else
             pwm_signal <= '0';
@@ -119,18 +120,18 @@ begin
 end process;
            
 
--- Duty cycle control 
-duty_cycle <= 1562 when (speed = "00") else  -- 25%
-             3125 when (speed = "01") else   --50%
-             4688 when (speed = "10") else   --75%
-             6250; --100%
+-- Duty cycle control - deprecated
+--duty_cycle <= 1562 when (speed = "00") else  -- 25%
+--             3125 when (speed = "01") else   --50%
+--             4688 when (speed = "10") else   --75%
+--             6250; --100%
 
 
 -- Brushless Logic
 process(clk_div, en) 
 begin
     if rising_edge(clk_div) then
-        if (en = '1' and kill='0') then
+        if (en = '1') then
             if in_startup = '1' then
                 INLA <= '1';
                 INHB <= '1';
@@ -182,7 +183,7 @@ begin
 end process; 
 
 INHA <= pwm_signal;
-INHC <= dir;
+INHC <= '0';
 INLC <= '1';
 en_spindle <= '1';
 
