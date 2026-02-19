@@ -5,7 +5,7 @@
     "cell_name": "xlslice_6",
     "component_reference": "xilinx.com:ip:xlslice:1.0",
     "ip_revision": "5",
-    "gen_directory": ".",
+    "gen_directory": "../../../../../../RAPID.gen/sources_1/bd/top/ip/top_xlslice_5_0",
     "parameters": {
       "component_parameters": {
         "Component_Name": [ { "value": "top_xlslice_5_0", "resolve_type": "user", "usage": "all" } ],
@@ -35,9 +35,8 @@
       "runtime_parameters": {
         "IPCONTEXT": [ { "value": "IP_Integrator" } ],
         "IPREVISION": [ { "value": "5" } ],
-        "LOCKEDBYUSER": [ { "value": "TRUE" } ],
         "MANAGED": [ { "value": "TRUE" } ],
-        "OUTPUTDIR": [ { "value": "." } ],
+        "OUTPUTDIR": [ { "value": "../../../../../../RAPID.gen/sources_1/bd/top/ip/top_xlslice_5_0" } ],
         "SELECTEDSIMMODEL": [ { "value": "" } ],
         "SHAREDDIR": [ { "value": "../../ipshared" } ],
         "SWVERSION": [ { "value": "2025.1" } ],
