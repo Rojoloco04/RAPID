@@ -13,15 +13,16 @@ entity stepperDriver is
         en_out : out std_logic; --enable signal sent to DRV8834's sleep pin
         num_steps : in std_logic_vector(20 downto 0); --number of steps to run motor for -1,048,576
         step_go : in std_logic; -- logic '1' to begin steps
-        M : out std_logic_vector(1 downto 0);
-        step_total_out : out std_logic_vector(20 downto 0));
+        M : inout std_logic_vector(1 downto 0);
+        step_total_out : out std_logic_vector(20 downto 0);
+        M_in : in std_logic_vector(3 downto 0));
 end stepperDriver;
 
 architecture Behavioral of stepperDriver is
 --constants for clock and clock dividers
 constant base_clk : integer := 125000000;
-constant run_freq : integer := 125000; --set for 1kHz for testing
-constant zero_freq : integer := 12500000; --set 10 Hz for zeroing process
+signal run_freq : integer := 125000; --set for 1kHz for testing
+signal zero_freq : integer := 12500000; --set 10 Hz for zeroing process
 --state logic for zero mode vs normal
 type state_t is (ZEROING, IDLE, WAKEUP, RUNNING, DONE);
 signal state : state_t := ZEROING;
@@ -54,6 +55,8 @@ signal wakeup_counter : integer range 0 to 150001 := 0; --wakeup counter from ex
 -- convert std_logic_vector port to integer for internal use
 signal num_steps_int : integer range 0 to 1000000 := 0;
 signal step_total : integer range 0 to 100000000 := 0; --counter to keep track of sled position
+signal M_val   : std_logic_vector(1 downto 0) := "00";
+signal M_en    : std_logic_vector(1 downto 0) := "11"; -- '1'=drive, '0'=tristate
 
 --Have vivado place prox_sync1 and prox_sync2 near each other in same slice - minimize routing delay
 --Also prevents optimizing flipflops away
@@ -65,9 +68,60 @@ begin
 
 num_steps_int <= to_integer(unsigned(num_steps));
 
+
+--assign M based on user input
+process(M_in)
+begin
+    case M_in is
+        when "0000" =>              -- full step
+            run_freq  <= 500000;
+            zero_freq <= 12500000;
+            M_val     <= "00";
+            M_en      <= "11";      -- both driven
+
+        when "0010" =>              -- 1/8 step
+            run_freq  <= 62500;
+            zero_freq <= 1562500;
+            M_val     <= "01";
+            M_en      <= "11";
+
+        when "1000" =>              -- 1/2 step
+            run_freq  <= 250000;
+            zero_freq <= 6250000;
+            M_val     <= "10";
+            M_en      <= "11";
+
+        when "1010" =>              -- 1/16 step
+            run_freq  <= 31250;
+            zero_freq <= 781250;
+            M_val     <= "11";
+            M_en      <= "11";
+
+        when "1100" =>              -- 1/4 step (M[1]=hi-Z, M[0]=low)
+            run_freq  <= 125000;
+            zero_freq <= 3125000;
+            M_val     <= "00";      -- M[0] driven low, M[1] value irrelevant
+            M_en      <= "01";      -- only M[0] driven, M[1] tristated
+
+        when "1011" =>              -- 1/32 step (M[1]=high, M[0]=hi-Z)
+            run_freq  <= 15625;
+            zero_freq <= 390625;
+            M_val     <= "10";      -- M[1] driven high, M[0] value irrelevant
+            M_en      <= "10";      -- only M[1] driven, M[0] tristated
+
+        when others =>              -- fallback
+            run_freq  <= 500000;
+            zero_freq <= 12500000;
+            M_val     <= "00";
+            M_en      <= "11";
+    end case;
+end process;
+
+
 --normal run clock div
 process(clk)
 begin
+        
     if rising_edge(clk) then
         if run_counter < (run_freq/2) then
             run_clk <= '0';
@@ -86,6 +140,7 @@ end process;
 --sled zero clock div (1hz)
 process(clk)
 begin
+    
     if rising_edge(clk) then
         if zero_counter < (zero_freq / 2) then
             zero_clk <= '0';
@@ -228,10 +283,12 @@ begin
      end if;
 end process;
         
-        
+--assign M value - tristate output assignment
+M(1) <= M_val(1) when M_en(1) = '1' else 'Z';
+M(0) <= M_val(0) when M_en(0) = '1' else 'Z';
+
 pwm_out_step <= pwm_sig;
 dir_out <= dir_sig;
-M <= "00";
 en_out <= en_sig;
 
 

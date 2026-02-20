@@ -17,12 +17,13 @@
       "axi_gpio_0": "",
       "rst_ps7_0_100M": "",
       "axi_smc": "",
-      "xlslice_0": "",
-      "xlslice_1": "",
-      "xlslice_2": "",
-      "xlslice_3": "",
-      "xlslice_4": "",
-      "xlslice_5": ""
+      "ilslice_0": "",
+      "ilslice_1": "",
+      "ilslice_2": "",
+      "ilslice_3": "",
+      "ilslice_4": "",
+      "ilslice_5": "",
+      "ilslice_6": ""
     },
     "interface_ports": {
       "DDR": {
@@ -2095,7 +2096,13 @@
             }
           },
           "en": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "en_spindle": {
             "direction": "O"
@@ -2148,13 +2155,25 @@
             }
           },
           "dir": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "dir_out": {
             "direction": "O"
           },
           "en": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "pwm_out_step": {
             "direction": "O"
@@ -2163,7 +2182,13 @@
             "direction": "I"
           },
           "zero_req": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "en_out": {
             "direction": "O"
@@ -2171,13 +2196,25 @@
           "num_steps": {
             "direction": "I",
             "left": "20",
-            "right": "0"
+            "right": "0",
+            "parameters": {
+              "PortWidth": {
+                "value": "21",
+                "value_src": "user_prop"
+              }
+            }
           },
           "step_go": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "M": {
-            "direction": "O",
+            "direction": "IO",
             "left": "1",
             "right": "0"
           },
@@ -2185,6 +2222,17 @@
             "direction": "O",
             "left": "20",
             "right": "0"
+          },
+          "M_in": {
+            "direction": "I",
+            "left": "3",
+            "right": "0",
+            "parameters": {
+              "PortWidth": {
+                "value": "4",
+                "value_src": "user_prop"
+              }
+            }
           }
         }
       },
@@ -2317,111 +2365,72 @@
           }
         }
       },
-      "xlslice_0": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_7",
-        "xci_path": "ip\\top_xlslice_0_7\\top_xlslice_0_7.xci",
-        "inst_hier_path": "xlslice_0",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "DOUT_WIDTH": {
-            "value": "1"
-          }
-        }
+      "ilslice_0": {
+        "vlnv": "xilinx.com:inline_hdl:ilslice:1.0"
       },
-      "xlslice_1": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_8",
-        "xci_path": "ip\\top_xlslice_0_8\\top_xlslice_0_8.xci",
-        "inst_hier_path": "xlslice_1",
-        "has_run_ip_tcl": "true",
+      "ilslice_1": {
+        "vlnv": "xilinx.com:inline_hdl:ilslice:1.0",
         "parameters": {
           "DIN_FROM": {
             "value": "1"
           },
           "DIN_TO": {
             "value": "1"
-          },
-          "DOUT_WIDTH": {
-            "value": "1"
           }
         }
       },
-      "xlslice_2": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_9",
-        "xci_path": "ip\\top_xlslice_0_9\\top_xlslice_0_9.xci",
-        "inst_hier_path": "xlslice_2",
-        "has_run_ip_tcl": "true",
+      "ilslice_2": {
+        "vlnv": "xilinx.com:inline_hdl:ilslice:1.0",
         "parameters": {
           "DIN_FROM": {
             "value": "2"
           },
           "DIN_TO": {
             "value": "2"
-          },
-          "DOUT_WIDTH": {
-            "value": "1"
           }
         }
       },
-      "xlslice_3": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_10",
-        "xci_path": "ip\\top_xlslice_0_10\\top_xlslice_0_10.xci",
-        "inst_hier_path": "xlslice_3",
-        "has_run_ip_tcl": "true",
+      "ilslice_3": {
+        "vlnv": "xilinx.com:inline_hdl:ilslice:1.0",
         "parameters": {
           "DIN_FROM": {
             "value": "3"
           },
           "DIN_TO": {
             "value": "3"
-          },
-          "DOUT_WIDTH": {
-            "value": "1"
           }
         }
       },
-      "xlslice_4": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_11",
-        "xci_path": "ip\\top_xlslice_0_11\\top_xlslice_0_11.xci",
-        "inst_hier_path": "xlslice_4",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "25"
-          },
-          "DIN_TO": {
-            "value": "25"
-          },
-          "DOUT_WIDTH": {
-            "value": "1"
-          }
-        }
-      },
-      "xlslice_5": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_12",
-        "xci_path": "ip\\top_xlslice_0_12\\top_xlslice_0_12.xci",
-        "inst_hier_path": "xlslice_5",
-        "has_run_ip_tcl": "true",
+      "ilslice_4": {
+        "vlnv": "xilinx.com:inline_hdl:ilslice:1.0",
         "parameters": {
           "DIN_FROM": {
             "value": "24"
           },
           "DIN_TO": {
             "value": "4"
+          }
+        }
+      },
+      "ilslice_5": {
+        "vlnv": "xilinx.com:inline_hdl:ilslice:1.0",
+        "parameters": {
+          "DIN_FROM": {
+            "value": "25"
           },
-          "DOUT_WIDTH": {
-            "value": "21"
+          "DIN_TO": {
+            "value": "25"
+          }
+        }
+      },
+      "ilslice_6": {
+        "vlnv": "xilinx.com:inline_hdl:ilslice:1.0",
+        "parameters": {
+          "DIN_FROM": {
+            "value": "29"
+          },
+          "DIN_TO": {
+            "value": "26"
           }
         }
       }
@@ -2498,12 +2507,55 @@
       "axi_gpio_0_gpio_io_o": {
         "ports": [
           "axi_gpio_0/gpio_io_o",
-          "xlslice_0/Din",
-          "xlslice_1/Din",
-          "xlslice_2/Din",
-          "xlslice_3/Din",
-          "xlslice_5/Din",
-          "xlslice_4/Din"
+          "ilslice_0/Din",
+          "ilslice_1/Din",
+          "ilslice_2/Din",
+          "ilslice_3/Din",
+          "ilslice_4/Din",
+          "ilslice_5/Din",
+          "ilslice_6/Din"
+        ]
+      },
+      "ilslice_0_Dout": {
+        "ports": [
+          "ilslice_0/Dout",
+          "Spindle_0/en"
+        ]
+      },
+      "ilslice_1_Dout": {
+        "ports": [
+          "ilslice_1/Dout",
+          "stepperDriver_0/dir"
+        ]
+      },
+      "ilslice_2_Dout": {
+        "ports": [
+          "ilslice_2/Dout",
+          "stepperDriver_0/en"
+        ]
+      },
+      "ilslice_3_Dout": {
+        "ports": [
+          "ilslice_3/Dout",
+          "stepperDriver_0/zero_req"
+        ]
+      },
+      "ilslice_4_Dout": {
+        "ports": [
+          "ilslice_4/Dout",
+          "stepperDriver_0/num_steps"
+        ]
+      },
+      "ilslice_5_Dout": {
+        "ports": [
+          "ilslice_5/Dout",
+          "stepperDriver_0/step_go"
+        ]
+      },
+      "ilslice_6_Dout": {
+        "ports": [
+          "ilslice_6/Dout",
+          "stepperDriver_0/M_in"
         ]
       },
       "processing_system7_0_FCLK_CLK0": {
@@ -2513,8 +2565,8 @@
           "axi_smc/aclk",
           "processing_system7_0/M_AXI_GP0_ACLK",
           "rst_ps7_0_100M/slowest_sync_clk",
-          "stepperDriver_0/clk",
-          "Spindle_0/clk"
+          "Spindle_0/clk",
+          "stepperDriver_0/clk"
         ]
       },
       "processing_system7_0_FCLK_RESET0_N": {
@@ -2538,8 +2590,8 @@
       },
       "stepperDriver_0_M": {
         "ports": [
-          "stepperDriver_0/M",
-          "M_0"
+          "M_0",
+          "stepperDriver_0/M"
         ]
       },
       "stepperDriver_0_dir_out": {
@@ -2564,42 +2616,6 @@
         "ports": [
           "stepperDriver_0/step_total_out",
           "axi_gpio_0/gpio2_io_i"
-        ]
-      },
-      "xlslice_0_Dout": {
-        "ports": [
-          "xlslice_0/Dout",
-          "Spindle_0/en"
-        ]
-      },
-      "xlslice_1_Dout": {
-        "ports": [
-          "xlslice_1/Dout",
-          "stepperDriver_0/dir"
-        ]
-      },
-      "xlslice_2_Dout": {
-        "ports": [
-          "xlslice_2/Dout",
-          "stepperDriver_0/en"
-        ]
-      },
-      "xlslice_3_Dout": {
-        "ports": [
-          "xlslice_3/Dout",
-          "stepperDriver_0/zero_req"
-        ]
-      },
-      "xlslice_4_Dout": {
-        "ports": [
-          "xlslice_4/Dout",
-          "stepperDriver_0/step_go"
-        ]
-      },
-      "xlslice_5_Dout": {
-        "ports": [
-          "xlslice_5/Dout",
-          "stepperDriver_0/num_steps"
         ]
       }
     },
