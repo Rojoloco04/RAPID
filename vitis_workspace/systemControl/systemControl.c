@@ -6,20 +6,21 @@
  * then enters a command loop that allows real-time adjustment of the spindle
  * and stepper motor without restarting the system.
  *
- * GPIO output word layout (7 bits, channel 1):
- *   Bits 1-0  spindleSpeed  PWM duty cycle select (0=25%, 1=50%, 2=75%, 3=100%)
- *   Bit  2    spindleDir    Spindle direction      (0=backwards, 1=forwards)
- *   Bit  3    spindleEn     Spindle enable         (0=off, 1=on)
- *   Bit  4    stepperDir    Stepper direction      (0=backwards, 1=forwards)
- *   Bit  5    stepperEn     Stepper enable         (0=off, 1=on)
- *   Bit  6    stepperReset  Stepper reset pulse    (momentary high)
+ * GPIO output word layout (26 bits, channel 1):
+ *   Bit  0        spindle_en   Spindle enable         (0=off, 1=on)
+ *   Bit  1        stepper_dir  Stepper direction      (0=backwards, 1=forwards)
+ *   Bit  2        stepper_en   Stepper enable         (0=off, 1=on)
+ *   Bit  3        zero_req     Zero/home request      (momentary high)
+ *   Bits 4-24     num_step     Step count             (0 to 2^21-1)
+ *   Bit  25       step_go      Step go pulse          (momentary high)
  *
  * Interactive commands (case-insensitive):
- *   S - set spindle speed (0-3)
- *   D - invert spindle direction (safely disables then re-enables spindle)
  *   P - toggle spindle power
+ *   D - toggle stepper direction
  *   Q - toggle stepper power
- *   R - pulse stepper reset line
+ *   Z - pulse zero request line
+ *   N - set number of steps
+ *   G - pulse step go line
  *   H - print help
  *
  * Build: Xilinx Vitis bare-metal project targeting Zynq-7000 PS.
@@ -39,16 +40,25 @@
 /* ------------------------------------------------------------------ */
 
 /* Mask to keep only the 7 valid output bits when writing to GPIO. */
-#define GPIO_MASK       0x7F
+//#define GPIO_MASK       0x7F
+#define GPIO_MASK       0x03FFFFFF
 
 /* GPIO bit positions within the control word. */
-#define BIT_SPINDLE_SPD 0   /* bits 1:0 - 2-bit speed field */
-#define BIT_SPINDLE_DIR 2
-#define BIT_SPINDLE_EN  3
-#define BIT_STEPPER_DIR 4
-#define BIT_STEPPER_EN  5
-#define BIT_STEPPER_RST 6
+//#define BIT_SPINDLE_SPD 0   /* bits 1:0 - 2-bit speed field */
+//#define BIT_SPINDLE_DIR 2
+//#define BIT_SPINDLE_EN  3
+//#define BIT_STEPPER_DIR 4
+//#define BIT_STEPPER_EN  5
+//#define BIT_STEPPER_RST 6
 
+#define BIT_SPINDLE_EN  0
+#define BIT_STEPPER_DIR 1
+#define BIT_STEPPER_EN  2
+#define BIT_ZERO_REQ    3
+#define BIT_NUM_STEP    4   /* bits 24:4 - 21-bit step count field */
+#define BIT_STEP_GO     25
+
+#define NUM_STEP_MAX    ((1 << 21) - 1)   /* 2097151 */
 /* ------------------------------------------------------------------ */
 /*  Globals                                                           */
 /* ------------------------------------------------------------------ */
@@ -111,12 +121,13 @@ int input_check(const char *prompt, int min, int max)
 static void help_query(void)
 {
     xil_printf("\r\nValid commands:\r\n"
-               "  S - adjust spindle speed\r\n"
-               "  D - invert spindle direction\r\n"
                "  P - toggle spindle power\r\n"
+               "  D - toggle stepper direction\r\n"
                "  Q - toggle stepper power\r\n"
-               "  R - reset stepper\r\n"
-               "  H - print this help\r\n");
+               "  Z - pulse zero request line\r\n"
+               "  N - set number of steps (0 to %d)\r\n"
+               "  G - pulse step go\r\n"
+               "  H - print this help\r\n", NUM_STEP_MAX);
 }
 
 /* ------------------------------------------------------------------ */
@@ -139,27 +150,43 @@ int main(void)
     }
 
     /* Configure channel 1 as all-outputs. */
-    XGpio_SetDataDirection(&gpio, 1, 0x00000000);
+    XGpio_SetDataDirection(&gpio, 1, 0x00000000);  /*channel 1 all outputs*/
+    XGpio_SetDataDirection(&gpio, 2, 0xFFFFFFFF);  /* channel 2 all inputs  */
+
+    XGpio_DiscreteWrite(&gpio, 1, (1 << BIT_STEPPER_EN));
+    xil_printf("\r\nZeroing in progress - waiting for proximity switch...\r\n");
 
     /* ---- collect initial configuration from user ---- */
-    int spindleSpeed = input_check("\r\nEnter spindle speed (0=25%%, 1=50%%, 2=75%%, 3=100%%): ", 0, 3);
-    int spindleDir   = input_check("\r\nEnter spindle direction (0=backwards, 1=forwards): ",      0, 1);
-    int spindleEn    = input_check("\r\nEnable spindle? (0=disable, 1=enable): ",                  0, 1);
-    int stepperDir   = input_check("\r\nEnter stepper direction (0=backwards, 1=forwards): ",      0, 1);
-    int stepperEn    = input_check("\r\nEnable stepper? (0=disable, 1=enable): ",                  0, 1);
+   // int spindleSpeed = input_check("\r\nEnter spindle speed (0=25%%, 1=50%%, 2=75%%, 3=100%%): ", 0, 3);
+   // int spindleDir   = input_check("\r\nEnter spindle direction (0=backwards, 1=forwards): ",      0, 1);
+   // int spindleEn    = input_check("\r\nEnable spindle? (0=disable, 1=enable): ",                  0, 1);
+   // int stepperDir   = input_check("\r\nEnter stepper direction (0=backwards, 1=forwards): ",      0, 1);
+   // int stepperEn    = input_check("\r\nEnable stepper? (0=disable, 1=enable): ",                  0, 1);
+
+    int spindleEn  = input_check("\r\nEnable spindle? (0=disable, 1=enable): ",                  0, 1);
+    int stepperDir = input_check("\r\nEnter stepper direction (0=backwards, 1=forwards): ",      0, 1);
+    int stepperEn  =  input_check("\r\nEnable stepper? (0=disable, 1=enable): ",                  0, 1);
+    int numStep    = input_check("\r\nEnter number of steps (0 to 2097151): ", 0, NUM_STEP_MAX);
+
 
     /* Pack fields into the control word. */
-    config |= (spindleSpeed & 0x03) << BIT_SPINDLE_SPD;
+    /*config |= (spindleSpeed & 0x03) << BIT_SPINDLE_SPD;
     config |= (spindleDir   & 0x01) << BIT_SPINDLE_DIR;
     config |= (spindleEn    & 0x01) << BIT_SPINDLE_EN;
     config |= (stepperDir   & 0x01) << BIT_STEPPER_DIR;
-    config |= (stepperEn    & 0x01) << BIT_STEPPER_EN;
+    config |= (stepperEn    & 0x01) << BIT_STEPPER_EN;*/
+
+    config |= (spindleEn  & 0x01)       << BIT_SPINDLE_EN;
+    config |= (stepperDir & 0x01)       << BIT_STEPPER_DIR;
+    config |= (stepperEn  & 0x01)       << BIT_STEPPER_EN;
+    /* zero_req and step_go start low; they are pulsed by commands */
+    config |= ((u32)(numStep & NUM_STEP_MAX)) << BIT_NUM_STEP;
 
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
 
     /* Readback to confirm the write took effect. */
     u32 rb = XGpio_DiscreteRead(&gpio, 1);
-    xil_printf("\r\nConfiguration applied: wrote 0x%02x, read back 0x%02x\r\n",
+    xil_printf("\r\nConfiguration applied: wrote 0x%08x, read back 0x%08x\r\n",
                config & GPIO_MASK, rb & GPIO_MASK);
 
     help_query();
@@ -168,48 +195,48 @@ int main(void)
     while (1) {
         scanf(" %c", &command);
 
-        /* R - pulse the stepper reset line high then immediately low */
-        if (command == 'R' || command == 'r') {
-            xil_printf("Stepper reset triggered.\r\n");
-            config |= (1 << BIT_STEPPER_RST);
+        /* Z - pulse the zero request line high then immediately low */
+        if (command == 'Z' || command == 'z') {
+            xil_printf("Zero request triggered.\r\n");
+            config |=  (1 << BIT_ZERO_REQ);
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-            config &= ~(1 << BIT_STEPPER_RST);
+            usleep(100000);
+            config &= ~(1 << BIT_ZERO_REQ);
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
         }
 
-        /* S - update spindle PWM duty-cycle speed */
-        else if (command == 'S' || command == 's') {
-            spindleSpeed = input_check("\r\nEnter new spindle speed (0=25%%, 1=50%%, 2=75%%, 3=100%%): ", 0, 3);
-
-            config &= ~(0x03 << BIT_SPINDLE_SPD);
-            config |=  (spindleSpeed & 0x03) << BIT_SPINDLE_SPD;
+        /* G - pulse the step go line high then immediately low */
+        else if (command == 'G' || command == 'g') {
+            xil_printf("Step go triggered.\r\n");
+            config |=  (1U << BIT_STEP_GO);
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-
-            const int duty_pct[4] = {25, 50, 75, 100};
-            xil_printf("Spindle speed set to %d%% duty cycle.\r\n", duty_pct[spindleSpeed]);
+            usleep(100000);
+            config &= ~(1U << BIT_STEP_GO);
+            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
         }
 
-        /*
-         * D - reverse spindle direction.
-         * The spindle is briefly disabled before the direction bit is flipped
-         * to avoid applying a sudden polarity reversal under load, then
-         * re-enabled after a short settling delay.
-         */
-        else if (command == 'D' || command == 'd') {
-            xil_printf("Inverting spindle direction.\r\n");
-            config &= ~(1 << BIT_SPINDLE_EN);              /* disable spindle  */
+        /* N - update the num_step field */
+        else if (command == 'N' || command == 'n') {
+            numStep = input_check("\r\nEnter number of steps (0 to 2097151): ", 0, NUM_STEP_MAX);
+
+            config &= ~((u32)NUM_STEP_MAX << BIT_NUM_STEP);
+            config |=  ((u32)(numStep & NUM_STEP_MAX)) << BIT_NUM_STEP;
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-            config ^=  (1 << BIT_SPINDLE_DIR);             /* flip direction   */
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-            usleep(50000);                                  /* 50 ms settling   */
-            config |=  (1 << BIT_SPINDLE_EN);              /* re-enable        */
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+
+            xil_printf("Step count set to %d.\r\n", numStep);
         }
 
         /* P - toggle spindle on/off */
         else if (command == 'P' || command == 'p') {
             config ^= (1 << BIT_SPINDLE_EN);
             xil_printf("Spindle power %s.\r\n", (config >> BIT_SPINDLE_EN) & 1 ? "on" : "off");
+            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+        }
+
+        /* D - toggle stepper direction */
+        else if (command == 'D' || command == 'd') {
+            config ^= (1 << BIT_STEPPER_DIR);
+            xil_printf("Stepper direction %s.\r\n", (config >> BIT_STEPPER_DIR) & 1 ? "forwards" : "backwards");
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
         }
 

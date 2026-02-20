@@ -183,7 +183,7 @@ begin
 end process; 
 
 INHA <= pwm_signal;
-INHC <= '0';
+INHC <= '0'; --DIR
 INLC <= '1';
 en_spindle <= '1';
 
