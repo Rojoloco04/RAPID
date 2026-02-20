@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xB4BAE5933922F45C",
+      "boundary_crc": "0xCDD0CFCE1264346D",
       "device": "xc7z020clg400-1",
       "gen_directory": "../../../../RAPID.gen/sources_1/bd/top",
       "name": "top",
@@ -15,16 +15,14 @@
       "Spindle_0": "",
       "stepperDriver_0": "",
       "axi_gpio_0": "",
+      "rst_ps7_0_100M": "",
+      "axi_smc": "",
       "xlslice_0": "",
       "xlslice_1": "",
       "xlslice_2": "",
       "xlslice_3": "",
       "xlslice_4": "",
-      "xlslice_5": "",
-      "rst_ps7_0_100M": "",
-      "axi_smc": "",
-      "xlslice_6": "",
-      "xlslice_7": ""
+      "xlslice_5": ""
     },
     "interface_ports": {
       "DDR": {
@@ -212,9 +210,6 @@
       }
     },
     "ports": {
-      "kill_0": {
-        "direction": "I"
-      },
       "En_Spindle": {
         "direction": "O"
       },
@@ -2208,141 +2203,9 @@
             "value": "1"
           },
           "C_GPIO_WIDTH": {
-            "value": "28"
+            "value": "32"
           },
           "C_IS_DUAL": {
-            "value": "1"
-          }
-        }
-      },
-      "xlslice_0": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_1",
-        "xci_path": "ip\\top_xlslice_0_1\\top_xlslice_0_1.xci",
-        "inst_hier_path": "xlslice_0",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "1"
-          },
-          "DIN_TO": {
-            "value": "0"
-          },
-          "DIN_WIDTH": {
-            "value": "27"
-          },
-          "DOUT_WIDTH": {
-            "value": "2"
-          }
-        }
-      },
-      "xlslice_1": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_2",
-        "xci_path": "ip\\top_xlslice_0_2\\top_xlslice_0_2.xci",
-        "inst_hier_path": "xlslice_1",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "2"
-          },
-          "DIN_TO": {
-            "value": "2"
-          },
-          "DIN_WIDTH": {
-            "value": "27"
-          },
-          "DOUT_WIDTH": {
-            "value": "1"
-          }
-        }
-      },
-      "xlslice_2": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_3",
-        "xci_path": "ip\\top_xlslice_0_3\\top_xlslice_0_3.xci",
-        "inst_hier_path": "xlslice_2",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "3"
-          },
-          "DIN_TO": {
-            "value": "3"
-          },
-          "DIN_WIDTH": {
-            "value": "27"
-          },
-          "DOUT_WIDTH": {
-            "value": "1"
-          }
-        }
-      },
-      "xlslice_3": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_4",
-        "xci_path": "ip\\top_xlslice_0_4\\top_xlslice_0_4.xci",
-        "inst_hier_path": "xlslice_3",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "4"
-          },
-          "DIN_TO": {
-            "value": "4"
-          },
-          "DIN_WIDTH": {
-            "value": "27"
-          },
-          "DOUT_WIDTH": {
-            "value": "1"
-          }
-        }
-      },
-      "xlslice_4": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_5",
-        "xci_path": "ip\\top_xlslice_0_5\\top_xlslice_0_5.xci",
-        "inst_hier_path": "xlslice_4",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "5"
-          },
-          "DIN_TO": {
-            "value": "5"
-          },
-          "DIN_WIDTH": {
-            "value": "27"
-          },
-          "DOUT_WIDTH": {
-            "value": "1"
-          }
-        }
-      },
-      "xlslice_5": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "ip_revision": "5",
-        "xci_name": "top_xlslice_0_6",
-        "xci_path": "ip\\top_xlslice_0_6\\top_xlslice_0_6.xci",
-        "inst_hier_path": "xlslice_5",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "6"
-          },
-          "DIN_TO": {
-            "value": "6"
-          },
-          "DIN_WIDTH": {
-            "value": "27"
-          },
-          "DOUT_WIDTH": {
             "value": "1"
           }
         }
@@ -2454,47 +2317,111 @@
           }
         }
       },
-      "xlslice_6": {
+      "xlslice_0": {
         "vlnv": "xilinx.com:ip:xlslice:1.0",
         "ip_revision": "5",
-        "xci_name": "top_xlslice_5_0",
-        "xci_path": "ip\\top_xlslice_5_0\\top_xlslice_5_0.xci",
-        "inst_hier_path": "xlslice_6",
+        "xci_name": "top_xlslice_0_7",
+        "xci_path": "ip\\top_xlslice_0_7\\top_xlslice_0_7.xci",
+        "inst_hier_path": "xlslice_0",
         "has_run_ip_tcl": "true",
         "parameters": {
-          "DIN_FROM": {
-            "value": "26"
-          },
-          "DIN_TO": {
-            "value": "7"
-          },
-          "DIN_WIDTH": {
-            "value": "27"
-          },
           "DOUT_WIDTH": {
-            "value": "20"
+            "value": "1"
           }
         }
       },
-      "xlslice_7": {
+      "xlslice_1": {
         "vlnv": "xilinx.com:ip:xlslice:1.0",
         "ip_revision": "5",
-        "xci_name": "top_xlslice_6_0",
-        "xci_path": "ip\\top_xlslice_6_0\\top_xlslice_6_0.xci",
-        "inst_hier_path": "xlslice_7",
+        "xci_name": "top_xlslice_0_8",
+        "xci_path": "ip\\top_xlslice_0_8\\top_xlslice_0_8.xci",
+        "inst_hier_path": "xlslice_1",
         "has_run_ip_tcl": "true",
         "parameters": {
           "DIN_FROM": {
-            "value": "26"
+            "value": "1"
           },
           "DIN_TO": {
-            "value": "26"
-          },
-          "DIN_WIDTH": {
-            "value": "27"
+            "value": "1"
           },
           "DOUT_WIDTH": {
             "value": "1"
+          }
+        }
+      },
+      "xlslice_2": {
+        "vlnv": "xilinx.com:ip:xlslice:1.0",
+        "ip_revision": "5",
+        "xci_name": "top_xlslice_0_9",
+        "xci_path": "ip\\top_xlslice_0_9\\top_xlslice_0_9.xci",
+        "inst_hier_path": "xlslice_2",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "DIN_FROM": {
+            "value": "2"
+          },
+          "DIN_TO": {
+            "value": "2"
+          },
+          "DOUT_WIDTH": {
+            "value": "1"
+          }
+        }
+      },
+      "xlslice_3": {
+        "vlnv": "xilinx.com:ip:xlslice:1.0",
+        "ip_revision": "5",
+        "xci_name": "top_xlslice_0_10",
+        "xci_path": "ip\\top_xlslice_0_10\\top_xlslice_0_10.xci",
+        "inst_hier_path": "xlslice_3",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "DIN_FROM": {
+            "value": "3"
+          },
+          "DIN_TO": {
+            "value": "3"
+          },
+          "DOUT_WIDTH": {
+            "value": "1"
+          }
+        }
+      },
+      "xlslice_4": {
+        "vlnv": "xilinx.com:ip:xlslice:1.0",
+        "ip_revision": "5",
+        "xci_name": "top_xlslice_0_11",
+        "xci_path": "ip\\top_xlslice_0_11\\top_xlslice_0_11.xci",
+        "inst_hier_path": "xlslice_4",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "DIN_FROM": {
+            "value": "25"
+          },
+          "DIN_TO": {
+            "value": "25"
+          },
+          "DOUT_WIDTH": {
+            "value": "1"
+          }
+        }
+      },
+      "xlslice_5": {
+        "vlnv": "xilinx.com:ip:xlslice:1.0",
+        "ip_revision": "5",
+        "xci_name": "top_xlslice_0_12",
+        "xci_path": "ip\\top_xlslice_0_12\\top_xlslice_0_12.xci",
+        "inst_hier_path": "xlslice_5",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "DIN_FROM": {
+            "value": "24"
+          },
+          "DIN_TO": {
+            "value": "4"
+          },
+          "DOUT_WIDTH": {
+            "value": "21"
           }
         }
       }
@@ -2575,15 +2502,8 @@
           "xlslice_1/Din",
           "xlslice_2/Din",
           "xlslice_3/Din",
-          "xlslice_4/Din",
           "xlslice_5/Din",
-          "xlslice_6/Din",
-          "xlslice_7/Din"
-        ]
-      },
-      "kill_0_1": {
-        "ports": [
-          "kill_0"
+          "xlslice_4/Din"
         ]
       },
       "processing_system7_0_FCLK_CLK0": {
@@ -2648,48 +2568,38 @@
       },
       "xlslice_0_Dout": {
         "ports": [
-          "xlslice_0/Dout"
+          "xlslice_0/Dout",
+          "Spindle_0/en"
         ]
       },
       "xlslice_1_Dout": {
         "ports": [
-          "xlslice_1/Dout"
+          "xlslice_1/Dout",
+          "stepperDriver_0/dir"
         ]
       },
       "xlslice_2_Dout": {
         "ports": [
           "xlslice_2/Dout",
-          "Spindle_0/en"
+          "stepperDriver_0/en"
         ]
       },
       "xlslice_3_Dout": {
         "ports": [
           "xlslice_3/Dout",
-          "stepperDriver_0/dir"
+          "stepperDriver_0/zero_req"
         ]
       },
       "xlslice_4_Dout": {
         "ports": [
           "xlslice_4/Dout",
-          "stepperDriver_0/en"
+          "stepperDriver_0/step_go"
         ]
       },
       "xlslice_5_Dout": {
         "ports": [
           "xlslice_5/Dout",
-          "stepperDriver_0/zero_req"
-        ]
-      },
-      "xlslice_6_Dout": {
-        "ports": [
-          "xlslice_6/Dout",
           "stepperDriver_0/num_steps"
-        ]
-      },
-      "xlslice_7_Dout": {
-        "ports": [
-          "xlslice_7/Dout",
-          "stepperDriver_0/step_go"
         ]
       }
     },
