@@ -62,7 +62,3 @@ set_property PACKAGE_PIN T16 [get_ports pwm_out_step_0]
 set_property PACKAGE_PIN N17 [get_ports prox_in_0]
 
 set_property PULLTYPE PULLDOWN [get_ports prox_in_0]
-
-
-set_property PULLTYPE PULLDOWN [get_ports {M_0[1]}]
-set_property PULLTYPE PULLDOWN [get_ports {M_0[0]}]

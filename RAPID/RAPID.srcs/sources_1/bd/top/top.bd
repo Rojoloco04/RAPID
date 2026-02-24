@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xCDD0CFCE1264346D",
+      "boundary_crc": "0xC1CF15DC25BF9B4F",
       "device": "xc7z020clg400-1",
       "gen_directory": "../../../../RAPID.gen/sources_1/bd/top",
       "name": "top",
@@ -22,8 +22,7 @@
       "ilslice_2": "",
       "ilslice_3": "",
       "ilslice_4": "",
-      "ilslice_5": "",
-      "ilslice_6": ""
+      "ilslice_5": ""
     },
     "interface_ports": {
       "DDR": {
@@ -243,11 +242,6 @@
       },
       "en_out_0": {
         "direction": "O"
-      },
-      "M_0": {
-        "direction": "O",
-        "left": "1",
-        "right": "0"
       }
     },
     "components": {
@@ -2155,25 +2149,13 @@
             }
           },
           "dir": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
+            "direction": "I"
           },
           "dir_out": {
             "direction": "O"
           },
           "en": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
+            "direction": "I"
           },
           "pwm_out_step": {
             "direction": "O"
@@ -2182,13 +2164,7 @@
             "direction": "I"
           },
           "zero_req": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
+            "direction": "I"
           },
           "en_out": {
             "direction": "O"
@@ -2196,43 +2172,15 @@
           "num_steps": {
             "direction": "I",
             "left": "20",
-            "right": "0",
-            "parameters": {
-              "PortWidth": {
-                "value": "21",
-                "value_src": "user_prop"
-              }
-            }
+            "right": "0"
           },
           "step_go": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
-          },
-          "M": {
-            "direction": "IO",
-            "left": "1",
-            "right": "0"
+            "direction": "I"
           },
           "step_total_out": {
             "direction": "O",
             "left": "20",
             "right": "0"
-          },
-          "M_in": {
-            "direction": "I",
-            "left": "3",
-            "right": "0",
-            "parameters": {
-              "PortWidth": {
-                "value": "4",
-                "value_src": "user_prop"
-              }
-            }
           }
         }
       },
@@ -2422,17 +2370,6 @@
             "value": "25"
           }
         }
-      },
-      "ilslice_6": {
-        "vlnv": "xilinx.com:inline_hdl:ilslice:1.0",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "29"
-          },
-          "DIN_TO": {
-            "value": "26"
-          }
-        }
       }
     },
     "interface_nets": {
@@ -2512,8 +2449,7 @@
           "ilslice_2/Din",
           "ilslice_3/Din",
           "ilslice_4/Din",
-          "ilslice_5/Din",
-          "ilslice_6/Din"
+          "ilslice_5/Din"
         ]
       },
       "ilslice_0_Dout": {
@@ -2552,12 +2488,6 @@
           "stepperDriver_0/step_go"
         ]
       },
-      "ilslice_6_Dout": {
-        "ports": [
-          "ilslice_6/Dout",
-          "stepperDriver_0/M_in"
-        ]
-      },
       "processing_system7_0_FCLK_CLK0": {
         "ports": [
           "processing_system7_0/FCLK_CLK0",
@@ -2586,12 +2516,6 @@
           "rst_ps7_0_100M/peripheral_aresetn",
           "axi_gpio_0/s_axi_aresetn",
           "axi_smc/aresetn"
-        ]
-      },
-      "stepperDriver_0_M": {
-        "ports": [
-          "M_0",
-          "stepperDriver_0/M"
         ]
       },
       "stepperDriver_0_dir_out": {

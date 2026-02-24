@@ -6,15 +6,13 @@
  * then enters a command loop that allows real-time adjustment of the spindle
  * and stepper motor without restarting the system.
  *
- * GPIO output word layout (30 bits, channel 1):
+ * GPIO output word layout (26 bits, channel 1):
  *   Bit  0        spindle_en   Spindle enable         (0=off, 1=on)
  *   Bit  1        stepper_dir  Stepper direction      (0=backwards, 1=forwards)
  *   Bit  2        stepper_en   Stepper enable         (0=off, 1=on)
  *   Bit  3        zero_req     Zero/home request      (momentary high)
  *   Bits 4-24     num_step     Step count             (0 to 2^21-1)
  *   Bit  25       step_go      Step go pulse          (momentary high)
- *   Bits 27:26    M[0] enc     M[0] signal encoding   (00=low, 10=high, 11=hi-Z)
- *   Bits 29:28    M[1] enc     M[1] signal encoding   (00=low, 10=high, 11=hi-Z)
  *
  * Interactive commands (case-insensitive):
  *   P - toggle spindle power
@@ -43,7 +41,7 @@
 
 /* Mask to keep only the 7 valid output bits when writing to GPIO. */
 //#define GPIO_MASK       0x7F
-#define GPIO_MASK       0x03FFFFFFF
+#define GPIO_MASK       0x03FFFFFF
 
 
 /* GPIO bit positions within the control word. */
@@ -60,17 +58,6 @@
 #define BIT_ZERO_REQ    3
 #define BIT_NUM_STEP    4   /* bits 24:4 - 21-bit step count field */
 #define BIT_STEP_GO     25
-/*M field, two bit per M bit to indicate high, low, or float -- used for step size*/
-#define BIT_M0              26              /* M[0] encoding LSB, bits 27:26 */
-#define BIT_M1              28              /* M[1] encoding LSB, bits 29:28 */
-#define M0_FIELD_MASK       ((u32)0x03 << BIT_M0)
-#define M1_FIELD_MASK       ((u32)0x03 << BIT_M1)
-#define M_FIELD_MASK        (M0_FIELD_MASK | M1_FIELD_MASK)
-/* 2-bit encoding values for each M signal */
-#define M_ENC_LOW           0x00            /* 00 = drive low  */
-#define M_ENC_HIGH          0x02            /* 10 = drive high */
-#define M_ENC_HIZ           0x03            /* 11 = hi-Z       */
-
 
 #define NUM_STEP_MAX    ((1 << 21) - 1)   /* 2097151 */
 /* ------------------------------------------------------------------ */
@@ -88,25 +75,7 @@ XGpio gpio;     /* AXI GPIO driver instance */
  * [min, max] is entered.  Supports backspace editing and echoes typed
  * characters.  Returns the validated integer value.
  */
-/*encode user input as 1, 0, or Z for M microstep output*/
-static int encode_m_char(char c)
-{
-    if (c == '0')              return M_ENC_LOW;
-    if (c == '1')              return M_ENC_HIGH;
-    if (c == 'Z' || c == 'z') return M_ENC_HIZ;
-    return -1;
-}
 
-/*decode user input to display char back*/
-static char decode_m_enc(u32 enc)
-{
-    switch (enc & 0x03) {
-        case M_ENC_LOW:  return '0';
-        case M_ENC_HIGH: return '1';
-        case M_ENC_HIZ:  return 'Z';
-        default:         return '?'; /* 01 - unused/invalid */
-    }
-}
 
 int input_check(const char *prompt, int min, int max)
 {
@@ -147,52 +116,6 @@ int input_check(const char *prompt, int min, int max)
         xil_printf("Invalid input. Please enter a value between %d and %d.\r\n", min, max);
     }
 }
-/*prompt M1:0, pack encoding into config, write GPIO,*/
-static u32 input_m_field(void)
-{
-    char buf[8];
-    int  idx;
-
-    while (1) {
-        xil_printf("\r\nEnter M[1:0] (e.g. 00, 10, Z1, ZZ; 0=low, 1=high, Z=hi-Z): ");
-        idx = 0;
-
-        while (1) {
-            char c = inbyte();
-            if (c == '\r' || c == '\n') {
-                buf[idx] = '\0';
-                xil_printf("\r\n");
-                break;
-            }
-            if ((c == 0x08 || c == 0x7F) && idx > 0) {
-                idx--;
-                xil_printf("\b \b");
-                continue;
-            }
-            if (idx < (int)sizeof(buf) - 1) {
-                buf[idx++] = c;
-                xil_printf("%c", c);
-            }
-        }
-
-        if (buf[0] == '\0' || buf[1] == '\0' || buf[2] != '\0') {
-            xil_printf("Invalid. Enter exactly 2 characters (e.g. Z0, 10, ZZ).\r\n");
-            continue;
-        }
-
-        int enc1 = encode_m_char(buf[0]);
-        int enc0 = encode_m_char(buf[1]);
-
-        if (enc1 < 0) { xil_printf("Invalid character '%c'. Use 0, 1, or Z.\r\n", buf[0]); continue; }
-        if (enc0 < 0) { xil_printf("Invalid character '%c'. Use 0, 1, or Z.\r\n", buf[1]); continue; }
-
-        xil_printf("M field: M[1]=%c (enc=%02u), M[0]=%c (enc=%02u).\r\n",
-                   decode_m_enc(enc1), (unsigned)enc1,
-                   decode_m_enc(enc0), (unsigned)enc0);
-
-        return ((u32)enc1 << BIT_M1) | ((u32)enc0 << BIT_M0);
-    }
-}
 
 /* ------------------------------------------------------------------ */
 /*  Helper: print command reference                                   */
@@ -206,7 +129,6 @@ static void help_query(void) {
                " Z - pulse zero request line\r\n"
                " N - set number of steps (0 to %d)\r\n"
                " G - pulse step go\r\n"
-               " M - set M[1:0] field (0=low, 1=high, Z=hi-Z; e.g. Z0, 1Z, 00)\r\n"
                " H - print this help\r\n", NUM_STEP_MAX);
 }
 
@@ -247,8 +169,6 @@ int main(void)
     int stepperDir = input_check("\r\nEnter stepper direction (0=backwards, 1=forwards): ",      0, 1);
     int stepperEn  =  input_check("\r\nEnable stepper? (0=disable, 1=enable): ",                  0, 1);
     int numStep    = input_check("\r\nEnter number of steps (0 to 2097151): ", 0, NUM_STEP_MAX);
-    xil_printf("\r\nConfigure M[1:0] microstep encoding.\r\n");
-    u32 mField     = input_m_field();
 
 
     /* Pack fields into the control word. */
@@ -263,7 +183,6 @@ int main(void)
     config |= (stepperEn  & 0x01)       << BIT_STEPPER_EN;
     /* zero_req and step_go start low; they are pulsed by commands */
     config |= ((u32)(numStep & NUM_STEP_MAX)) << BIT_NUM_STEP;
-    config |= mField;
 
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
 
@@ -327,12 +246,6 @@ int main(void)
         else if (command == 'Q' || command == 'q') {
             config ^= (1 << BIT_STEPPER_EN);
             xil_printf("Stepper power %s.\r\n", (config >> BIT_STEPPER_EN) & 1 ? "on" : "off");
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-        }
-
-        else if (command == 'M' || command == 'm') {
-            config &= ~M_FIELD_MASK;
-            config |= input_m_field();
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
         }
 
