@@ -22,7 +22,7 @@
  *   Z - pulse zero request line
  *   N - set number of steps
  *   G - pulse step go line
- *   L - Toggle Laser
+ *   L - toggle laser power
  *   H - print help
  *
  * Build: Xilinx Vitis bare-metal project targeting Zynq-7000 PS.
@@ -43,15 +43,6 @@
 
 /* Mask to keep only the 27 valid output bits when writing to GPIO. */
 #define GPIO_MASK       0x07FFFFFF
-
-
-/* GPIO bit positions within the control word. */
-//#define BIT_SPINDLE_SPD 0   /* bits 1:0 - 2-bit speed field */
-//#define BIT_SPINDLE_DIR 2
-//#define BIT_SPINDLE_EN  3
-//#define BIT_STEPPER_DIR 4
-//#define BIT_STEPPER_EN  5
-//#define BIT_STEPPER_RST 6
 
 #define BIT_SPINDLE_EN  0
 #define BIT_STEPPER_DIR 1
@@ -161,26 +152,11 @@ int main(void)
     XGpio_DiscreteWrite(&gpio, 1, (1 << BIT_STEPPER_EN));
     xil_printf("\r\nZeroing in progress - waiting for proximity switch...\r\n");
 
-    /* ---- collect initial configuration from user ---- */
-   // int spindleSpeed = input_check("\r\nEnter spindle speed (0=25%%, 1=50%%, 2=75%%, 3=100%%): ", 0, 3);
-   // int spindleDir   = input_check("\r\nEnter spindle direction (0=backwards, 1=forwards): ",      0, 1);
-   // int spindleEn    = input_check("\r\nEnable spindle? (0=disable, 1=enable): ",                  0, 1);
-   // int stepperDir   = input_check("\r\nEnter stepper direction (0=backwards, 1=forwards): ",      0, 1);
-   // int stepperEn    = input_check("\r\nEnable stepper? (0=disable, 1=enable): ",                  0, 1);
-
     int spindleEn  = input_check("\r\nEnable spindle? (0=disable, 1=enable): ",                  0, 1);
     int stepperDir = input_check("\r\nEnter stepper direction (0=backwards, 1=forwards): ",      0, 1);
     int stepperEn  =  input_check("\r\nEnable stepper? (0=disable, 1=enable): ",                  0, 1);
     int numStep    = input_check("\r\nEnter number of steps (0 to 2097151): ", 0, NUM_STEP_MAX);
     int laserEn    = input_check("\r\nEnable Laser? (0=off, 1=on)", 0, 1);
-
-
-    /* Pack fields into the control word. */
-    /*config |= (spindleSpeed & 0x03) << BIT_SPINDLE_SPD;
-    config |= (spindleDir   & 0x01) << BIT_SPINDLE_DIR;
-    config |= (spindleEn    & 0x01) << BIT_SPINDLE_EN;
-    config |= (stepperDir   & 0x01) << BIT_STEPPER_DIR;
-    config |= (stepperEn    & 0x01) << BIT_STEPPER_EN;*/
 
     config |= (spindleEn  & 0x01)       << BIT_SPINDLE_EN;
     config |= (stepperDir & 0x01)       << BIT_STEPPER_DIR;

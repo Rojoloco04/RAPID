@@ -23,12 +23,9 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity Spindle is
-    Port (  clk : in STD_LOGIC; -- 125 MHz
+    Port (  clk : in  STD_LOGIC; -- 125 MHz
             en : in STD_LOGIC; --enable 
             en_spindle : out STD_LOGIC; --enable for DRV8323
---            dir : in STD_LOGIC; --motor direction; "0" forward, "1" backwards
---            speed : in STD_LOGIC_VECTOR(1 downto 0); -- speed control 4 options
---            kill : in STD_LOGIC; --safety kill switch
             INHA : out STD_LOGIC;  -- PWM input
             INLA : out STD_LOGIC;  -- State input 
             INHB : out STD_LOGIC;  -- State input 
@@ -44,27 +41,26 @@ signal clk_div : std_logic := '0';
 signal step : integer range 1 to 6 := 1;
 signal pwm_counter : integer range 0 to 12501 := 0;
 signal pwm_signal : std_logic := '0';
-signal duty_cycle : integer range 0 to 12501 := 6250; -- 100% default
 signal start_check : std_logic := '1';
 signal start_count : integer range 0 to 187500002 := 0;
 signal in_startup : std_logic := '0';
 
 begin
 
--- Different Speeds 
+-- Commutation frequency: count_max=6,410,256 gives ~14.5 Hz (~1 rev / 1.8 s)
 --count_max <= 200000 when (speed = "00") else  -- Slowest
 --             100000 when (speed = "01") else  
 --             50000 when (speed = "10") else   
 --             25000;                           -- Fastest
-count_max <= 6410256; --14.5Hz - Smoothest/slowest
 --12,820,512 gives 9.75 Hz = too jerky/unusable
 --10,309,278 gives 12.13 Hz = ~1 rotation every 3 seconds - slightly jerky
 --9,387,908 gives 13.32 Hz = 1 rotation every 2.6 seconds
 --6,410,256 gives ~14.5 Hz = 1 rotation everhy 1.8 seconds
 --3,205,128 gives ~39 Hz = 1 RPS
--- clk divider
+count_max <= 6410256; --14.5Hz - Smoothest/slowest
+
+-- Clock divider
 process(clk)
---clock div
 begin
     if rising_edge(clk) then
         if counter < (count_max / 2) then
@@ -118,14 +114,6 @@ begin
         end if;
     end if;
 end process;
-           
-
--- Duty cycle control - deprecated
---duty_cycle <= 1562 when (speed = "00") else  -- 25%
---             3125 when (speed = "01") else   --50%
---             4688 when (speed = "10") else   --75%
---             6250; --100%
-
 
 -- Brushless Logic
 process(clk_div, en) 
