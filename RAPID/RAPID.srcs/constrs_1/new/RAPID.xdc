@@ -59,6 +59,10 @@ set_property IOSTANDARD LVCMOS33 [get_ports {M_0[*]}]
 
 set_property PACKAGE_PIN V18 [get_ports dir_out_0]
 set_property PACKAGE_PIN T16 [get_ports pwm_out_step_0]
-set_property PACKAGE_PIN N17 [get_ports prox_in_0]
+set_property PACKAGE_PIN R17 [get_ports prox_in_0]
 
 set_property PULLTYPE PULLDOWN [get_ports prox_in_0]
+
+set_property IOSTANDARD LVCMOS33 [get_ports {LaserEn[0]}]
+set_property PACKAGE_PIN P18 [get_ports {LaserEn[0]}]
+set_property PULLTYPE PULLDOWN [get_ports {LaserEn[0]}]

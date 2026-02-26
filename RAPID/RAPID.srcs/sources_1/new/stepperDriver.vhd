@@ -46,6 +46,7 @@ signal prox_sync2 : std_logic := '0';
 signal zero_counter : integer range 0 to base_clk := 0;
 signal zero_clk : std_logic := '0';
 signal zero_req_prev : std_logic := '0'; --previous state to prevent inadvertent bounce
+signal zero_clk_prev : std_logic := '0';
 --signals for outputs
 signal pwm_sig : std_logic := '0';
 signal dir_sig : std_logic := '0';
@@ -141,6 +142,7 @@ begin
         run_clk_prev <= run_clk;
         step_go_prev <= step_go;
         zero_req_prev <= zero_req;
+        zero_clk_prev <= zero_clk;
     
     case state is
         when ZEROING =>
@@ -148,6 +150,15 @@ begin
             en_sig <= '1';
             if en ='1' then
                 pwm_sig <= zero_clk;
+                
+                if zero_clk = '0' and zero_clk_prev = '1' then
+                    if dir ='1' then
+                        step_total <= step_total + 1;
+                    else 
+                        step_total <= step_total -1;
+                    end if;
+                end if;
+                
             else
                 pwm_sig <= '0';
             end if;
@@ -237,6 +248,7 @@ end process;
 pwm_out_step <= pwm_sig;
 dir_out <= dir_sig;
 en_out <= en_sig;
+step_total_out <= std_logic_vector(to_unsigned(step_total,21));
 
 
 end Behavioral;
