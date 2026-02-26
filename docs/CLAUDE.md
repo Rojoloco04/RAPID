@@ -8,16 +8,18 @@ It streams GDS2 lithography patterns from a PC to an Arty Z7-20 FPGA over UART f
 ## System Architecture
 
 ```
-input.gds → inputParser → pcCommunication → UART → fpgaCommunication
-             (XY→polar)    (frame+send)               (recv+ACK)
+input.gds → inputParser → pcCommunication → UART → systemControl.c
+             (XY→polar)    (frame+send)               (recv+ACK+motor control)
                                 ↑                           │
                              gui.py ←── ACK log ────────────┘
                           (live XY scatter)
 
-AXI GPIO (PS→PL) ─── systemControl.c ──→ stepperDriver.vhd
-                                      └──→ spindle.vhd (BLDC)
-                                      └──→ LaserEn (GPIO pin P18)
+systemControl.c ── AXI GPIO (PS→PL) ──→ stepperDriver.vhd
+                                     └──→ spindle.vhd (BLDC)
+                                     └──→ LaserEn (GPIO pin P18)
 ```
+
+`systemControl.c` now handles both packet reception and motor/laser control in a single bare-metal app.
 
 ---
 
@@ -27,10 +29,10 @@ AXI GPIO (PS→PL) ─── systemControl.c ──→ stepperDriver.vhd
 |------|-------------|
 | `src/pcCommunication.c` | PC-side UART sender — compiled into `build/RAPID.exe` |
 | `src/inputParser.c/h` | GDS2 text parser: XY coords → polar (r in nm, theta in degrees) |
-| `src/platform.c/h` | Thin Xilinx cache init wrappers (shared by both FPGA apps) |
+| `src/platform.c/h` | Thin Xilinx cache init wrappers (shared by FPGA apps) |
 | `src/gui.py` | PySide6 GUI — launches RAPID.exe, parses stdout, plots ACK'd points |
-| `vitis_workspace/fpgaCommunication/fpgaCommunication.c` | **Active** FPGA UART receiver |
-| `vitis_workspace/systemControl/systemControl.c` | **Active** motor/laser controller |
+| `vitis_workspace/testControl/OLD_systemControl.c` | Old motor/laser controller |
+| `vitis_workspace/systemControl/systemControl.c` | **Active** FPGA app — packet receiver + motor/laser control |
 | `RAPID/RAPID.srcs/sources_1/new/stepperDriver.vhd` | **Active** stepper FSM VHDL |
 | `RAPID/RAPID.srcs/sources_1/new/spindle.vhd` | **Active** BLDC 6-step commutation VHDL |
 | `RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc` | Pin constraints (Arty Z7-20) |
@@ -57,23 +59,28 @@ AXI GPIO (PS→PL) ─── systemControl.c ──→ stepperDriver.vhd
 
 ## Packet Wire Format
 
-Identical on both PC (`pcCommunication.c`) and FPGA (`fpgaCommunication.c`):
+Identical on both PC (`pcCommunication.c`) and FPGA (`systemControl.c`):
 
 ```
 [ 0xAA | 0x55 | TYPE (1B) | LEN (1B) | PAYLOAD (LEN bytes) | CRC8 (1B) ]
 ```
 
-| Direction | TYPE | LEN | Payload |
-|-----------|------|-----|---------|
-| PC → FPGA | `0x01` | 8 | `r_nm` (int32 LE, nanometres) + `theta_udeg` (int32 LE, microdegrees) |
-| FPGA → PC | `0x81` | 8 | Echo of received payload (ACK) |
-| FPGA → PC | `0xF0` | N | Debug/status ASCII string |
+| Direction | TYPE | LEN | Payload | Purpose |
+|-----------|------|-----|---------|---------|
+| PC → FPGA | `0x02` | 8 | `r_min_nm` (int32 LE) + `r_max_nm` (int32 LE) | Radial range — sent once, before all points |
+| PC → FPGA | `0x01` | 8 | `r_nm` (int32 LE, nanometres) + `theta_udeg` (int32 LE, microdegrees) | Polar point |
+| PC → FPGA | `0x03` | 0 | (none) | End of sequence |
+| FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
+| FPGA → PC | `0xF0` | N | ASCII string | Debug/status |
 
 **CRC8:** XOR over `[TYPE, LEN, PAYLOAD...]`. Simple accumulating XOR, not polynomial.
 
-**Flow control:** Stop-and-wait. PC sends one packet, waits up to 2000 ms for ACK, then sends next.
+**Flow control:** Stop-and-wait.
+- PC sends `TYPE_RANGE`, waits up to **120 000 ms** for ACK (covers FPGA homing delay).
+- PC sends each `TYPE_POINT`, waits up to **2000 ms** for ACK (FPGA ACKs after move completes).
+- PC sends `TYPE_END`, waits up to **2000 ms** for ACK.
 
-**Frame size:** 13 bytes total (2 SOF + TYPE + LEN + 8 payload + CRC).
+**Frame sizes:** 13 bytes (point/range), 5 bytes (end).
 
 ---
 
@@ -84,7 +91,7 @@ Defined and written in `vitis_workspace/systemControl/systemControl.c`:
 | Bits | `#define` | Description |
 |------|-----------|-------------|
 | `[0]` | `BIT_SPINDLE_EN` | Spindle enable (0=off, 1=on) |
-| `[1]` | `BIT_STEPPER_DIR` | Stepper direction (0=backwards, 1=forwards) |
+| `[1]` | `BIT_STEPPER_DIR` | Stepper direction (0=inward/home, 1=outward) |
 | `[2]` | `BIT_STEPPER_EN` | Stepper enable (0=off, 1=on) |
 | `[3]` | `BIT_ZERO_REQ` | Zero/home request — momentary high pulse (100 ms) |
 | `[24:4]` | `BIT_NUM_STEP` (21 bits) | Number of steps to move (0–2,097,151) |
@@ -96,20 +103,34 @@ Defined and written in `vitis_workspace/systemControl/systemControl.c`:
 ### Channel 2 (input)
 `XGpio_SetDataDirection(&gpio, 2, 0xFFFFFFFF)` — all inputs, reserved for future readback (e.g. `step_total_out` from stepper VHDL).
 
-### systemControl.c Interactive Commands
+### systemControl.c Automated Sequence
 
-**Startup sequence:** Stepper is enabled immediately and the VHDL FSM begins homing (ZEROING state). Once the proximity switch triggers, the user is prompted for: spindleEn, stepperDir, stepperEn, numStep, laserEn. Then the command loop begins.
+`systemControl.c` no longer has an interactive command loop. It runs the following automated sequence on startup:
 
-| Key | Action |
-|-----|--------|
-| `P` | Toggle spindle on/off |
-| `D` | Toggle stepper direction |
-| `Q` | Toggle stepper on/off |
-| `Z` | Pulse `zero_req` (re-home sled, 100 ms pulse) |
-| `N` | Set `num_steps` (0–2,097,151) |
-| `G` | Pulse `step_go` (execute move, 100 ms pulse) |
-| `L` | Toggle laser on/off |
-| `H` | Print help |
+| Phase | Code action |
+|-------|------------|
+| **1 — Homing** | Write `stepper_en=1` → VHDL enters ZEROING state, sled moves to inner edge |
+| **2 — Range receive** | Block-receive `TYPE_RANGE` (0x02) packet; store `r_min_nm`, `r_max_nm` without ACK'ing yet |
+| **3 — Zero wait** | `usleep(ZERO_WAIT_US)` (default 30 s), then send ACK for range packet |
+| **4 — Spindle** | Set `spindle_en=1` |
+| **5 — Point loop** | For each `TYPE_POINT`: compute `target_step`, update `dir`+`num_steps`, pulse `step_go`, wait, turn laser on after first move, send ACK |
+| **6 — End** | On `TYPE_END`: clear `laser_en`, `spindle_en`, `stepper_en`, send ACK, return |
+
+**Step-count mapping:**
+```
+target_step = clamp( round( (r_nm − r_min_nm) / (r_max_nm − r_min_nm) × 8500 ), 0, 8500 )
+```
+8500 steps = full disc range (inner edge → outer edge). After homing, `current_step = 0`.
+
+**Move wait time** (after 100 ms `step_go` pulse):
+```
+usleep( 1200 + delta × 125 + 10000 )   /* µs: wakeup + running + margin */
+```
+
+**Key constant:**
+```c
+#define ZERO_WAIT_US  30000000U   /* 30 s — increase if sled starts far from home */
+```
 
 ---
 
@@ -272,8 +293,8 @@ Note: uses `PI = 3.14159` (not `M_PI`).
 
 ## Known Issues / Active Development Notes
 
-1. **fpgaCommunication ↔ systemControl not yet merged:** Received polar coordinates are ACK'd by `fpgaCommunication` and discarded — they are not forwarded to `systemControl` for actual motor movement. The two apps are separate bare-metal Vitis projects and cannot run simultaneously on the same PS core. Merging them (or using dual-core) is a future task.
+1. **`step_total_out` readback:** GPIO channel 2 is configured as input for position readback, but the connection from `step_total_out` to GPIO channel 2 in the block design needs verification.
 
-2. **`step_total_out` readback:** GPIO channel 2 is configured as input for position readback, but the connection from `step_total_out` to GPIO channel 2 in the block design needs verification.
+2. **Spindle runs open-loop:** No encoder feedback; rotor position is assumed from timing only. The `theta_udeg` value in each point packet is received and available in `systemControl.c` but not yet used to command the spindle to a specific angle. Full theta control requires adding an encoder and position feedback loop.
 
-3. **Spindle runs open-loop:** No encoder feedback; rotor position is assumed from timing only.
+3. **Homing wait is time-based:** `ZERO_WAIT_US` (default 30 s) is a fixed delay rather than a proximity-switch readback. If `step_total_out` → GPIO channel 2 is confirmed wired, the wait can be replaced with a polling loop for more reliable homing completion detection.

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * pcCommunication.c - PC-side UART sender for the RAPID system.
  *
  * Reads polar coordinates from a GDS input file (via inputParser), frames
@@ -34,20 +34,16 @@
 /*  Constants                                                         */
 /* ------------------------------------------------------------------ */
 
-#define SOF_BYTE_1           0xAA
-#define SOF_BYTE_2           0x55
-#define TYPE_POINT           0x01   /* outgoing polar-point payload   */
-#define TYPE_RANGE           0x02   /* outgoing radial range packet   */
-#define TYPE_END             0x03   /* outgoing end-of-sequence       */
-#define TYPE_ACK             0x81   /* FPGA acknowledgement           */
-#define TYPE_DEBUG           0xF0   /* FPGA debug string              */
-#define POINT_LEN            0x08   /* payload length for a point     */
-#define RANGE_LEN            0x08   /* payload length for range       */
-#define FRAME_SIZE           13     /* SOF(2) + TYPE + LEN + PAYLOAD(8) + CRC */
-#define RX_BUF_SIZE          256    /* serial read buffer (bulk reads)   */
-#define ACK_TIMEOUT          2000   /* ms to wait for each point ACK     */
-#define RANGE_ACK_TIMEOUT_MS 120000 /* ms to wait for range ACK (covers homing) */
-#define BAUD_RATE            115200
+#define SOF_BYTE_1   0xAA
+#define SOF_BYTE_2   0x55
+#define TYPE_POINT   0x01   /* outgoing polar-point payload   */
+#define TYPE_ACK     0x81   /* FPGA acknowledgement           */
+#define TYPE_DEBUG   0xF0   /* FPGA debug string              */
+#define POINT_LEN    0x08   /* payload length for a point     */
+#define FRAME_SIZE   13     /* SOF(2) + TYPE + LEN + PAYLOAD(8) + CRC */
+#define RX_BUF_SIZE  256    /* serial read buffer (bulk reads)   */
+#define ACK_TIMEOUT  2000   /* ms to wait for each ACK           */
+#define BAUD_RATE    115200
 
 /* ------------------------------------------------------------------ */
 /*  CRC / serialisation helpers                                       */
@@ -163,42 +159,6 @@ static int send_polar_point(HANDLE h, double r_nm, double theta_deg) {
     return write_all(h, frame, FRAME_SIZE);
 }
 
-/**
- * Build and send a TYPE_RANGE frame: conveys r_min and r_max of the
- * coordinate set so the FPGA can map r_nm values to stepper steps.
- */
-static int send_range_packet(HANDLE h, int32_t r_min_nm, int32_t r_max_nm) {
-    uint8_t payload[RANGE_LEN];
-    pack_i32_le(&payload[0], r_min_nm);
-    pack_i32_le(&payload[4], r_max_nm);
-
-    uint8_t frame[2 + 1 + 1 + RANGE_LEN + 1];  /* SOF+TYPE+LEN+PAYLOAD+CRC */
-    size_t idx = 0;
-    frame[idx++] = SOF_BYTE_1;
-    frame[idx++] = SOF_BYTE_2;
-    frame[idx++] = TYPE_RANGE;
-    frame[idx++] = RANGE_LEN;
-    for (int i = 0; i < RANGE_LEN; i++) frame[idx++] = payload[i];
-    frame[idx++] = crc8_xor(&frame[2], 2 + RANGE_LEN);
-
-    return write_all(h, frame, idx);
-}
-
-/**
- * Build and send a TYPE_END frame: signals the FPGA that all points
- * have been sent and it should shut down laser and motors gracefully.
- */
-static int send_end_packet(HANDLE h) {
-    uint8_t frame[5];  /* SOF(2) + TYPE + LEN=0 + CRC */
-    frame[0] = SOF_BYTE_1;
-    frame[1] = SOF_BYTE_2;
-    frame[2] = TYPE_END;
-    frame[3] = 0x00;
-    frame[4] = TYPE_END ^ 0x00;   /* CRC over TYPE + LEN + (no payload) */
-
-    return write_all(h, frame, sizeof(frame));
-}
-
 /* ------------------------------------------------------------------ */
 /*  Reader thread context & ACK signalling                            */
 /* ------------------------------------------------------------------ */
@@ -312,15 +272,13 @@ static DWORD WINAPI reader_thread(LPVOID param) {
                     msg[n] = '\0';
                     printf("[FPGA] %s\n", msg);
                 }
-                else if (type == TYPE_ACK) {
-                    /* ACK — signal the sender unconditionally */
-                    if (len == POINT_LEN) {
-                        /* point or range ACK: log the echoed coordinates */
-                        int32_t r_nm       = unpack_i32_le(&payload[0]);
-                        int32_t theta_udeg = unpack_i32_le(&payload[4]);
-                        printf("[ACK] r=%ld nm, theta=%ld udeg\n",
-                               (long)r_nm, (long)theta_udeg);
-                    }
+                else if (type == TYPE_ACK && len == POINT_LEN) {
+                    /* ACK echo — log and signal the sender */
+                    int32_t r_nm       = unpack_i32_le(&payload[0]);
+                    int32_t theta_udeg = unpack_i32_le(&payload[4]);
+                    printf("[ACK] r=%ld nm, theta=%ld udeg\n",
+                           (long)r_nm, (long)theta_udeg);
+
                     InterlockedIncrement(&ctx->ack_count);
                     SetEvent(ctx->ack_event);  /* wake wait_for_ack() */
                 }
@@ -407,37 +365,11 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    /* ---- compute radial range for stepper mapping ---- */
-    double r_min = polar[0].r, r_max = polar[0].r;
-    for (size_t i = 1; i < count; i++) {
-        if (polar[i].r < r_min) r_min = polar[i].r;
-        if (polar[i].r > r_max) r_max = polar[i].r;
-    }
-    int32_t r_min_nm = (int32_t)llround(r_min);
-    int32_t r_max_nm = (int32_t)llround(r_max);
-    printf("Radial range: r_min=%ld nm, r_max=%ld nm\n",
-           (long)r_min_nm, (long)r_max_nm);
-
-    /* ---- send range packet and wait for FPGA ready (includes homing) ---- */
-    printf("Sending range packet — waiting up to %d s for FPGA to finish homing...\n",
-           RANGE_ACK_TIMEOUT_MS / 1000);
-    if (!send_range_packet(h, r_min_nm, r_max_nm)) {
-        fprintf(stderr, "UART send failed (range packet)\n");
-        cleanup(&ctx, th, h, polar);
-        return 1;
-    }
-    if (!wait_for_ack(&ctx, 1, RANGE_ACK_TIMEOUT_MS)) {
-        fprintf(stderr, "Timeout waiting for range ACK (FPGA not ready)\n");
-        cleanup(&ctx, th, h, polar);
-        return 1;
-    }
-
     /* ---- send points with stop-and-wait flow control ---- */
-    /* ack_count is now 1 (range ACK); point ACKs start at 2 */
     printf("Sending %zu polar points over %s...\n", count, port_name);
 
     for (size_t i = 0; i < count; i++) {
-        LONG target_ack = (LONG)(i + 2);
+        LONG target_ack = (LONG)(i + 1);
 
         if (!send_polar_point(h, polar[i].r, polar[i].theta)) {
             fprintf(stderr, "UART send failed at i=%zu\n", i);
@@ -451,18 +383,6 @@ int main(int argc, char **argv) {
             cleanup(&ctx, th, h, polar);
             return 1;
         }
-    }
-
-    /* ---- send end packet — FPGA shuts down laser and motors ---- */
-    if (!send_end_packet(h)) {
-        fprintf(stderr, "UART send failed (end packet)\n");
-        cleanup(&ctx, th, h, polar);
-        return 1;
-    }
-    if (!wait_for_ack(&ctx, (LONG)(count + 2), ACK_TIMEOUT)) {
-        fprintf(stderr, "Timeout waiting for end ACK\n");
-        cleanup(&ctx, th, h, polar);
-        return 1;
     }
 
     printf("Done - %zu points sent, %ld ACKs received.\n",
