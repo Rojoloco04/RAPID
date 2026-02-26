@@ -1,29 +1,41 @@
-﻿/*
- * systemControl.c - Interactive motor and laser controller for the RAPID system.
+/*
+ * systemControl.c - Automated polar-coordinate motor/laser controller for RAPID.
  *
- * Runs on the Zynq PS (ARM Cortex-A9).  Reads initial configuration from the
- * user over UART, writes a packed 7-bit control word to a GPIO output channel,
- * then enters a command loop that allows real-time adjustment of the spindle
- * and stepper motor without restarting the system.
+ * Runs on the Zynq PS (ARM Cortex-A9).  Merges the functions of the former
+ * interactive systemControl app and the fpgaCommunication receiver into a
+ * single automated pipeline:
  *
- * GPIO output word layout (26 bits, channel 1):
+ *   1. Enable stepper -> VHDL FSM begins homing (ZEROING state).
+ *   2. Receive TYPE_RANGE packet from PC, storing r_min / r_max.
+ *   3. Wait ZERO_WAIT_US for homing to complete, then ACK the range packet.
+ *   4. Enable spindle.
+ *   5. For each TYPE_POINT packet:
+ *        a. Map r_nm -> target step count (linear, [r_min,r_max] -> [0,MAX_STEPS]).
+ *        b. Compute delta and direction from current position.
+ *        c. Update GPIO and pulse step_go; wait for move to complete.
+ *        d. Turn on laser after the first point's move.
+ *        e. ACK the point.
+ *   6. On TYPE_END packet: disable laser/spindle/stepper, ACK, return.
+ *
+ * GPIO output word layout (27 bits, AXI GPIO channel 1):
  *   Bit  0        spindle_en   Spindle enable         (0=off, 1=on)
- *   Bit  1        stepper_dir  Stepper direction      (0=backwards, 1=forwards)
+ *   Bit  1        stepper_dir  Stepper direction      (0=inward, 1=outward)
  *   Bit  2        stepper_en   Stepper enable         (0=off, 1=on)
  *   Bit  3        zero_req     Zero/home request      (momentary high)
  *   Bits 4-24     num_step     Step count             (0 to 2^21-1)
  *   Bit  25       step_go      Step go pulse          (momentary high)
  *   Bit  26       LaserEn      Laser On/Off           (0=off, 1=on)
  *
- * Interactive commands (case-insensitive):
- *   P - toggle spindle power
- *   D - toggle stepper direction
- *   Q - toggle stepper power
- *   Z - pulse zero request line
- *   N - set number of steps
- *   G - pulse step go line
- *   L - toggle laser power
- *   H - print help
+ * Wire format (shared with pcCommunication.c):
+ *   SOF (0xAA 0x55) | TYPE (1 B) | LEN (1 B) | PAYLOAD (LEN B) | CRC8
+ *
+ * Incoming packet types:
+ *   TYPE 0x02, LEN 0x08 - range: r_min_nm (int32 LE) + r_max_nm (int32 LE)
+ *   TYPE 0x01, LEN 0x08 - polar point: r_nm (int32 LE) + theta_udeg (int32 LE)
+ *   TYPE 0x03, LEN 0x00 - end of sequence
+ *
+ * Outgoing:
+ *   TYPE 0x81 - ACK, LEN = echo of incoming LEN, PAYLOAD = echo of incoming payload
  *
  * Build: Xilinx Vitis bare-metal project targeting Zynq-7000 PS.
  */
@@ -33,12 +45,14 @@
 #include "xparameters.h"
 #include "platform.h"
 #include "sleep.h"
+#include "xuartps.h"
+#include "xuartps_hw.h"
 
 #include <stdio.h>
 #include <stdint.h>
 
 /* ------------------------------------------------------------------ */
-/*  Constants                                                         */
+/*  GPIO constants                                                    */
 /* ------------------------------------------------------------------ */
 
 /* Mask to keep only the 27 valid output bits when writing to GPIO. */
@@ -53,77 +67,160 @@
 #define BIT_LASER_EN    26
 
 #define NUM_STEP_MAX    ((1 << 21) - 1)   /* 2097151 */
+
+/* ------------------------------------------------------------------ */
+/*  UART / protocol constants                                         */
+/* ------------------------------------------------------------------ */
+
+#define UART_BASEADDR   XPAR_XUARTPS_0_BASEADDR
+#define BAUD_RATE       115200
+
+#define SOF_BYTE_1      0xAA
+#define SOF_BYTE_2      0x55
+#define TYPE_POINT      0x01
+#define TYPE_RANGE      0x02
+#define TYPE_END        0x03
+#define TYPE_ACK        0x81
+#define POINT_LEN       0x08
+#define RANGE_LEN       0x08
+#define MAX_PAYLOAD     255
+
+/* ------------------------------------------------------------------ */
+/*  Motor constants                                                   */
+/* ------------------------------------------------------------------ */
+
+/* Full stepper range: inner edge (home / step 0) to outer edge. */
+#define MAX_STEPS       8500
+
+/*
+ * How long to wait after asserting stepper_en before ACK'ing the range
+ * packet.  At the VHDL homing rate of ~50 steps/s, 30 s covers 1500
+ * steps from home.  Increase ZERO_WAIT_US if the sled may start further.
+ */
+#define ZERO_WAIT_US    30000000U   /* 30 seconds */
+
 /* ------------------------------------------------------------------ */
 /*  Globals                                                           */
 /* ------------------------------------------------------------------ */
 
-XGpio gpio;     /* AXI GPIO driver instance */
+static XGpio   gpio;
+static XUartPs Uart_Ps;
 
 /* ------------------------------------------------------------------ */
-/*  Helper: validated integer input over UART                        */
+/*  CRC / serialisation helpers                                       */
 /* ------------------------------------------------------------------ */
 
-/*
- * input_check - prompt the user and block until a valid integer in
- * [min, max] is entered.  Supports backspace editing and echoes typed
- * characters.  Returns the validated integer value.
- */
-
-
-int input_check(const char *prompt, int min, int max)
+static uint8_t crc8_xor(const uint8_t *data, unsigned len)
 {
-    char buf[16];
-    int  idx = 0;
-    int  value;
+    uint8_t c = 0;
+    for (unsigned i = 0; i < len; i++)
+        c ^= data[i];
+    return c;
+}
 
-    while (1) {
-        xil_printf("%s", prompt);
-        idx = 0;
-
-        /* accumulate one line of input */
-        while (1) {
-            char c = inbyte();  /* blocking UART read */
-
-            if (c == '\r' || c == '\n') {
-                buf[idx] = '\0';
-                xil_printf("\r\n");
-                break;
-            }
-
-            /* handle backspace (BS 0x08 and DEL 0x7F) */
-            if ((c == 0x08 || c == 0x7F) && idx > 0) {
-                idx--;
-                xil_printf("\b \b");
-                continue;
-            }
-
-            if (idx < (int)sizeof(buf) - 1) {
-                buf[idx++] = c;
-                xil_printf("%c", c);    /* echo typed character */
-            }
-        }
-
-        if (sscanf(buf, "%d", &value) == 1 && value >= min && value <= max)
-            return value;
-
-        xil_printf("Invalid input. Please enter a value between %d and %d.\r\n", min, max);
-    }
+static int32_t unpack_i32_le(const uint8_t b[4])
+{
+    return (int32_t)(
+        ((uint32_t)b[0])       |
+        ((uint32_t)b[1] << 8)  |
+        ((uint32_t)b[2] << 16) |
+        ((uint32_t)b[3] << 24)
+    );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Helper: print command reference                                   */
+/*  Low-level UART I/O (polled, no interrupts)                        */
 /* ------------------------------------------------------------------ */
 
-static void help_query(void) {
-    xil_printf("\r\nValid commands:\r\n"
-               " P - toggle spindle power\r\n"
-               " D - toggle stepper direction\r\n"
-               " Q - toggle stepper power\r\n"
-               " Z - pulse zero request line\r\n"
-               " N - set number of steps (0 to %d)\r\n"
-               " G - pulse step go\r\n"
-               " L - toggle laser power\r\n"
-               " H - print this help\r\n", NUM_STEP_MAX);
+static void uart_send(const uint8_t *buf, unsigned len)
+{
+    UINTPTR base = Uart_Ps.Config.BaseAddress;
+    for (unsigned i = 0; i < len; i++)
+        XUartPs_SendByte(base, buf[i]);
+}
+
+static void uart_flush_tx(void)
+{
+    UINTPTR base = Uart_Ps.Config.BaseAddress;
+    while (!(XUartPs_ReadReg(base, XUARTPS_SR_OFFSET) & XUARTPS_SR_TXEMPTY))
+        ;
+}
+
+static uint8_t uart_recv_byte(void)
+{
+    uint8_t b;
+    while (XUartPs_Recv(&Uart_Ps, &b, 1) != 1)
+        ;
+    return b;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Framed packet TX                                                  */
+/* ------------------------------------------------------------------ */
+
+/*
+ * send_frame - build and transmit a framed response packet.
+ *
+ * Frame layout: SOF(2) | type(1) | len(1) | payload(len) | CRC8(1)
+ * CRC is computed over [type, len, payload...].
+ * Pass payload=NULL or len=0 for empty-payload frames.
+ */
+static void send_frame(uint8_t type, const uint8_t *payload, uint8_t len)
+{
+    uint8_t hdr[4] = { SOF_BYTE_1, SOF_BYTE_2, type, len };
+
+    uint8_t crc = type ^ len;
+    for (uint8_t i = 0; i < len; i++)
+        crc ^= payload[i];
+
+    uart_send(hdr, sizeof(hdr));
+    if (len && payload)
+        uart_send(payload, len);
+    uart_send(&crc, 1);
+    uart_flush_tx();
+}
+
+/* ------------------------------------------------------------------ */
+/*  Framed packet RX                                                  */
+/* ------------------------------------------------------------------ */
+
+/*
+ * receive_packet - block until one valid framed packet is received.
+ *
+ * Fills out_payload (caller must provide MAX_PAYLOAD bytes) and returns
+ * the TYPE byte.  Frames with CRC mismatches are silently discarded.
+ */
+static uint8_t receive_packet(uint8_t *out_payload)
+{
+    for (;;) {
+        /* synchronise on SOF */
+        if (uart_recv_byte() != SOF_BYTE_1) continue;
+        if (uart_recv_byte() != SOF_BYTE_2) continue;
+
+        uint8_t type = uart_recv_byte();
+        uint8_t len  = uart_recv_byte();
+
+        uint8_t payload[MAX_PAYLOAD];
+        for (uint8_t i = 0; i < len; i++)
+            payload[i] = uart_recv_byte();
+
+        uint8_t rx_crc = uart_recv_byte();
+
+        /* verify CRC over [TYPE, LEN, PAYLOAD...] */
+        uint8_t chk[2 + MAX_PAYLOAD];
+        chk[0] = type;
+        chk[1] = len;
+        for (uint8_t i = 0; i < len; i++)
+            chk[2 + i] = payload[i];
+
+        if (crc8_xor(chk, 2u + len) != rx_crc)
+            continue;   /* CRC mismatch - drop frame and resync */
+
+        for (uint8_t i = 0; i < len; i++)
+            out_payload[i] = payload[i];
+
+        return type;
+    }
 }
 
 /* ------------------------------------------------------------------ */
@@ -134,119 +231,152 @@ int main(void)
 {
     init_platform();
 
-    int  Status;
-    u32  config  = 0x00000000;  /* packed GPIO control word */
-    char command;
-
     /* ---- initialise AXI GPIO ---- */
-    Status = XGpio_Initialize(&gpio, 0);
-    if (Status != XST_SUCCESS) {
-        xil_printf("GPIO Initialization Failed: %d\r\n", Status);
+    if (XGpio_Initialize(&gpio, 0) != XST_SUCCESS) {
+        xil_printf("GPIO init failed\r\n");
         return XST_FAILURE;
     }
+    XGpio_SetDataDirection(&gpio, 1, 0x00000000);  /* ch1: all outputs */
+    XGpio_SetDataDirection(&gpio, 2, 0xFFFFFFFF);  /* ch2: all inputs  */
 
-    /* Configure channel 1 as all-outputs. */
-    XGpio_SetDataDirection(&gpio, 1, 0x00000000);  /*channel 1 all outputs*/
-    XGpio_SetDataDirection(&gpio, 2, 0xFFFFFFFF);  /* channel 2 all inputs  */
+    /* ---- initialise PS UART ---- */
+    XUartPs_Config *cfg = XUartPs_LookupConfig(UART_BASEADDR);
+    if (!cfg) { for (;;) ; }   /* halt - no UART config found */
+    if (XUartPs_CfgInitialize(&Uart_Ps, cfg, cfg->BaseAddress) != XST_SUCCESS)
+        { for (;;) ; }         /* halt - UART init failed */
+    XUartPs_SetBaudRate(&Uart_Ps, BAUD_RATE);
+    XUartPs_SetOperMode(&Uart_Ps, XUARTPS_OPER_MODE_NORMAL);
 
-    XGpio_DiscreteWrite(&gpio, 1, (1 << BIT_STEPPER_EN));
-    xil_printf("\r\nZeroing in progress - waiting for proximity switch...\r\n");
+    u32 config = 0;
 
-    int spindleEn  = input_check("\r\nEnable spindle? (0=disable, 1=enable): ",                  0, 1);
-    int stepperDir = input_check("\r\nEnter stepper direction (0=backwards, 1=forwards): ",      0, 1);
-    int stepperEn  =  input_check("\r\nEnable stepper? (0=disable, 1=enable): ",                  0, 1);
-    int numStep    = input_check("\r\nEnter number of steps (0 to 2097151): ", 0, NUM_STEP_MAX);
-    int laserEn    = input_check("\r\nEnable Laser? (0=off, 1=on)", 0, 1);
-
-    config |= (spindleEn  & 0x01)       << BIT_SPINDLE_EN;
-    config |= (stepperDir & 0x01)       << BIT_STEPPER_DIR;
-    config |= (stepperEn  & 0x01)       << BIT_STEPPER_EN;
-    /* zero_req and step_go start low; they are pulsed by commands */
-    config |= ((u32)(numStep & NUM_STEP_MAX)) << BIT_NUM_STEP;
-    config |= (laserEn & 0x01)          << BIT_LASER_EN;
-
+    /* ===== 1. HOMING ================================================ */
+    /*
+     * Assert stepper_en so the VHDL FSM immediately enters ZEROING state
+     * and drives the sled towards the inner-edge proximity switch.
+     */
+    config = (1u << BIT_STEPPER_EN);
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+    xil_printf("\r\nZeroing started. Will wait %u s for sled to home...\r\n",
+               ZERO_WAIT_US / 1000000u);
 
-    /* Readback to confirm the write took effect. */
-    u32 rb = XGpio_DiscreteRead(&gpio, 1);
-    xil_printf("\r\nConfiguration applied: wrote 0x%08x, read back 0x%08x\r\n",
-               config & GPIO_MASK, rb & GPIO_MASK);
+    /* ===== 2. RECEIVE RANGE PACKET ================================= */
+    /*
+     * The range packet may arrive from the PC while zeroing is still in
+     * progress.  Receive and store r_min / r_max now, but withhold the
+     * ACK until the homing wait expires so the PC does not start sending
+     * point packets before the sled is at the home position.
+     */
+    uint8_t rx_payload[MAX_PAYLOAD];
+    uint8_t range_echo[RANGE_LEN];
+    int32_t r_min_nm = 0, r_max_nm = 1;   /* safe defaults */
 
-    help_query();
+    uint8_t pkt_type;
+    do {
+        pkt_type = receive_packet(rx_payload);
+    } while (pkt_type != TYPE_RANGE);
 
-    /* ---- command loop ---- */
-    while (1) {
-        scanf(" %c", &command);
+    r_min_nm = unpack_i32_le(&rx_payload[0]);
+    r_max_nm = unpack_i32_le(&rx_payload[4]);
+    for (uint8_t i = 0; i < RANGE_LEN; i++)
+        range_echo[i] = rx_payload[i];
 
-        /* Z - pulse the zero request line high then immediately low */
-        if (command == 'Z' || command == 'z') {
-            xil_printf("Zero request triggered.\r\n");
-            config |=  (1 << BIT_ZERO_REQ);
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-            usleep(100000);
-            config &= ~(1 << BIT_ZERO_REQ);
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+    /* ===== 3. FINISH ZEROING WAIT, THEN ACK RANGE ================== */
+    usleep(ZERO_WAIT_US);
+    send_frame(TYPE_ACK, range_echo, RANGE_LEN);
+    xil_printf("Zeroing complete. r_min=%ld nm, r_max=%ld nm\r\n",
+               (long)r_min_nm, (long)r_max_nm);
+
+    /* ===== 4. ENABLE SPINDLE ======================================= */
+    config |= (1u << BIT_SPINDLE_EN);
+    XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+    xil_printf("Spindle enabled.\r\n");
+
+    /* ===== 5. POINT LOOP =========================================== */
+    int32_t current_step = 0;
+    int     first_point  = 1;
+
+    for (;;) {
+        pkt_type = receive_packet(rx_payload);
+
+        if (pkt_type == TYPE_POINT) {
+
+            int32_t r_nm = unpack_i32_le(&rx_payload[0]);
+            /* theta_udeg currently logged only; spindle position not yet controlled */
+
+            /* --- compute normalised target step count --- */
+            int32_t target_step;
+            if (r_max_nm == r_min_nm) {
+                target_step = 0;
+            } else {
+                double frac = (double)(r_nm - r_min_nm)
+                            / (double)(r_max_nm - r_min_nm);
+                target_step = (int32_t)(frac * (double)MAX_STEPS + 0.5);
+                if (target_step < 0)          target_step = 0;
+                if (target_step > MAX_STEPS)  target_step = MAX_STEPS;
+            }
+
+            int32_t delta = target_step - current_step;
+            if (delta < 0) delta = -delta;
+            int dir = (target_step >= current_step) ? 1 : 0;
+
+            /* --- issue move (skip if already at target) --- */
+            if (delta > 0) {
+                /* update direction and step count in the GPIO word */
+                config &= ~(1u << BIT_STEPPER_DIR);
+                config |=  ((u32)dir << BIT_STEPPER_DIR);
+                config &= ~((u32)NUM_STEP_MAX << BIT_NUM_STEP);
+                config |=  ((u32)(delta & NUM_STEP_MAX) << BIT_NUM_STEP);
+                XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+
+                /* pulse step_go for 100 ms - rising edge triggers VHDL FSM */
+                config |=  (1u << BIT_STEP_GO);
+                XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+                usleep(100000);   /* 100 ms pulse */
+                config &= ~(1u << BIT_STEP_GO);
+                XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+
+                /*
+                 * Wait for the move to finish:
+                 *   1200 us   WAKEUP hold (150,000 cycles @ 125 MHz)
+                 *   delta*125 RUNNING at 8 kHz step rate (125 us/step)
+                 *   10000 us  safety margin
+                 * (The 100 ms step_go pulse already elapsed above.)
+                 */
+                usleep(1200u + (uint32_t)delta * 125u + 10000u);
+            }
+
+            current_step = target_step;
+
+            /* turn laser on after the first point's move completes */
+            if (first_point) {
+                config |= (1u << BIT_LASER_EN);
+                XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+                first_point = 0;
+                xil_printf("Laser ON.\r\n");
+            }
+
+            /* ACK the point - echo payload back to PC */
+            send_frame(TYPE_ACK, rx_payload, POINT_LEN);
         }
 
-        /* G - pulse the step go line high then immediately low */
-        else if (command == 'G' || command == 'g') {
-            xil_printf("Step go triggered.\r\n");
-            config |=  (1U << BIT_STEP_GO);
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-            usleep(100000);
-            config &= ~(1U << BIT_STEP_GO);
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-        }
-
-        /* N - update the num_step field */
-        else if (command == 'N' || command == 'n') {
-            numStep = input_check("\r\nEnter number of steps (0 to 2097151): ", 0, NUM_STEP_MAX);
-
-            config &= ~((u32)NUM_STEP_MAX << BIT_NUM_STEP);
-            config |=  ((u32)(numStep & NUM_STEP_MAX)) << BIT_NUM_STEP;
+        else if (pkt_type == TYPE_END) {
+            /* pattern finished - disable laser, spindle, and stepper */
+            config &= ~(1u << BIT_LASER_EN);
+            config &= ~(1u << BIT_SPINDLE_EN);
+            config &= ~(1u << BIT_STEPPER_EN);
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
 
-            xil_printf("Step count set to %d.\r\n", numStep);
-        }
+            xil_printf("Pattern complete. Laser OFF. Motors stopped.\r\n");
 
-        /* P - toggle spindle on/off */
-        else if (command == 'P' || command == 'p') {
-            config ^= (1 << BIT_SPINDLE_EN);
-            xil_printf("Spindle power %s.\r\n", (config >> BIT_SPINDLE_EN) & 1 ? "on" : "off");
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-        }
+            /* ACK end packet (LEN=0, no payload) */
+            {
+                uint8_t empty = 0;
+                send_frame(TYPE_ACK, &empty, 0);
+            }
 
-        /* D - toggle stepper direction */
-        else if (command == 'D' || command == 'd') {
-            config ^= (1 << BIT_STEPPER_DIR);
-            xil_printf("Stepper direction %s.\r\n", (config >> BIT_STEPPER_DIR) & 1 ? "forwards" : "backwards");
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+            cleanup_platform();
+            return 0;
         }
-
-        /* Q - toggle stepper on/off */
-        else if (command == 'Q' || command == 'q') {
-            config ^= (1 << BIT_STEPPER_EN);
-            xil_printf("Stepper power %s.\r\n", (config >> BIT_STEPPER_EN) & 1 ? "on" : "off");
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-        }
-
-        /* L - toggle laser on/off */
-        else if (command == 'L' || command == 'l') {
-            config ^= (1 << BIT_LASER_EN);
-            xil_printf("Laser power %s.\r\n", (config >> BIT_LASER_EN) & 1 ? "on" : "off");
-            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-        }
-
-        /* H - print command reference */
-        else if (command == 'H' || command == 'h') {
-            help_query();
-        }
-
-        else {
-            xil_printf("Unknown command '%c'. Press H for help.\r\n", command);
-        }
+        /* any other packet type is silently ignored */
     }
-
-    cleanup_platform();
-    return 0;
 }

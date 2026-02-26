@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 
 include(${CMAKE_SOURCE_DIR}/Empty_applicationExample.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/UserConfig.cmake)
-set(APP_NAME fpgaCommunication)
+set(APP_NAME testControl)
 project(${APP_NAME})
 
 find_package(common)

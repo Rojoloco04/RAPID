@@ -9,14 +9,19 @@ Streams GDS2 lithography patterns to an FPGA over UART for motor-driven stage co
 
 ## Overview
 
-RAPID reads a GDS2 input file, converts the XY coordinates to polar form, and transmits each point as a framed binary packet over a serial COM port to a Zynq FPGA. The FPGA acknowledges every received point; the PC waits for each ACK before sending the next (stop-and-wait flow control). A Python GUI provides real-time visualisation of the acknowledged points.
+RAPID reads a GDS2 input file, converts the XY coordinates to polar form, and transmits each point as a framed binary packet over a serial COM port to a Zynq FPGA. The FPGA drives a stepper motor (radial axis) and laser to write the pattern on a spinning disc. The PC waits for each ACK before sending the next point (stop-and-wait flow control). A Python GUI provides real-time visualisation of the acknowledged points.
 
 ```
-input.gds  ──►  inputParser  ──►  pcCommunication  ──►  UART  ──►  fpgaCommunication
-                (XY -> polar)       (frame + send)                    (receive + ACK)
+input.gds  ──►  inputParser  ──►  pcCommunication  ──►  UART  ──►  systemControl
+                (XY -> polar)       (frame + send)                  (recv + motor control)
                                          ▲                                  │
                                       gui.py  ◄──── ACK log ────────────────┘
                                    (live XY scatter)
+
+                                                          systemControl  ──►  AXI GPIO
+                                                                         ──►  stepperDriver.vhd
+                                                                         ──►  spindle.vhd
+                                                                         ──►  LaserEn (pin P18)
 ```
 
 ---
@@ -32,8 +37,8 @@ RAPID/
 │   └── gui.py                # PySide6 real-time visualisation GUI
 ├── vitis_workspace/          # Xilinx Vitis workspace (FPGA software)
 │   ├── platform/             # BSP platform project (generated from .xsa)
-│   ├── fpgaCommunication/    # Application project — UART receiver
-│   └── systemControl/        # Application project — motor/laser controller
+│   ├── testControl/          # Test motor/laser controller
+│   └── systemControl/        # Active FPGA app — UART receiver + motor/laser control
 ├── RAPID/                    # Xilinx Vivado project files (FPGA hardware)
 │   ├── RAPID.srcs/sources_1/new/
 │   │   ├── stepperDriver.vhd # Stepper motor FSM (DRV8834)
@@ -76,7 +81,7 @@ pip install -r requirements.txt
 - Xilinx Vivado 2025.1 (or compatible)
 - Xilinx Vitis 2025.1 (or compatible)
 - Target device: Arty Z7-20 (xc7z020clg400-1)
-- `vitis_workspace/fpgaCommunication/fpgaCommunication.c` and `vitis_workspace/systemControl/systemControl.c` must be built inside Vitis bare-metal projects — they are **not** part of the PC Makefile.
+- `vitis_workspace/systemControl/systemControl.c` must be built inside a Vitis bare-metal project — it is **not** part of the PC Makefile.
 
 ---
 
@@ -103,17 +108,16 @@ pip install -r requirements.txt
 
 The Vitis workspace is already set up at `vitis_workspace/` with three components:
 - **platform** — BSP platform project (built from the exported `.xsa`)
-- **fpgaCommunication** — UART receiver application
-- **systemControl** — motor/laser controller application
+- **systemControl** — active application: receives packets and drives motors/laser
+- **testControl** - test motor/laser controller
 
 1. Launch Vitis and open the workspace: **File → Open Workspace →** `vitis_workspace/`
 2. **Rebuild the platform** if the `.xsa` changed: right-click **platform → Build**
-3. **Build the application projects:**
-   - Right-click **fpgaCommunication** → **Build Project**
+3. **Build the application:**
    - Right-click **systemControl** → **Build Project**
 4. **Program the FPGA & run:**
    - Connect the Arty Z7 via USB
-   - Right-click the desired application → **Run As → Launch on Hardware**
+   - Right-click **systemControl** → **Run As → Launch on Hardware**
 
 > **Note:** The XDC constraints file at `RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc` contains all pin and I/O standard assignments. If you change block design port names, update the XDC to match.
 
@@ -161,19 +165,23 @@ make clean
 
 ## Packet wire format
 
-Both `pcCommunication.c` and `fpgaCommunication.c` use the same framing:
+Both `pcCommunication.c` and `systemControl.c` use the same framing:
 
 ```
 [ 0xAA | 0x55 | TYPE | LEN | PAYLOAD (LEN bytes) | CRC8 ]
 ```
 
-| Direction | TYPE | LEN | Payload |
-|-----------|------|-----|---------|
-| PC → FPGA | 0x01 | 8 | `r_nm` (int32 LE, nanometres) + `theta_udeg` (int32 LE, microdegrees) |
-| FPGA → PC | 0x81 | 8 | Echo of received payload (ACK) |
-| FPGA → PC | 0xF0 | N | Debug / status string |
+| Direction | TYPE | LEN | Payload | Purpose |
+|-----------|------|-----|---------|---------|
+| PC → FPGA | `0x02` | 8 | `r_min_nm` (int32 LE) + `r_max_nm` (int32 LE) | Radial range — sent once before all points |
+| PC → FPGA | `0x01` | 8 | `r_nm` (int32 LE, nanometres) + `theta_udeg` (int32 LE, microdegrees) | Polar point |
+| PC → FPGA | `0x03` | 0 | (none) | End of sequence — triggers graceful shutdown |
+| FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
+| FPGA → PC | `0xF0` | N | ASCII string | Debug / status message |
 
 CRC8 is computed as XOR over `[TYPE, LEN, PAYLOAD...]`.
+
+**Flow control:** Stop-and-wait. The PC waits up to 120 s for the range ACK (covers the FPGA homing wait), then up to 2 s for each point ACK, then up to 2 s for the end ACK.
 
 ---
 
@@ -191,17 +199,19 @@ CRC8 is computed as XOR over `[TYPE, LEN, PAYLOAD...]`.
 | [25] | `step_go` | Step go: momentary high pulse triggers move |
 | [26] | `laser_en` | Laser enable: 0=off, 1=on |
 
-### `systemControl.c` interactive commands
+### `systemControl.c` automated sequence
 
-On startup, the stepper automatically homes (zeros) via the proximity switch, then prompts for initial configuration. The following single-key commands are available at runtime:
+`systemControl.c` now runs fully automated — no interactive commands. On startup it executes the following sequence:
 
-| Key | Action |
-|-----|--------|
-| `P` | Toggle spindle power |
-| `D` | Toggle stepper direction |
-| `Q` | Toggle stepper power |
-| `Z` | Pulse zero request line (re-home sled) |
-| `N` | Set number of steps |
-| `G` | Pulse step go (execute move) |
-| `L` | Toggle laser power |
-| `H` | Print command reference |
+| Step | Action |
+|------|--------|
+| 1 | Enable stepper → VHDL FSM enters ZEROING (homes to inner edge via proximity switch) |
+| 2 | Wait to receive `TYPE_RANGE` (0x02) packet from PC; store `r_min_nm` and `r_max_nm` |
+| 3 | Wait 30 s for homing to complete (`ZERO_WAIT_US`, adjustable), then ACK the range packet |
+| 4 | Enable spindle |
+| 5 | For each `TYPE_POINT` (0x01): compute target step = `round((r − r_min) / (r_max − r_min) × 8500)`, move stepper, turn laser on after the first move, ACK |
+| 6 | On `TYPE_END` (0x03): turn laser off, stop spindle and stepper, ACK, halt |
+
+The stepper position is tracked in software. Direction is set automatically (outward for increasing r, inward for decreasing r). The laser remains on continuously between the first and last points.
+
+> **Note:** `ZERO_WAIT_US` defaults to 30 s (covers up to ~1500 steps at 50 Hz homing speed). If the sled starts near the outer edge, increase this constant in `systemControl.c` before building.
