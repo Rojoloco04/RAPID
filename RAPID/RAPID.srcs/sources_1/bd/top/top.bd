@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xC1CF15DC25BF9B4F",
+      "boundary_crc": "0x82899DC47ED30FE5",
       "device": "xc7z020clg400-1",
       "gen_directory": "../../../../RAPID.gen/sources_1/bd/top",
       "name": "top",
@@ -22,7 +22,8 @@
       "ilslice_2": "",
       "ilslice_3": "",
       "ilslice_4": "",
-      "ilslice_5": ""
+      "ilslice_5": "",
+      "ilslice_6": ""
     },
     "interface_ports": {
       "DDR": {
@@ -242,6 +243,18 @@
       },
       "en_out_0": {
         "direction": "O"
+      },
+      "LaserEn": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
       }
     },
     "components": {
@@ -2370,6 +2383,17 @@
             "value": "25"
           }
         }
+      },
+      "ilslice_6": {
+        "vlnv": "xilinx.com:inline_hdl:ilslice:1.0",
+        "parameters": {
+          "DIN_FROM": {
+            "value": "26"
+          },
+          "DIN_TO": {
+            "value": "26"
+          }
+        }
       }
     },
     "interface_nets": {
@@ -2449,7 +2473,8 @@
           "ilslice_2/Din",
           "ilslice_3/Din",
           "ilslice_4/Din",
-          "ilslice_5/Din"
+          "ilslice_5/Din",
+          "ilslice_6/Din"
         ]
       },
       "ilslice_0_Dout": {
@@ -2486,6 +2511,12 @@
         "ports": [
           "ilslice_5/Dout",
           "stepperDriver_0/step_go"
+        ]
+      },
+      "ilslice_6_Dout": {
+        "ports": [
+          "ilslice_6/Dout",
+          "LaserEn"
         ]
       },
       "processing_system7_0_FCLK_CLK0": {

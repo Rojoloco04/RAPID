@@ -13,6 +13,7 @@
  *   Bit  3        zero_req     Zero/home request      (momentary high)
  *   Bits 4-24     num_step     Step count             (0 to 2^21-1)
  *   Bit  25       step_go      Step go pulse          (momentary high)
+ *   Bit  26       LaserEn      Laser On/Off           (0=off, 1=on)
  *
  * Interactive commands (case-insensitive):
  *   P - toggle spindle power
@@ -21,6 +22,7 @@
  *   Z - pulse zero request line
  *   N - set number of steps
  *   G - pulse step go line
+ *   L - Toggle Laser
  *   H - print help
  *
  * Build: Xilinx Vitis bare-metal project targeting Zynq-7000 PS.
@@ -39,9 +41,8 @@
 /*  Constants                                                         */
 /* ------------------------------------------------------------------ */
 
-/* Mask to keep only the 7 valid output bits when writing to GPIO. */
-//#define GPIO_MASK       0x7F
-#define GPIO_MASK       0x03FFFFFF
+/* Mask to keep only the 27 valid output bits when writing to GPIO. */
+#define GPIO_MASK       0x07FFFFFF
 
 
 /* GPIO bit positions within the control word. */
@@ -58,6 +59,7 @@
 #define BIT_ZERO_REQ    3
 #define BIT_NUM_STEP    4   /* bits 24:4 - 21-bit step count field */
 #define BIT_STEP_GO     25
+#define BIT_LASER_EN    26
 
 #define NUM_STEP_MAX    ((1 << 21) - 1)   /* 2097151 */
 /* ------------------------------------------------------------------ */
@@ -129,6 +131,7 @@ static void help_query(void) {
                " Z - pulse zero request line\r\n"
                " N - set number of steps (0 to %d)\r\n"
                " G - pulse step go\r\n"
+               " L - toggle laser power\r\n"
                " H - print this help\r\n", NUM_STEP_MAX);
 }
 
@@ -169,6 +172,7 @@ int main(void)
     int stepperDir = input_check("\r\nEnter stepper direction (0=backwards, 1=forwards): ",      0, 1);
     int stepperEn  =  input_check("\r\nEnable stepper? (0=disable, 1=enable): ",                  0, 1);
     int numStep    = input_check("\r\nEnter number of steps (0 to 2097151): ", 0, NUM_STEP_MAX);
+    int laserEn    = input_check("\r\nEnable Laser? (0=off, 1=on)", 0, 1);
 
 
     /* Pack fields into the control word. */
@@ -183,6 +187,7 @@ int main(void)
     config |= (stepperEn  & 0x01)       << BIT_STEPPER_EN;
     /* zero_req and step_go start low; they are pulsed by commands */
     config |= ((u32)(numStep & NUM_STEP_MAX)) << BIT_NUM_STEP;
+    config |= (laserEn & 0x01)          << BIT_LASER_EN;
 
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
 
@@ -246,6 +251,13 @@ int main(void)
         else if (command == 'Q' || command == 'q') {
             config ^= (1 << BIT_STEPPER_EN);
             xil_printf("Stepper power %s.\r\n", (config >> BIT_STEPPER_EN) & 1 ? "on" : "off");
+            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+        }
+
+        /* L - toggle laser on/off */
+        else if (command == 'L' || command == 'l') {
+            config ^= (1 << BIT_LASER_EN);
+            xil_printf("Laser power %s.\r\n", (config >> BIT_LASER_EN) & 1 ? "on" : "off");
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
         }
 
