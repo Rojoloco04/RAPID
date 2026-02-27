@@ -419,7 +419,7 @@ int main(int argc, char **argv) {
            (long)r_min_nm, (long)r_max_nm);
 
     /* ---- send range packet and wait for FPGA ready (includes homing) ---- */
-    printf("Sending range packet — waiting up to %d s for FPGA to finish homing...\n",
+    printf("Sending range packet - waiting up to %d s for FPGA to finish homing...\n",
            RANGE_ACK_TIMEOUT_MS / 1000);
     if (!send_range_packet(h, r_min_nm, r_max_nm)) {
         fprintf(stderr, "UART send failed (range packet)\n");
