@@ -45,6 +45,10 @@ signal start_check : std_logic := '1';
 signal start_count : integer range 0 to 187500002 := 0;
 signal in_startup : std_logic := '0';
 
+signal in_startup_s1 : std_logic := '0';
+signal in_startup_sync : std_logic := '0';
+signal duty_cycle_count : integer range 0 to 5000 := 4000; -- 80% at 25kHz
+
 begin
 
 -- Commutation frequency: count_max=6,410,256 gives ~14.5 Hz (~1 rev / 1.8 s)
@@ -73,6 +77,15 @@ begin
             counter <= 0;
             clk_div <= '0';
         end if;
+    end if;
+end process;
+
+--metastability 
+process(clk_div)
+begin
+    if rising_edge(clk_div) then
+        in_startup_s1 <= in_startup;
+        in_startup_sync <= in_startup_s1;
     end if;
 end process;
 
@@ -120,7 +133,7 @@ process(clk_div, en)
 begin
     if rising_edge(clk_div) then
         if (en = '1') then
-            if in_startup = '1' then
+            if in_startup_sync = '1' then
                 INLA <= '1';
                 INHB <= '1';
                 INLB <= '1';
@@ -153,7 +166,7 @@ begin
               end if;
             
             -- Increment step 
-         if in_startup = '0' then
+         if in_startup_sync = '0' then
             if step >= 6 then
                 step <= 1;
             else

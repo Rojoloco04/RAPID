@@ -4,7 +4,7 @@
 
 import math
 
-R = 5000
+R = 5000000
 N = 1000
 start_deg = 0
 step_deg = 360.0 / N
