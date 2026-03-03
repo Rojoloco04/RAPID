@@ -42,7 +42,6 @@
  */
 
 #include "xgpio.h"
-#include "xil_printf.h"
 #include "xparameters.h"
 #include "platform.h"
 #include "sleep.h"
@@ -50,6 +49,7 @@
 #include "xuartps_hw.h"
 
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdint.h>
 
 /* ------------------------------------------------------------------ */
@@ -82,6 +82,7 @@
 #define TYPE_RANGE      0x02
 #define TYPE_END        0x03
 #define TYPE_ACK        0x81
+#define TYPE_DEBUG      0xF0
 #define POINT_LEN       0x08
 #define RANGE_LEN       0x08
 #define MAX_PAYLOAD     255
@@ -186,6 +187,29 @@ static void send_frame(uint8_t type, const uint8_t *payload, uint8_t len)
 }
 
 /* ------------------------------------------------------------------ */
+/*  Debug output via TYPE_DEBUG packet                               */
+/* ------------------------------------------------------------------ */
+
+/*
+ * debug_printf - send a formatted string to the PC as a TYPE_DEBUG (0xF0)
+ * framed packet.  The PC reader thread prints these as "[FPGA] <msg>".
+ * Use this instead of xil_printf so debug output stays within the framed
+ * protocol and is visible in the PC console / GUI while the port is open.
+ */
+static void debug_printf(const char *fmt, ...)
+{
+    char buf[128];
+    va_list ap;
+    va_start(ap, fmt);
+    vsnprintf(buf, sizeof(buf), fmt, ap);
+    va_end(ap);
+
+    uint8_t len = 0;
+    while (buf[len] && len < 255) len++;
+    send_frame(TYPE_DEBUG, (const uint8_t *)buf, len);
+}
+
+/* ------------------------------------------------------------------ */
 /*  Framed packet RX                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -237,10 +261,8 @@ int main(void)
     init_platform();
 
     /* ---- initialise AXI GPIO ---- */
-    if (XGpio_Initialize(&gpio, 0) != XST_SUCCESS) {
-        xil_printf("GPIO init failed\r\n");
-        return XST_FAILURE;
-    }
+    if (XGpio_Initialize(&gpio, 0) != XST_SUCCESS)
+        return XST_FAILURE;   /* UART not yet up - can't send debug packet */
     XGpio_SetDataDirection(&gpio, 1, 0x00000000);  /* ch1: all outputs */
     XGpio_SetDataDirection(&gpio, 2, 0xFFFFFFFF);  /* ch2: all inputs  */
 
@@ -261,8 +283,8 @@ int main(void)
      */
     config = (1u << BIT_STEPPER_EN);
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-    xil_printf("\r\nZeroing started. Will wait %u s for sled to home...\r\n",
-               ZERO_WAIT_US / 1000000u);
+    debug_printf("Zeroing started. Will wait %u s for sled to home...",
+                 ZERO_WAIT_US / 1000000u);
 
     /* ===== 2. RECEIVE RANGE PACKET ================================= */
     /*
@@ -287,13 +309,13 @@ int main(void)
     /* ===== 3. FINISH ZEROING WAIT, THEN ACK RANGE ================== */
     usleep(ZERO_WAIT_US);
     send_frame(TYPE_ACK, range_echo, RANGE_LEN);
-    xil_printf("Zeroing complete. Disc radius: %u um, max steps: %u\r\n",
-               DISC_RADIUS_UM, MAX_STEPS);
+    debug_printf("Zeroing complete. Disc radius: %u um, max steps: %u",
+                 DISC_RADIUS_UM, MAX_STEPS);
 
     /* ===== 4. ENABLE SPINDLE ======================================= */
     config |= (1u << BIT_SPINDLE_EN);
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-    xil_printf("Spindle enabled.\r\n");
+    debug_printf("Spindle enabled.");
 
     /* ===== 5. POINT LOOP =========================================== */
     int32_t current_step = 0;
@@ -351,7 +373,7 @@ int main(void)
                 config |= (1u << BIT_LASER_EN);
                 XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
                 first_point = 0;
-                xil_printf("Laser ON.\r\n");
+                debug_printf("Laser ON.");
             }
 
             /* ACK the point - echo payload back to PC */
@@ -365,7 +387,7 @@ int main(void)
             config &= ~(1u << BIT_STEPPER_EN);
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
 
-            xil_printf("Pattern complete. Laser OFF. Motors stopped.\r\n");
+            debug_printf("Pattern complete. Laser OFF. Motors stopped.");
 
             /* ACK end packet (LEN=0, no payload) */
             {

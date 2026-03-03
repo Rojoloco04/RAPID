@@ -47,7 +47,7 @@
 #define FRAME_SIZE           13     /* SOF(2) + TYPE + LEN + PAYLOAD(8) + CRC */
 #define RX_BUF_SIZE          256    /* serial read buffer (bulk reads)   */
 #define ACK_TIMEOUT          2000   /* ms to wait for each point ACK     */
-#define RANGE_ACK_TIMEOUT_MS 30000 /* ms to wait for range ACK (covers homing) */
+#define RANGE_ACK_TIMEOUT_MS 120000 /* ms to wait for range ACK (covers homing) */
 #define BAUD_RATE            115200
 #define DISC_RADIUS_UM       33000  /* physical disc radius in µm (33 mm standard CD) */
 
@@ -437,15 +437,15 @@ int main(int argc, char **argv) {
 
     /* ---- send range packet (homing sync) and wait for FPGA ready ---- */
     printf("Disc radius: %d um, max steps: 8500\n", DISC_RADIUS_UM);
-    printf("Sending range packet - waiting up to %d s for FPGA to finish homing...\n",
-           RANGE_ACK_TIMEOUT_MS / 1000);
+    printf("Sending range packet - waiting up to %d s for stepper to finish zeroing...\n",
+           RANGE_ACK_TIMEOUT_MS / 1000);  /* covers FPGA ZERO_WAIT_US (30 s fixed timer) plus startup margin */
     if (!send_range_packet(h)) {
         fprintf(stderr, "UART send failed (range packet)\n");
         cleanup(&ctx, th, h, polar);
         return 1;
     }
     if (!wait_for_ack(&ctx, 1, RANGE_ACK_TIMEOUT_MS)) {
-        fprintf(stderr, "Timeout waiting for range ACK (FPGA not ready)\n");
+        fprintf(stderr, "Timeout waiting for range ACK (stepper zeroing incomplete or FPGA not responding)\n");
         cleanup(&ctx, th, h, polar);
         return 1;
     }
