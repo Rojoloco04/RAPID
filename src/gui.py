@@ -10,6 +10,7 @@ Usage:
 """
 
 import sys
+import signal
 import re
 import math
 from pathlib import Path
@@ -308,4 +309,12 @@ if __name__ == "__main__":
     w = GUI()
     w.resize(1100, 700)
     w.show()
+
+    # Allow Ctrl+C to reach Python's signal handler (Qt blocks it otherwise)
+    signal.signal(signal.SIGINT, lambda *_: w.close())
+    _sigint_timer = QTimer()
+    _sigint_timer.setInterval(200)
+    _sigint_timer.timeout.connect(lambda: None)  # wake the event loop periodically
+    _sigint_timer.start()
+
     sys.exit(app.exec())
