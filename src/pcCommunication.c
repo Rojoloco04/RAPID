@@ -11,7 +11,7 @@
  *   SOF (0xAA 0x55) | TYPE (1 B) | LEN (1 B) | PAYLOAD (LEN B) | CRC8
  *
  * Outgoing TYPE 0x01, LEN 0x08:
- *   r_nm       (int32, little-endian, nanometres)
+ *   r_um       (int32, little-endian, micrometres)
  *   theta_udeg (int32, little-endian, microdegrees)
  *
  * Incoming responses from FPGA:
@@ -48,6 +48,7 @@
 #define ACK_TIMEOUT          2000   /* ms to wait for each point ACK     */
 #define RANGE_ACK_TIMEOUT_MS 120000 /* ms to wait for range ACK (covers homing) */
 #define BAUD_RATE            115200
+#define DISC_RADIUS_UM       33000  /* physical disc radius in µm (33 mm standard CD) */
 
 /* ------------------------------------------------------------------ */
 /*  CRC / serialisation helpers                                       */
@@ -145,8 +146,8 @@ static HANDLE open_serial(const char *com_name, int baud) {
 /* ------------------------------------------------------------------ */
 
 /** Build and send a single polar-point frame over the serial link. */
-static int send_polar_point(HANDLE h, double r_nm, double theta_deg) {
-    int32_t r_i32 = (int32_t)llround(r_nm);
+static int send_polar_point(HANDLE h, double r_um, double theta_deg) {
+    int32_t r_i32 = (int32_t)llround(r_um);
     int32_t t_i32 = (int32_t)llround(theta_deg * 1e6); /* degrees → microdegrees */
 
     uint8_t frame[FRAME_SIZE];
@@ -164,13 +165,14 @@ static int send_polar_point(HANDLE h, double r_nm, double theta_deg) {
 }
 
 /**
- * Build and send a TYPE_RANGE frame: conveys r_min and r_max of the
- * coordinate set so the FPGA can map r_nm values to stepper steps.
+ * Build and send a TYPE_RANGE frame: acts as homing sync signal.
+ * Sends disc physical range [0, DISC_RADIUS_UM] as metadata; the FPGA
+ * uses this packet only for timing (waits for homing before ACK'ing).
  */
-static int send_range_packet(HANDLE h, int32_t r_min_nm, int32_t r_max_nm) {
+static int send_range_packet(HANDLE h) {
     uint8_t payload[RANGE_LEN];
-    pack_i32_le(&payload[0], r_min_nm);
-    pack_i32_le(&payload[4], r_max_nm);
+    pack_i32_le(&payload[0], (int32_t)0);
+    pack_i32_le(&payload[4], (int32_t)DISC_RADIUS_UM);
 
     uint8_t frame[2 + 1 + 1 + RANGE_LEN + 1];  /* SOF+TYPE+LEN+PAYLOAD+CRC */
     size_t idx = 0;
@@ -316,10 +318,10 @@ static DWORD WINAPI reader_thread(LPVOID param) {
                     /* ACK — signal the sender unconditionally */
                     if (len == POINT_LEN) {
                         /* point or range ACK: log the echoed coordinates */
-                        int32_t r_nm       = unpack_i32_le(&payload[0]);
+                        int32_t r_um       = unpack_i32_le(&payload[0]);
                         int32_t theta_udeg = unpack_i32_le(&payload[4]);
-                        printf("[ACK] r=%ld nm, theta=%ld udeg\n",
-                               (long)r_nm, (long)theta_udeg);
+                        printf("[ACK] r=%ld um, theta=%ld udeg\n",
+                               (long)r_um, (long)theta_udeg);
                     }
                     InterlockedIncrement(&ctx->ack_count);
                     SetEvent(ctx->ack_event);  /* wake wait_for_ack() */
@@ -407,21 +409,11 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    /* ---- compute radial range for stepper mapping ---- */
-    double r_min = polar[0].r, r_max = polar[0].r;
-    for (size_t i = 1; i < count; i++) {
-        if (polar[i].r < r_min) r_min = polar[i].r;
-        if (polar[i].r > r_max) r_max = polar[i].r;
-    }
-    int32_t r_min_nm = (int32_t)llround(r_min);
-    int32_t r_max_nm = (int32_t)llround(r_max);
-    printf("Radial range: r_min=%ld nm, r_max=%ld nm\n",
-           (long)r_min_nm, (long)r_max_nm);
-
-    /* ---- send range packet and wait for FPGA ready (includes homing) ---- */
+    /* ---- send range packet (homing sync) and wait for FPGA ready ---- */
+    printf("Disc radius: %d um, max steps: 8500\n", DISC_RADIUS_UM);
     printf("Sending range packet - waiting up to %d s for FPGA to finish homing...\n",
            RANGE_ACK_TIMEOUT_MS / 1000);
-    if (!send_range_packet(h, r_min_nm, r_max_nm)) {
+    if (!send_range_packet(h)) {
         fprintf(stderr, "UART send failed (range packet)\n");
         cleanup(&ctx, th, h, polar);
         return 1;

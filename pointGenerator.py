@@ -4,7 +4,7 @@
 
 import math
 
-R = 5000000
+R = 25000  # radius in micrometres (25 mm, within 33 mm disc range)
 N = 1000
 start_deg = 0
 step_deg = 360.0 / N

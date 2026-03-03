@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x82899DC47ED30FE5",
+      "boundary_crc": "0x82899DC4F20313E7",
       "device": "xc7z020clg400-1",
       "gen_directory": "../../../../RAPID.gen/sources_1/bd/top",
       "name": "top",
@@ -2103,13 +2103,7 @@
             }
           },
           "en": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
+            "direction": "I"
           },
           "en_spindle": {
             "direction": "O"
@@ -2162,25 +2156,13 @@
             }
           },
           "dir": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
+            "direction": "I"
           },
           "dir_out": {
             "direction": "O"
           },
           "en": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
+            "direction": "I"
           },
           "pwm_out_step": {
             "direction": "O"
@@ -2189,13 +2171,7 @@
             "direction": "I"
           },
           "zero_req": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
+            "direction": "I"
           },
           "en_out": {
             "direction": "O"
@@ -2203,22 +2179,10 @@
           "num_steps": {
             "direction": "I",
             "left": "20",
-            "right": "0",
-            "parameters": {
-              "PortWidth": {
-                "value": "21",
-                "value_src": "user_prop"
-              }
-            }
+            "right": "0"
           },
           "step_go": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
+            "direction": "I"
           },
           "step_total_out": {
             "direction": "O",
@@ -2556,8 +2520,8 @@
           "axi_smc/aclk",
           "processing_system7_0/M_AXI_GP0_ACLK",
           "rst_ps7_0_100M/slowest_sync_clk",
-          "stepperDriver_0/clk",
-          "Spindle_0/clk"
+          "Spindle_0/clk",
+          "stepperDriver_0/clk"
         ]
       },
       "processing_system7_0_FCLK_RESET0_N": {

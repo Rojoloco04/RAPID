@@ -6,11 +6,12 @@
  * single automated pipeline:
  *
  *   1. Enable stepper -> VHDL FSM begins homing (ZEROING state).
- *   2. Receive TYPE_RANGE packet from PC, storing r_min / r_max.
+ *   2. Receive TYPE_RANGE packet from PC (used only as homing sync signal).
  *   3. Wait ZERO_WAIT_US for homing to complete, then ACK the range packet.
  *   4. Enable spindle.
  *   5. For each TYPE_POINT packet:
- *        a. Map r_nm -> target step count (linear, [r_min,r_max] -> [0,MAX_STEPS]).
+ *        a. Map r_um -> target step count using fixed physical scale:
+ *             steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM)
  *        b. Compute delta and direction from current position.
  *        c. Update GPIO and pulse step_go; wait for move to complete.
  *        d. Turn on laser after the first point's move.
@@ -30,8 +31,8 @@
  *   SOF (0xAA 0x55) | TYPE (1 B) | LEN (1 B) | PAYLOAD (LEN B) | CRC8
  *
  * Incoming packet types:
- *   TYPE 0x02, LEN 0x08 - range: r_min_nm (int32 LE) + r_max_nm (int32 LE)
- *   TYPE 0x01, LEN 0x08 - polar point: r_nm (int32 LE) + theta_udeg (int32 LE)
+ *   TYPE 0x02, LEN 0x08 - range sync: payload ignored, used only for homing timing
+ *   TYPE 0x01, LEN 0x08 - polar point: r_um (int32 LE) + theta_udeg (int32 LE)
  *   TYPE 0x03, LEN 0x00 - end of sequence
  *
  * Outgoing:
@@ -90,7 +91,11 @@
 /* ------------------------------------------------------------------ */
 
 /* Full stepper range: inner edge (home / step 0) to outer edge. */
-#define MAX_STEPS       8500
+#define MAX_STEPS        8500
+
+/* Physical disc radius in micrometres (33 mm standard CD).
+ * 8500 steps spans this full range: steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM). */
+#define DISC_RADIUS_UM   33000
 
 /*
  * How long to wait after asserting stepper_en before ACK'ing the range
@@ -268,23 +273,22 @@ int main(void)
      */
     uint8_t rx_payload[MAX_PAYLOAD];
     uint8_t range_echo[RANGE_LEN];
-    int32_t r_min_nm = 0, r_max_nm = 1;   /* safe defaults */
 
     uint8_t pkt_type;
     do {
         pkt_type = receive_packet(rx_payload);
     } while (pkt_type != TYPE_RANGE);
 
-    r_min_nm = unpack_i32_le(&rx_payload[0]);
-    r_max_nm = unpack_i32_le(&rx_payload[4]);
+    /* TYPE_RANGE payload is ignored for step mapping; received only as homing sync.
+     * Echo it back in the ACK so the PC flow-control unblocks. */
     for (uint8_t i = 0; i < RANGE_LEN; i++)
         range_echo[i] = rx_payload[i];
 
     /* ===== 3. FINISH ZEROING WAIT, THEN ACK RANGE ================== */
     usleep(ZERO_WAIT_US);
     send_frame(TYPE_ACK, range_echo, RANGE_LEN);
-    xil_printf("Zeroing complete. r_min=%ld nm, r_max=%ld nm\r\n",
-               (long)r_min_nm, (long)r_max_nm);
+    xil_printf("Zeroing complete. Disc radius: %u um, max steps: %u\r\n",
+               DISC_RADIUS_UM, MAX_STEPS);
 
     /* ===== 4. ENABLE SPINDLE ======================================= */
     config |= (1u << BIT_SPINDLE_EN);
@@ -300,20 +304,15 @@ int main(void)
 
         if (pkt_type == TYPE_POINT) {
 
-            int32_t r_nm = unpack_i32_le(&rx_payload[0]);
+            int32_t r_um = unpack_i32_le(&rx_payload[0]);
             /* theta_udeg currently logged only; spindle position not yet controlled */
 
-            /* --- compute normalised target step count --- */
-            int32_t target_step;
-            if (r_max_nm == r_min_nm) {
-                target_step = 0;
-            } else {
-                double frac = (double)(r_nm - r_min_nm)
-                            / (double)(r_max_nm - r_min_nm);
-                target_step = (int32_t)(frac * (double)MAX_STEPS + 0.5);
-                if (target_step < 0)          target_step = 0;
-                if (target_step > MAX_STEPS)  target_step = MAX_STEPS;
-            }
+            /* --- map physical radius (µm) to stepper steps ---
+             *   steps = round( r_um / DISC_RADIUS_UM * MAX_STEPS )
+             * 0 µm = home (inner edge, step 0); DISC_RADIUS_UM = outer edge (MAX_STEPS). */
+            int32_t target_step = (int32_t)((double)r_um / DISC_RADIUS_UM * MAX_STEPS + 0.5);
+            if (target_step < 0)         target_step = 0;
+            if (target_step > MAX_STEPS) target_step = MAX_STEPS;
 
             int32_t delta = target_step - current_step;
             if (delta < 0) delta = -delta;

@@ -67,8 +67,8 @@ Identical on both PC (`pcCommunication.c`) and FPGA (`systemControl.c`):
 
 | Direction | TYPE | LEN | Payload | Purpose |
 |-----------|------|-----|---------|---------|
-| PC → FPGA | `0x02` | 8 | `r_min_nm` (int32 LE) + `r_max_nm` (int32 LE) | Radial range — sent once, before all points |
-| PC → FPGA | `0x01` | 8 | `r_nm` (int32 LE, nanometres) + `theta_udeg` (int32 LE, microdegrees) | Polar point |
+| PC → FPGA | `0x02` | 8 | `0` (int32 LE) + `33000` (int32 LE, µm) | Homing sync — sent once before all points; FPGA ignores payload values |
+| PC → FPGA | `0x01` | 8 | `r_um` (int32 LE, micrometres) + `theta_udeg` (int32 LE, microdegrees) | Polar point |
 | PC → FPGA | `0x03` | 0 | (none) | End of sequence |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
 | FPGA → PC | `0xF0` | N | ASCII string | Debug/status |
@@ -76,7 +76,7 @@ Identical on both PC (`pcCommunication.c`) and FPGA (`systemControl.c`):
 **CRC8:** XOR over `[TYPE, LEN, PAYLOAD...]`. Simple accumulating XOR, not polynomial.
 
 **Flow control:** Stop-and-wait.
-- PC sends `TYPE_RANGE`, waits up to **120 000 ms** for ACK (covers FPGA homing delay).
+- PC sends `TYPE_RANGE` (homing sync), waits up to **120 000 ms** for ACK (covers FPGA homing delay).
 - PC sends each `TYPE_POINT`, waits up to **2000 ms** for ACK (FPGA ACKs after move completes).
 - PC sends `TYPE_END`, waits up to **2000 ms** for ACK.
 
@@ -116,11 +116,11 @@ Defined and written in `vitis_workspace/systemControl/systemControl.c`:
 | **5 — Point loop** | For each `TYPE_POINT`: compute `target_step`, update `dir`+`num_steps`, pulse `step_go`, wait, turn laser on after first move, send ACK |
 | **6 — End** | On `TYPE_END`: clear `laser_en`, `spindle_en`, `stepper_en`, send ACK, return |
 
-**Step-count mapping:**
+**Step-count mapping (fixed physical scale):**
 ```
-target_step = clamp( round( (r_nm − r_min_nm) / (r_max_nm − r_min_nm) × 8500 ), 0, 8500 )
+target_step = clamp( round( r_um / 33000 × 8500 ), 0, 8500 )
 ```
-8500 steps = full disc range (inner edge → outer edge). After homing, `current_step = 0`.
+8500 steps = 33 mm (full CD disc range, inner edge → outer edge). `r_um` is the input radius in micrometres. After homing, `current_step = 0`.
 
 **Move wait time** (after 100 ms `step_go` pulse):
 ```
@@ -266,10 +266,10 @@ XY <x0> : <y0>
 ENDEL
 ```
 
-Units: nanometres (integers). The parser strips the leading `XY`, reads `int : int` pairs until `ENDEL`. Dynamic array with initial capacity 8, doubles on overflow.
+Units: **micrometres** (integers). The parser strips the leading `XY`, reads `int : int` pairs until `ENDEL` (or EOF). Dynamic array with initial capacity 8, doubles on overflow.
 
 `convertToPolar()` converts to:
-- `r` = `sqrt(x²+y²)` (double, nm)
+- `r` = `sqrt(x²+y²)` (double, µm)
 - `theta` = `atan2(y,x)` in degrees, normalized to [0, 360)
 
 Note: uses `PI = 3.14159` (not `M_PI`).
