@@ -27,7 +27,7 @@ import pyqtgraph as pg
 #   [ACK] r=<int> nm, theta=<int> udeg   - acknowledged polar point
 #   [FPGA] <text>                         - debug message from FPGA
 #   [RX] CRC mismatch ...                 - checksum failure
-ACK_RE  = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+nm,\s+theta=(?P<t>-?\d+)\s+udeg")
+ACK_RE  = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+um,\s+theta=(?P<t>-?\d+)\s+udeg")
 FPGA_RE = re.compile(r"\[FPGA\]\s+(?P<msg>.*)")
 CRC_RE  = re.compile(r"\[RX\]\s+CRC mismatch")
 
@@ -139,8 +139,8 @@ class GUI(QWidget):
     def _build_plot(self, parent):
         """Create the pyqtgraph scatter plot with a reference circle."""
         self.plot = pg.PlotWidget()
-        self.plot.setLabel("bottom", "X (nm)")
-        self.plot.setLabel("left",   "Y (nm)")
+        self.plot.setLabel("bottom", "X (µm)")
+        self.plot.setLabel("left",   "Y (µm)")
         self.plot.showGrid(x=True, y=True, alpha=0.2)
         self.plot.setAspectLocked(True)
         self.curve_ack   = self.plot.plot([], [], pen=None, symbol="o", symbolSize=6)
