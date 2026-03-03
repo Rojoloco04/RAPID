@@ -24,10 +24,10 @@ import pyqtgraph as pg
 # ---------------------------------------------------------------------------
 # Regex patterns for parsing RAPID.exe stdout
 # ---------------------------------------------------------------------------
-#   [ACK] r=<int> nm, theta=<int> udeg   - acknowledged polar point
+#   [ACK] r=<int> um, theta=<float> deg  - acknowledged polar point
 #   [FPGA] <text>                         - debug message from FPGA
 #   [RX] CRC mismatch ...                 - checksum failure
-ACK_RE  = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+um,\s+theta=(?P<t>-?\d+)\s+udeg")
+ACK_RE  = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+um,\s+theta=(?P<t>-?\d+\.?\d*)\s+deg")
 FPGA_RE = re.compile(r"\[FPGA\]\s+(?P<msg>.*)")
 CRC_RE  = re.compile(r"\[RX\]\s+CRC mismatch")
 
@@ -260,10 +260,10 @@ class GUI(QWidget):
         # check for ACK line → extract polar coords and store
         m = ACK_RE.search(line)
         if m:
-            r_nm   = int(m.group("r"))
-            t_udeg = int(m.group("t"))
-            self.ack_r.append(r_nm)
-            self.ack_theta_deg.append(t_udeg / 1e6)  # microdegrees → degrees
+            r_um  = int(m.group("r"))
+            t_deg = float(m.group("t"))
+            self.ack_r.append(r_um)
+            self.ack_theta_deg.append(t_deg)
             self.ack_count += 1
             self.lbl_ack.setText(f"ACK: {self.ack_count}")
             self._plot_dirty = True

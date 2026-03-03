@@ -1,22 +1,26 @@
-# Ignore build output directory
-/build
-/export
-/platform
+# Build output
+/build/
+/export/
+/platform/
 
-# Ignore object files and dependent files
-.o
-.d
+# Object and dependency files
+*.o
+*.d
 
-#Ignore logs folder and log files
-/logs
-.log
+# Logs
+/logs/
+*.log
 
-#Ignore lock files
-.lock
+# Lock files
+*.lock
 
-.bin
-.pdi
+# Binary artifacts
+*.bin
+*.pdi
+
+# Vitis workspace
 .vitisWorkspace.json
 
-_ide/logs
-_ide/.wsdata
+# IDE generated
+_ide/logs/
+_ide/.wsdata/

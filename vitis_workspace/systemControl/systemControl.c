@@ -32,7 +32,7 @@
  *
  * Incoming packet types:
  *   TYPE 0x02, LEN 0x08 - range sync: payload ignored, used only for homing timing
- *   TYPE 0x01, LEN 0x08 - polar point: r_um (int32 LE) + theta_udeg (int32 LE)
+ *   TYPE 0x01, LEN 0x08 - polar point: r_um (int32 LE) + theta_deg (float32 LE)
  *   TYPE 0x03, LEN 0x00 - end of sequence
  *
  * Outgoing:
@@ -305,7 +305,7 @@ int main(void)
         if (pkt_type == TYPE_POINT) {
 
             int32_t r_um = unpack_i32_le(&rx_payload[0]);
-            /* theta_udeg currently logged only; spindle position not yet controlled */
+            /* theta_deg currently unused; spindle position not yet controlled */
 
             /* --- map physical radius (µm) to stepper steps ---
              *   steps = round( r_um / DISC_RADIUS_UM * MAX_STEPS )

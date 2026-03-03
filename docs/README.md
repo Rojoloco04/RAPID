@@ -39,7 +39,7 @@ RAPID/
 │   ├── platform/             # BSP platform project (generated from .xsa)
 │   ├── testControl/          # Test motor/laser controller
 │   └── systemControl/        # Active FPGA app — UART receiver + motor/laser control
-├── RAPID/                    # Xilinx Vivado project files (FPGA hardware)
+├── hardware/                 # Xilinx Vivado project files (FPGA hardware)
 │   ├── RAPID.srcs/sources_1/new/
 │   │   ├── stepperDriver.vhd # Stepper motor FSM (DRV8834)
 │   │   └── spindle.vhd       # BLDC 6-step commutation (DRV8323)
@@ -91,7 +91,7 @@ pip install -r requirements.txt
 
 #### Hardware (Vivado)
 
-1. Open the Vivado project: **File → Open Project →** `RAPID/RAPID.xpr`
+1. Open the Vivado project: **File → Open Project →** `hardware/RAPID.xpr`
 2. In the **Sources** panel, expand **Design Sources** and locate the block design `top.bd`
 3. **Generate the HDL wrapper:**
    - Right-click `top` (the `.bd` file) → **Create HDL Wrapper…**
@@ -119,7 +119,7 @@ The Vitis workspace is already set up at `vitis_workspace/` with three component
    - Connect the Arty Z7 via USB
    - Right-click **systemControl** → **Run As → Launch on Hardware**
 
-> **Note:** The XDC constraints file at `RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc` contains all pin and I/O standard assignments. If you change block design port names, update the XDC to match.
+> **Note:** The XDC constraints file at `hardware/RAPID.srcs/constrs_1/new/RAPID.xdc` contains all pin and I/O standard assignments. If you change block design port names, update the XDC to match.
 
 ### 1 - Build `RAPID.exe`
 
@@ -173,8 +173,8 @@ Both `pcCommunication.c` and `systemControl.c` use the same framing:
 
 | Direction | TYPE | LEN | Payload | Purpose |
 |-----------|------|-----|---------|---------|
-| PC → FPGA | `0x02` | 8 | `r_min_nm` (int32 LE) + `r_max_nm` (int32 LE) | Radial range — sent once before all points |
-| PC → FPGA | `0x01` | 8 | `r_nm` (int32 LE, nanometres) + `theta_udeg` (int32 LE, microdegrees) | Polar point |
+| PC → FPGA | `0x02` | 8 | `0` (int32 LE) + `33000` (int32 LE, µm) | Homing sync — sent once before all points; FPGA ignores payload |
+| PC → FPGA | `0x01` | 8 | `r_um` (int32 LE, micrometres) + `theta_deg` (float32 LE, degrees) | Polar point |
 | PC → FPGA | `0x03` | 0 | (none) | End of sequence — triggers graceful shutdown |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
 | FPGA → PC | `0xF0` | N | ASCII string | Debug / status message |
@@ -206,10 +206,10 @@ CRC8 is computed as XOR over `[TYPE, LEN, PAYLOAD...]`.
 | Step | Action |
 |------|--------|
 | 1 | Enable stepper → VHDL FSM enters ZEROING (homes to inner edge via proximity switch) |
-| 2 | Wait to receive `TYPE_RANGE` (0x02) packet from PC; store `r_min_nm` and `r_max_nm` |
+| 2 | Wait to receive `TYPE_RANGE` (0x02) homing sync packet from PC |
 | 3 | Wait 30 s for homing to complete (`ZERO_WAIT_US`, adjustable), then ACK the range packet |
 | 4 | Enable spindle |
-| 5 | For each `TYPE_POINT` (0x01): compute target step = `round((r − r_min) / (r_max − r_min) × 8500)`, move stepper, turn laser on after the first move, ACK |
+| 5 | For each `TYPE_POINT` (0x01): compute target step = `round(r_um / 33000 × 8500)`, move stepper, turn laser on after the first move, ACK |
 | 6 | On `TYPE_END` (0x03): turn laser off, stop spindle and stepper, ACK, halt |
 
 The stepper position is tracked in software. Direction is set automatically (outward for increasing r, inward for decreasing r). The laser remains on continuously between the first and last points.

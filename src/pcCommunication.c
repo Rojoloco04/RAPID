@@ -11,8 +11,8 @@
  *   SOF (0xAA 0x55) | TYPE (1 B) | LEN (1 B) | PAYLOAD (LEN B) | CRC8
  *
  * Outgoing TYPE 0x01, LEN 0x08:
- *   r_um       (int32, little-endian, micrometres)
- *   theta_udeg (int32, little-endian, microdegrees)
+ *   r_um      (int32,   little-endian, micrometres)
+ *   theta_deg (float32, little-endian, degrees)
  *
  * Incoming responses from FPGA:
  *   TYPE 0x81 LEN 0x08  - ACK echo of the point payload
@@ -26,6 +26,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 
 #include "inputParser.h"
@@ -46,7 +47,7 @@
 #define FRAME_SIZE           13     /* SOF(2) + TYPE + LEN + PAYLOAD(8) + CRC */
 #define RX_BUF_SIZE          256    /* serial read buffer (bulk reads)   */
 #define ACK_TIMEOUT          2000   /* ms to wait for each point ACK     */
-#define RANGE_ACK_TIMEOUT_MS 120000 /* ms to wait for range ACK (covers homing) */
+#define RANGE_ACK_TIMEOUT_MS 30000 /* ms to wait for range ACK (covers homing) */
 #define BAUD_RATE            115200
 #define DISC_RADIUS_UM       33000  /* physical disc radius in µm (33 mm standard CD) */
 
@@ -78,6 +79,27 @@ static int32_t unpack_i32_le(const uint8_t b[4]) {
         ((uint32_t)b[2] << 16) |
         ((uint32_t)b[3] << 24)
     );
+}
+
+/** Pack a 32-bit float into 4 bytes, little-endian (IEEE 754). */
+static void pack_f32_le(uint8_t out[4], float v) {
+    uint32_t bits;
+    memcpy(&bits, &v, 4);
+    out[0] = (uint8_t)(bits);
+    out[1] = (uint8_t)(bits >> 8);
+    out[2] = (uint8_t)(bits >> 16);
+    out[3] = (uint8_t)(bits >> 24);
+}
+
+/** Unpack 4 little-endian bytes into a 32-bit float (IEEE 754). */
+static float unpack_f32_le(const uint8_t b[4]) {
+    uint32_t bits = ((uint32_t)b[0])       |
+                    ((uint32_t)b[1] << 8)  |
+                    ((uint32_t)b[2] << 16) |
+                    ((uint32_t)b[3] << 24);
+    float v;
+    memcpy(&v, &bits, 4);
+    return v;
 }
 
 /* ------------------------------------------------------------------ */
@@ -148,7 +170,7 @@ static HANDLE open_serial(const char *com_name, int baud) {
 /** Build and send a single polar-point frame over the serial link. */
 static int send_polar_point(HANDLE h, double r_um, double theta_deg) {
     int32_t r_i32 = (int32_t)llround(r_um);
-    int32_t t_i32 = (int32_t)llround(theta_deg * 1e6); /* degrees → microdegrees */
+    float   t_f32 = (float)theta_deg;
 
     uint8_t frame[FRAME_SIZE];
     size_t idx = 0;
@@ -158,7 +180,7 @@ static int send_polar_point(HANDLE h, double r_um, double theta_deg) {
     frame[idx++] = TYPE_POINT;
     frame[idx++] = POINT_LEN;
     pack_i32_le(&frame[idx], r_i32);  idx += 4;
-    pack_i32_le(&frame[idx], t_i32);  idx += 4;
+    pack_f32_le(&frame[idx], t_f32);  idx += 4;
     frame[idx++] = crc8_xor(&frame[2], 2 + POINT_LEN); /* CRC over TYPE+LEN+PAYLOAD */
 
     return write_all(h, frame, FRAME_SIZE);
@@ -317,11 +339,15 @@ static DWORD WINAPI reader_thread(LPVOID param) {
                 else if (type == TYPE_ACK) {
                     /* ACK — signal the sender unconditionally */
                     if (len == POINT_LEN) {
-                        /* point or range ACK: log the echoed coordinates */
-                        int32_t r_um       = unpack_i32_le(&payload[0]);
-                        int32_t theta_udeg = unpack_i32_le(&payload[4]);
-                        printf("[ACK] r=%ld um, theta=%ld udeg\n",
-                               (long)r_um, (long)theta_udeg);
+                        if (InterlockedCompareExchange(&ctx->ack_count, 0, 0) == 0) {
+                            /* first ACK is always the range (homing) ACK */
+                            printf("[ACK] Range - homing complete\n");
+                        } else {
+                            int32_t r_um    = unpack_i32_le(&payload[0]);
+                            float theta_deg = unpack_f32_le(&payload[4]);
+                            printf("[ACK] r=%ld um, theta=%.2f deg\n",
+                                   (long)r_um, (double)theta_deg);
+                        }
                     }
                     InterlockedIncrement(&ctx->ack_count);
                     SetEvent(ctx->ack_event);  /* wake wait_for_ack() */
