@@ -28,16 +28,17 @@ systemControl.c ── AXI GPIO (PS→PL) ──→ stepperDriver.vhd
 | Path | Description |
 |------|-------------|
 | `src/pcCommunication.c` | PC-side UART sender — compiled into `build/RAPID.exe` |
-| `src/inputParser.c/h` | GDS2 text parser: XY coords → polar (r in nm, theta in degrees) |
+| `src/inputParser.c/h` | GDS2 text parser: XY coords → polar (r in µm, theta in degrees) |
 | `src/platform.c/h` | Thin Xilinx cache init wrappers (shared by FPGA apps) |
 | `src/gui.py` | PySide6 GUI — launches RAPID.exe, parses stdout, plots ACK'd points |
 | `vitis_workspace/testControl/OLD_systemControl.c` | Old motor/laser controller |
 | `vitis_workspace/systemControl/systemControl.c` | **Active** FPGA app — packet receiver + motor/laser control |
-| `RAPID/RAPID.srcs/sources_1/new/stepperDriver.vhd` | **Active** stepper FSM VHDL |
-| `RAPID/RAPID.srcs/sources_1/new/spindle.vhd` | **Active** BLDC 6-step commutation VHDL |
-| `RAPID/RAPID.srcs/constrs_1/new/RAPID.xdc` | Pin constraints (Arty Z7-20) |
-| `RAPID/ip_repo/src/stepperDriver.vhd` | Old simple 2-phase stepper (archived, not in block design) |
-| `RAPID/ip_repo/src/BLDC.vhd` | Old abstract BLDC (archived, not in block design) |
+| `hardware/RAPID.xpr` | Vivado project file |
+| `hardware/RAPID.srcs/sources_1/new/stepperDriver.vhd` | **Active** stepper FSM VHDL |
+| `hardware/RAPID.srcs/sources_1/new/spindle.vhd` | **Active** BLDC 6-step commutation VHDL |
+| `hardware/RAPID.srcs/constrs_1/new/RAPID.xdc` | Pin constraints (Arty Z7-20) |
+| `hardware/ip_repo/src/stepperDriver.vhd` | Old simple 2-phase stepper (archived, not in block design) |
+| `hardware/ip_repo/src/BLDC.vhd` | Old abstract BLDC (archived, not in block design) |
 | `Makefile` | PC-side build: `make`, `make run`, `make gui`, `make clean` |
 | `pointGenerator.py` | Test utility — generates N points on a circle of radius R |
 | `requirements.txt` | Python deps: PySide6, pyqtgraph, numpy, colorama |
@@ -68,7 +69,7 @@ Identical on both PC (`pcCommunication.c`) and FPGA (`systemControl.c`):
 | Direction | TYPE | LEN | Payload | Purpose |
 |-----------|------|-----|---------|---------|
 | PC → FPGA | `0x02` | 8 | `0` (int32 LE) + `33000` (int32 LE, µm) | Homing sync — sent once before all points; FPGA ignores payload values |
-| PC → FPGA | `0x01` | 8 | `r_um` (int32 LE, micrometres) + `theta_udeg` (int32 LE, microdegrees) | Polar point |
+| PC → FPGA | `0x01` | 8 | `r_um` (int32 LE, micrometres) + `theta_deg` (float32 LE, degrees) | Polar point |
 | PC → FPGA | `0x03` | 0 | (none) | End of sequence |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
 | FPGA → PC | `0xF0` | N | ASCII string | Debug/status |
@@ -110,7 +111,7 @@ Defined and written in `vitis_workspace/systemControl/systemControl.c`:
 | Phase | Code action |
 |-------|------------|
 | **1 — Homing** | Write `stepper_en=1` → VHDL enters ZEROING state, sled moves to inner edge |
-| **2 — Range receive** | Block-receive `TYPE_RANGE` (0x02) packet; store `r_min_nm`, `r_max_nm` without ACK'ing yet |
+| **2 — Range receive** | Block-receive `TYPE_RANGE` (0x02) packet (homing sync); echo payload, withhold ACK until homing completes |
 | **3 — Zero wait** | `usleep(ZERO_WAIT_US)` (default 30 s), then send ACK for range packet |
 | **4 — Spindle** | Set `spindle_en=1` |
 | **5 — Point loop** | For each `TYPE_POINT`: compute `target_step`, update `dir`+`num_steps`, pulse `step_go`, wait, turn laser on after first move, send ACK |
@@ -136,7 +137,7 @@ usleep( 1200 + delta × 125 + 10000 )   /* µs: wakeup + running + margin */
 
 ## VHDL Modules
 
-### `stepperDriver.vhd` — `RAPID/RAPID.srcs/sources_1/new/`
+### `stepperDriver.vhd` — `hardware/RAPID.srcs/sources_1/new/`
 
 Clock: 125 MHz. Drives a DRV8834 stepper driver IC.
 
@@ -180,7 +181,7 @@ ZEROING → (prox_stable) → IDLE ←──────────────
 
 ---
 
-### `spindle.vhd` — `RAPID/RAPID.srcs/sources_1/new/`
+### `spindle.vhd` — `hardware/RAPID.srcs/sources_1/new/`
 
 BLDC 6-step open-loop commutation. Drives DRV8323 3-phase gate driver. Clock: 125 MHz.
 
@@ -212,7 +213,7 @@ The spindle runs **fixed speed, fixed direction** — `dir` and `speed` ports do
 
 ---
 
-### Old/Archived VHDL — `RAPID/ip_repo/src/`
+### Old/Archived VHDL — `hardware/ip_repo/src/`
 
 - `BLDC.vhd` — abstract BLDC with PhA/PhB/PhC 2-bit encoding. Not in block design.
 - `stepperDriver.vhd` — simple 2-phase full-step FSM, no PWM, no homing. Not in block design.
@@ -281,7 +282,7 @@ Note: uses `PI = 3.14159` (not `M_PI`).
 - **Framework:** PySide6 + pyqtgraph
 - Launches `build/RAPID.exe` as a `QProcess` child (merged stdout+stderr)
 - Parses stdout line-by-line with regex:
-  - `[ACK] r=<r> nm, theta=<t> udeg` → stores point, increments ACK counter
+  - `[ACK] r=<r> um, theta=<t> deg` → stores point, increments ACK counter
   - `[FPGA] <msg>` → logs to scrolling pane
   - `[RX] CRC mismatch` → increments CRC error counter
 - Plot refreshes at **10 Hz** (100 ms QTimer, dirty-flag pattern to avoid redundant repaints)
@@ -295,6 +296,6 @@ Note: uses `PI = 3.14159` (not `M_PI`).
 
 1. **`step_total_out` readback:** GPIO channel 2 is configured as input for position readback, but the connection from `step_total_out` to GPIO channel 2 in the block design needs verification.
 
-2. **Spindle runs open-loop:** No encoder feedback; rotor position is assumed from timing only. The `theta_udeg` value in each point packet is received and available in `systemControl.c` but not yet used to command the spindle to a specific angle. Full theta control requires adding an encoder and position feedback loop.
+2. **Spindle runs open-loop:** No encoder feedback; rotor position is assumed from timing only. The `theta_deg` value in each point packet is received and available in `systemControl.c` but not yet used to command the spindle to a specific angle. Full theta control requires adding an encoder and position feedback loop.
 
 3. **Homing wait is time-based:** `ZERO_WAIT_US` (default 30 s) is a fixed delay rather than a proximity-switch readback. If `step_total_out` → GPIO channel 2 is confirmed wired, the wait can be replaced with a polling loop for more reliable homing completion detection.

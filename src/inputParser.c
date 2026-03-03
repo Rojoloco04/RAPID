@@ -7,7 +7,7 @@
 #define PI 3.14159
 
 /*
-UNITS ARE IN NM
+UNITS ARE IN UM (micrometres)
 COMPILE WITH:
 gcc -Wall -Wextra -O2 -o inputParser inputParser.c -lm
 */
