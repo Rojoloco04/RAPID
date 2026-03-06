@@ -44,6 +44,9 @@ RAPID/
 │   │   ├── stepperDriver.vhd # Stepper motor FSM (DRV8834)
 │   │   └── spindle.vhd       # BLDC 6-step commutation (DRV8323)
 │   └── RAPID.srcs/constrs_1/new/RAPID.xdc  # Pin constraints (Arty Z7-20)
+├── PCB/              # PCB schematic/layout designed with Altium Designer
+│   ├── Spindle       # BLDC spindle motor custom PCB files
+│   └── Stepper       # Stepper motor custom PCB files
 ├── docs/
 │   ├── README.md             # This file
 │   └── CLAUDE.md             # Full technical context for AI-assisted development
