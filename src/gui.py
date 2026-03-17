@@ -66,7 +66,7 @@ class GUI(QWidget):
         # ---- data state ----
         self.ack_count = 0
         self.crc_count = 0
-        self.ack_r: list[float] = []          # radii of ACK'd points (nm)
+        self.ack_r: list[float] = []          # radii of ACK'd points (µm)
         self.ack_theta_deg: list[float] = []   # angles of ACK'd points (degrees)
         self._read_buf = ""                    # partial-line accumulation buffer
         self._plot_dirty = False               # flag: new data since last repaint

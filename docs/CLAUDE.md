@@ -68,7 +68,6 @@ Identical on both PC (`pcCommunication.c`) and FPGA (`systemControl.c`):
 
 | Direction | TYPE | LEN | Payload | Purpose |
 |-----------|------|-----|---------|---------|
-| PC → FPGA | `0x02` | 8 | `0` (int32 LE) + `33000` (int32 LE, µm) | Homing sync — sent once before all points; FPGA ignores payload values |
 | PC → FPGA | `0x01` | 8 | `r_um` (int32 LE, micrometres) + `theta_deg` (float32 LE, degrees) | Polar point |
 | PC → FPGA | `0x03` | 0 | (none) | End of sequence |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
@@ -77,11 +76,11 @@ Identical on both PC (`pcCommunication.c`) and FPGA (`systemControl.c`):
 **CRC8:** XOR over `[TYPE, LEN, PAYLOAD...]`. Simple accumulating XOR, not polynomial.
 
 **Flow control:** Stop-and-wait.
-- PC sends `TYPE_RANGE` (homing sync), waits up to **120 000 ms** for ACK (covers FPGA homing delay).
+- PC waits **`FPGA_INIT_WAIT_MS`** (32 s) at startup for FPGA stepper zeroing to complete.
 - PC sends each `TYPE_POINT`, waits up to **2000 ms** for ACK (FPGA ACKs after move completes).
 - PC sends `TYPE_END`, waits up to **2000 ms** for ACK.
 
-**Frame sizes:** 13 bytes (point/range), 5 bytes (end).
+**Frame sizes:** 13 bytes (point), 5 bytes (end).
 
 ---
 
@@ -110,12 +109,10 @@ Defined and written in `vitis_workspace/systemControl/systemControl.c`:
 
 | Phase | Code action |
 |-------|------------|
-| **1 — Homing** | Write `stepper_en=1` → VHDL enters ZEROING state, sled moves to inner edge |
-| **2 — Range receive** | Block-receive `TYPE_RANGE` (0x02) packet (homing sync); echo payload, withhold ACK until homing completes |
-| **3 — Zero wait** | `usleep(ZERO_WAIT_US)` (default 30 s), then send ACK for range packet |
-| **4 — Spindle** | Set `spindle_en=1` |
-| **5 — Point loop** | For each `TYPE_POINT`: compute `target_step`, update `dir`+`num_steps`, pulse `step_go`, wait, turn laser on after first move, send ACK |
-| **6 — End** | On `TYPE_END`: clear `laser_en`, `spindle_en`, `stepper_en`, send ACK, return |
+| **1 — Zeroing** | Write `stepper_en=1` → VHDL enters ZEROING state, sled moves to inner edge; `usleep(ZERO_WAIT_US)` (default 30 s) waits for proximity switch to trigger |
+| **2 — Spindle** | Set `spindle_en=1` |
+| **3 — Point loop** | For each `TYPE_POINT`: compute `target_step`, update `dir`+`num_steps`, pulse `step_go`, wait, turn laser on after first move, send ACK |
+| **4 — End** | On `TYPE_END`: clear `laser_en`, `spindle_en`, `stepper_en`, send ACK, return |
 
 **Step-count mapping (fixed physical scale):**
 ```
@@ -128,9 +125,10 @@ target_step = clamp( round( r_um / 33000 × 8500 ), 0, 8500 )
 usleep( 1200 + delta × 125 + 10000 )   /* µs: wakeup + running + margin */
 ```
 
-**Key constant:**
+**Key constants:**
 ```c
-#define ZERO_WAIT_US  30000000U   /* 30 s — increase if sled starts far from home */
+#define ZERO_WAIT_US      30000000U   /* FPGA: 30 s zeroing wait — increase if sled starts far from home */
+#define FPGA_INIT_WAIT_MS 32000       /* PC: matches ZERO_WAIT_US + margin; Sleep() before sending points */
 ```
 
 ---
@@ -297,5 +295,3 @@ Note: uses `PI = 3.14159` (not `M_PI`).
 1. **`step_total_out` readback:** GPIO channel 2 is configured as input for position readback, but the connection from `step_total_out` to GPIO channel 2 in the block design needs verification.
 
 2. **Spindle runs open-loop:** No encoder feedback; rotor position is assumed from timing only. The `theta_deg` value in each point packet is received and available in `systemControl.c` but not yet used to command the spindle to a specific angle. Full theta control requires adding an encoder and position feedback loop.
-
-3. **Homing wait is time-based:** `ZERO_WAIT_US` (default 30 s) is a fixed delay rather than a proximity-switch readback. If `step_total_out` → GPIO channel 2 is confirmed wired, the wait can be replaced with a polling loop for more reliable homing completion detection.
