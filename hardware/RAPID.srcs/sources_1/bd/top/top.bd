@@ -2103,7 +2103,13 @@
             }
           },
           "en": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "en_spindle": {
             "direction": "O"

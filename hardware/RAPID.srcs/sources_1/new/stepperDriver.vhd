@@ -20,9 +20,9 @@ end stepperDriver;
 architecture Behavioral of stepperDriver is
 --constants for clock and clock dividers
 constant base_clk : integer := 125000000;
-constant run_freq : integer := 15625; --set for 1kHz for testing
+constant run_freq : integer := 250000; --set for 1kHz for testing
 --1kHz = 125000
-constant zero_freq : integer := 2500000; --set 10 Hz for zeroing process
+constant zero_freq : integer := 250000; --set 500 Hz for zeroing process
 --state logic for zero mode vs normal
 type state_t is (ZEROING, IDLE, WAKEUP, RUNNING, DONE);
 signal state : state_t := ZEROING;
