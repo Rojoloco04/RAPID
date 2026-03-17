@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # ---- Build RAPID.exe (MinGW-w64 / MSYS2 UCRT64 on Windows) ----------------
+  build-pc:
+    name: Build RAPID.exe
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up MSYS2 (UCRT64)
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: UCRT64
+        update: false
+        install: mingw-w64-ucrt-x86_64-gcc make
+
+    - name: Build
+      shell: msys2 {0}
+      run: make
+
+    - name: Upload RAPID.exe
+      uses: actions/upload-artifact@v4
+      with:
+        name: RAPID-exe
+        path: build/RAPID.exe
+
+  # ---- Python GUI syntax check -----------------------------------------------
+  check-gui:
+    name: Check Python GUI syntax
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Syntax check gui.py
+      run: python -m py_compile src/gui.py
