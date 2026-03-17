@@ -176,7 +176,6 @@ Both `pcCommunication.c` and `systemControl.c` use the same framing:
 
 | Direction | TYPE | LEN | Payload | Purpose |
 |-----------|------|-----|---------|---------|
-| PC → FPGA | `0x02` | 8 | `0` (int32 LE) + `33000` (int32 LE, µm) | Homing sync — sent once before all points; FPGA ignores payload |
 | PC → FPGA | `0x01` | 8 | `r_um` (int32 LE, micrometres) + `theta_deg` (float32 LE, degrees) | Polar point |
 | PC → FPGA | `0x03` | 0 | (none) | End of sequence — triggers graceful shutdown |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
@@ -184,7 +183,7 @@ Both `pcCommunication.c` and `systemControl.c` use the same framing:
 
 CRC8 is computed as XOR over `[TYPE, LEN, PAYLOAD...]`.
 
-**Flow control:** Stop-and-wait. The PC waits up to 120 s for the range ACK (covers the FPGA homing wait), then up to 2 s for each point ACK, then up to 2 s for the end ACK.
+**Flow control:** Stop-and-wait. The PC waits 32 s at startup for FPGA stepper zeroing to complete (`FPGA_INIT_WAIT_MS`, matches FPGA's `ZERO_WAIT_US`), then up to 2 s for each point ACK, then up to 2 s for the end ACK.
 
 ---
 
@@ -195,7 +194,7 @@ CRC8 is computed as XOR over `[TYPE, LEN, PAYLOAD...]`.
 | Bits | Field | Description |
 |------|-------|-------------|
 | [0] | `spindle_en` | Spindle enable: 0=off, 1=on |
-| [1] | `stepper_dir` | Stepper direction: 0=backwards, 1=forwards |
+| [1] | `stepper_dir` | Stepper direction: 0=inward, 1=outward |
 | [2] | `stepper_en` | Stepper enable: 0=off, 1=on |
 | [3] | `zero_req` | Zero/home request: momentary high pulse |
 | [24:4] | `num_step` | Number of steps to move (0–2,097,151) |
@@ -208,13 +207,11 @@ CRC8 is computed as XOR over `[TYPE, LEN, PAYLOAD...]`.
 
 | Step | Action |
 |------|--------|
-| 1 | Enable stepper → VHDL FSM enters ZEROING (homes to inner edge via proximity switch) |
-| 2 | Wait to receive `TYPE_RANGE` (0x02) homing sync packet from PC |
-| 3 | Wait 30 s for homing to complete (`ZERO_WAIT_US`, adjustable), then ACK the range packet |
-| 4 | Enable spindle |
-| 5 | For each `TYPE_POINT` (0x01): compute target step = `round(r_um / 33000 × 8500)`, move stepper, turn laser on after the first move, ACK |
-| 6 | On `TYPE_END` (0x03): turn laser off, stop spindle and stepper, ACK, halt |
+| 1 | Enable stepper → VHDL FSM enters ZEROING (drives to inner-edge proximity switch, resets position to 0); wait `ZERO_WAIT_US` (30 s) for completion |
+| 2 | Enable spindle |
+| 3 | For each `TYPE_POINT` (0x01): compute target step = `round(r_um / 33000 × 8500)`, move stepper, turn laser on after the first move, ACK |
+| 4 | On `TYPE_END` (0x03): turn laser off, stop spindle and stepper, ACK, halt |
 
 The stepper position is tracked in software. Direction is set automatically (outward for increasing r, inward for decreasing r). The laser remains on continuously between the first and last points.
 
-> **Note:** `ZERO_WAIT_US` defaults to 30 s (covers up to ~1500 steps at 50 Hz homing speed). If the sled starts near the outer edge, increase this constant in `systemControl.c` before building.
+> **Note:** `ZERO_WAIT_US` defaults to 30 s (covers up to ~1500 steps at 50 Hz homing rate). The PC-side constant `FPGA_INIT_WAIT_MS` (32 s) must be ≥ `ZERO_WAIT_US`; update both if you increase the zeroing timeout.

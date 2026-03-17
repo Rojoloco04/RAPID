@@ -5,18 +5,17 @@
  * interactive systemControl app and the fpgaCommunication receiver into a
  * single automated pipeline:
  *
- *   1. Enable stepper -> VHDL FSM begins homing (ZEROING state).
- *   2. Receive TYPE_RANGE packet from PC (used only as homing sync signal).
- *   3. Wait ZERO_WAIT_US for homing to complete, then ACK the range packet.
- *   4. Enable spindle.
- *   5. For each TYPE_POINT packet:
+ *   1. Enable stepper -> VHDL FSM begins zeroing (ZEROING state).
+ *   2. Wait ZERO_WAIT_US for zeroing to complete (proximity-switch driven in VHDL).
+ *   3. Enable spindle.
+ *   4. For each TYPE_POINT packet:
  *        a. Map r_um -> target step count using fixed physical scale:
  *             steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM)
  *        b. Compute delta and direction from current position.
  *        c. Update GPIO and pulse step_go; wait for move to complete.
  *        d. Turn on laser after the first point's move.
  *        e. ACK the point.
- *   6. On TYPE_END packet: disable laser/spindle/stepper, ACK, return.
+ *   5. On TYPE_END packet: disable laser/spindle/stepper, ACK, return.
  *
  * GPIO output word layout (27 bits, AXI GPIO channel 1):
  *   Bit  0        spindle_en   Spindle enable         (0=off, 1=on)
@@ -31,7 +30,6 @@
  *   SOF (0xAA 0x55) | TYPE (1 B) | LEN (1 B) | PAYLOAD (LEN B) | CRC8
  *
  * Incoming packet types:
- *   TYPE 0x02, LEN 0x08 - range sync: payload ignored, used only for homing timing
  *   TYPE 0x01, LEN 0x08 - polar point: r_um (int32 LE) + theta_deg (float32 LE)
  *   TYPE 0x03, LEN 0x00 - end of sequence
  *
@@ -79,12 +77,10 @@
 #define SOF_BYTE_1      0xAA
 #define SOF_BYTE_2      0x55
 #define TYPE_POINT      0x01
-#define TYPE_RANGE      0x02
 #define TYPE_END        0x03
 #define TYPE_ACK        0x81
 #define TYPE_DEBUG      0xF0
 #define POINT_LEN       0x08
-#define RANGE_LEN       0x08
 #define MAX_PAYLOAD     255
 
 /* ------------------------------------------------------------------ */
@@ -99,9 +95,10 @@
 #define DISC_RADIUS_UM   33000
 
 /*
- * How long to wait after asserting stepper_en before ACK'ing the range
- * packet.  At the VHDL homing rate of ~50 steps/s, 30 s covers 1500
- * steps from home.  Increase ZERO_WAIT_US if the sled may start further.
+ * How long to wait after asserting stepper_en for the VHDL ZEROING state
+ * to drive the sled to the proximity switch and reset step_total to 0.
+ * At the VHDL homing rate of ~50 steps/s, 30 s covers 1500 steps.
+ * Increase ZERO_WAIT_US if the sled may start further from the inner edge.
  */
 #define ZERO_WAIT_US    30000000U   /* 30 seconds */
 
@@ -276,48 +273,33 @@ int main(void)
 
     u32 config = 0;
 
-    /* ===== 1. HOMING ================================================ */
+    /* ===== 1. ZEROING =============================================== */
     /*
      * Assert stepper_en so the VHDL FSM immediately enters ZEROING state
      * and drives the sled towards the inner-edge proximity switch.
+     * Wait ZERO_WAIT_US for the VHDL to detect prox_stable and reset
+     * step_total to 0.  The PC waits a matching interval before sending
+     * point packets (see FPGA_INIT_WAIT_MS in pcCommunication.c).
      */
     config = (1u << BIT_STEPPER_EN);
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-    debug_printf("Zeroing started. Will wait %u s for sled to home...",
+    debug_printf("Zeroing started. Will wait %u s for sled to reach proximity switch...",
                  ZERO_WAIT_US / 1000000u);
 
-    /* ===== 2. RECEIVE RANGE PACKET ================================= */
-    /*
-     * The range packet may arrive from the PC while zeroing is still in
-     * progress.  Receive and store r_min / r_max now, but withhold the
-     * ACK until the homing wait expires so the PC does not start sending
-     * point packets before the sled is at the home position.
-     */
     uint8_t rx_payload[MAX_PAYLOAD];
-    uint8_t range_echo[RANGE_LEN];
-
     uint8_t pkt_type;
-    do {
-        pkt_type = receive_packet(rx_payload);
-    } while (pkt_type != TYPE_RANGE);
 
-    /* TYPE_RANGE payload is ignored for step mapping; received only as homing sync.
-     * Echo it back in the ACK so the PC flow-control unblocks. */
-    for (uint8_t i = 0; i < RANGE_LEN; i++)
-        range_echo[i] = rx_payload[i];
-
-    /* ===== 3. FINISH ZEROING WAIT, THEN ACK RANGE ================== */
+    /* ===== 2. ZEROING WAIT ========================================= */
     usleep(ZERO_WAIT_US);
-    send_frame(TYPE_ACK, range_echo, RANGE_LEN);
-    debug_printf("Zeroing complete. Disc radius: %u um, max steps: %u",
+    debug_printf("Zeroing complete. Disc radius: %u um, max steps: %u. Ready for points.",
                  DISC_RADIUS_UM, MAX_STEPS);
 
-    /* ===== 4. ENABLE SPINDLE ======================================= */
+    /* ===== 3. ENABLE SPINDLE ======================================= */
     config |= (1u << BIT_SPINDLE_EN);
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
     debug_printf("Spindle enabled.");
 
-    /* ===== 5. POINT LOOP =========================================== */
+    /* ===== 4. POINT LOOP =========================================== */
     int32_t current_step = 0;
     int     first_point  = 1;
 
