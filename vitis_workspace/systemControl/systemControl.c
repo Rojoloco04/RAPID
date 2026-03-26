@@ -88,10 +88,10 @@
 /* ------------------------------------------------------------------ */
 
 /* Full stepper range: inner edge (home / step 0) to outer edge. */
-#define MAX_STEPS        8500
+#define MAX_STEPS        280
 
 /* Physical disc radius in micrometres (33 mm standard CD).
- * 8500 steps spans this full range: steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM). */
+ * 280 steps spans this full range: steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM). */
 #define DISC_RADIUS_UM   33000
 
 /*

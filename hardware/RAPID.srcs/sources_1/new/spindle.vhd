@@ -61,7 +61,9 @@ begin
 --9,387,908 gives 13.32 Hz = 1 rotation every 2.6 seconds
 --6,410,256 gives ~14.5 Hz = 1 rotation everhy 1.8 seconds
 --3,205,128 gives ~39 Hz = 1 RPS
-count_max <= 6410256; --14.5Hz - Smoothest/slowest
+count_max <= 12500000;      --10 hz
+
+--6410256; --14.5Hz - Smoothest/slowest
 
 -- Clock divider
 process(clk)
@@ -90,17 +92,17 @@ begin
 end process;
 
 
--- PWM Generator @ ~10kHz
+-- PWM Generator @ ~10Hz
 process(clk)
 begin
     if rising_edge(clk) then
-        if pwm_counter < 6250 then
+        if pwm_counter < 12500000 then
             pwm_counter <= pwm_counter + 1;
         else
             pwm_counter <= 0;
         end if;
         
-        if pwm_counter < 3125 then
+        if pwm_counter < 500000 then
             pwm_signal <= '1';
         else
             pwm_signal <= '0';

@@ -2103,13 +2103,7 @@
             }
           },
           "en": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
+            "direction": "I"
           },
           "en_spindle": {
             "direction": "O"
@@ -2162,13 +2156,25 @@
             }
           },
           "dir": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "dir_out": {
             "direction": "O"
           },
           "en": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "pwm_out_step": {
             "direction": "O"
@@ -2177,7 +2183,13 @@
             "direction": "I"
           },
           "zero_req": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "en_out": {
             "direction": "O"
@@ -2185,10 +2197,22 @@
           "num_steps": {
             "direction": "I",
             "left": "20",
-            "right": "0"
+            "right": "0",
+            "parameters": {
+              "PortWidth": {
+                "value": "21",
+                "value_src": "user_prop"
+              }
+            }
           },
           "step_go": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "step_total_out": {
             "direction": "O",
@@ -2526,8 +2550,8 @@
           "axi_smc/aclk",
           "processing_system7_0/M_AXI_GP0_ACLK",
           "rst_ps7_0_100M/slowest_sync_clk",
-          "Spindle_0/clk",
-          "stepperDriver_0/clk"
+          "stepperDriver_0/clk",
+          "Spindle_0/clk"
         ]
       },
       "processing_system7_0_FCLK_RESET0_N": {
