@@ -26,6 +26,8 @@ entity Spindle is
     Port (  clk : in  STD_LOGIC; -- 125 MHz
             en : in STD_LOGIC; --enable 
             en_spindle : out STD_LOGIC; --enable for DRV8323
+            RPM_Out : out STD_LOGIC_VECTOR(15 downto 0);
+            RPM_Pulse_In : in STD_LOGIC;
             INHA : out STD_LOGIC;  -- PWM input
             INLA : out STD_LOGIC;  -- State input 
             INHB : out STD_LOGIC;  -- State input 
@@ -39,7 +41,7 @@ signal counter : integer range 0 to 416666668 := 0;
 signal count_max : integer range 500 to 416666668 := 416666668;
 signal clk_div : std_logic := '0';
 signal step : integer range 1 to 6 := 1;
-signal pwm_counter : integer range 0 to 12501 := 0;
+signal pwm_counter : integer range 0 to 125000001 := 0;
 signal pwm_signal : std_logic := '0';
 signal start_check : std_logic := '1';
 signal start_count : integer range 0 to 187500002 := 0;
@@ -102,7 +104,7 @@ begin
             pwm_counter <= 0;
         end if;
         
-        if pwm_counter < 500000 then
+        if pwm_counter < 125000 then
             pwm_signal <= '1';
         else
             pwm_signal <= '0';
@@ -188,6 +190,6 @@ end process;
 INHA <= pwm_signal;
 INHC <= '0'; --DIR
 INLC <= '1';
-en_spindle <= '1';
+en_spindle <= en;
 
 end Behavioral;

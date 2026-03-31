@@ -1,28 +1,14 @@
-﻿# =============================================================================
+# =============================================================================
 # Makefile - RAPID PC-side build
-#
-# Builds RAPID.exe: the PC utility that reads a GDS input file,
-# converts coordinates to polar, and streams them over UART to the FPGA.
 #
 # Requirements:
 #   MinGW-w64 / MSYS2 UCRT64  (gcc must be on PATH)
 #   Windows (uses Win32 serial API)
 #
 # Usage:
-#   make                       - build build/RAPID.exe
-#   make clean                 - remove build artefacts
-#   make run                   - build and run (uses default PORT and FILE below)
-#   make run PORT=COM3 FILE=my.gds
-#   make gui                   - launch the Python GUI (requires venv)
-#
-# Project layout:
-#   src/        - all source files (C and Python)
-#   build/      - compiled output (generated, not committed)
-#   input.gds   - default input file
-#
-# Note:
-#   src/fpgaCommunication.c and src/fgpaConfiguration.c target the Zynq PS
-#   bare-metal environment and must be built inside Xilinx Vitis / SDK, not here.
+#   make          - build build/rapidComm.exe
+#   make clean    - remove build artefacts
+#   make gui      - launch the Python GUI
 # =============================================================================
 
 # ---- Toolchain ---------------------------------------------------------------
@@ -35,45 +21,35 @@ SRCDIR   := src
 BUILDDIR := build
 
 # ---- Target ------------------------------------------------------------------
-TARGET  := $(BUILDDIR)/RAPID.exe
+TARGET := $(BUILDDIR)/rapidComm.exe
 
-# ---- Sources -----------------------------------------------------------------
-SRCS    := $(SRCDIR)/pcCommunication.c $(SRCDIR)/inputParser.c
-OBJS    := $(SRCS:$(SRCDIR)/%.c=$(BUILDDIR)/%.o)
-DEPS    := $(OBJS:.o=.d)
+SRCS := $(SRCDIR)/rapidComm.c $(SRCDIR)/inputParser.c $(SRCDIR)/serialComm.c
+OBJS := $(SRCS:$(SRCDIR)/%.c=$(BUILDDIR)/%.o)
+DEPS := $(OBJS:.o=.d)
 
-# ---- Runtime defaults (override on command line) -----------------------------
-PORT    := COM25
-FILE    := input.gds
+# ---- Runtime defaults --------------------------------------------------------
+PORT := COM25
+FILE := input.gds
 
 # ==============================================================================
 
-.PHONY: all clean run gui
+.PHONY: all clean gui
 
 all: $(TARGET)
 
-# Create build directory if it doesn't exist
-$(BUILDDIR):
-	mkdir -p $(BUILDDIR)
-
-# Link
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) | $(BUILDDIR)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 	@echo "Built $@"
 
-# Compile into build/ with automatic dependency tracking
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
+
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c | $(BUILDDIR)
 	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
 
-# Pull in generated header dependency files (silently ignored on first build)
 -include $(DEPS)
 
-# Run RAPID.exe directly
-run: $(TARGET)
-	./$(TARGET) $(PORT) $(FILE)
-
-# Launch the Python GUI (activates venv if not already active)
-VENV_PYTHON := venv/Scripts/python
+VENV_PYTHON   := venv/Scripts/python
 SYSTEM_PYTHON := python
 
 gui:
@@ -83,6 +59,5 @@ gui:
 		$(SYSTEM_PYTHON) src/gui.py; \
 	fi
 
-# Remove all build artefacts
 clean:
 	rm -rf $(BUILDDIR)

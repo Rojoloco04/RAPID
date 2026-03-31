@@ -1,0 +1,8 @@
+laser on/off to etch specific points
+RPM readback
+
+remove tests branch
+rename files to main
+stepper power toggle button in manual control
+remove any unused functionality, code, or comments
+update documentation

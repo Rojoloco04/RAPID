@@ -5,17 +5,16 @@
  * interactive systemControl app and the fpgaCommunication receiver into a
  * single automated pipeline:
  *
- *   1. Enable stepper -> VHDL FSM begins zeroing (ZEROING state).
- *   2. Wait ZERO_WAIT_US for zeroing to complete (proximity-switch driven in VHDL).
- *   3. Enable spindle.
- *   4. For each TYPE_POINT packet:
+ *   1. Enable stepper (stepper is pre-zeroed before program runs).
+ *   2. Enable spindle.
+ *   3. For each TYPE_POINT packet:
  *        a. Map r_um -> target step count using fixed physical scale:
  *             steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM)
  *        b. Compute delta and direction from current position.
  *        c. Update GPIO and pulse step_go; wait for move to complete.
  *        d. Turn on laser after the first point's move.
  *        e. ACK the point.
- *   5. On TYPE_END packet: disable laser/spindle/stepper, ACK, return.
+ *   4. On TYPE_END packet: disable laser/spindle/stepper, ACK, return.
  *
  * GPIO output word layout (27 bits, AXI GPIO channel 1):
  *   Bit  0        spindle_en   Spindle enable         (0=off, 1=on)
@@ -31,7 +30,13 @@
  *
  * Incoming packet types:
  *   TYPE 0x01, LEN 0x08 - polar point: r_um (int32 LE) + theta_deg (float32 LE)
- *   TYPE 0x03, LEN 0x00 - end of sequence
+ *   TYPE 0x03, LEN 0x00 - end of sequence: disable all hardware, stay running
+ *   TYPE 0x04, LEN 0x01 - spindle enable: payload[0] = 0/1
+ *   TYPE 0x05, LEN 0x01 - stepper enable: payload[0] = 0/1
+ *   TYPE 0x06, LEN 0x01 - laser enable:   payload[0] = 0/1
+ *   TYPE 0x07, LEN 0x01 - stepper dir:    payload[0] = 0=inward, 1=outward
+ *   TYPE 0x08, LEN 0x00 - zero request:   pulse zero_req line, reset step tracking
+ *   TYPE 0x09, LEN 0x04 - jog:            int32 LE step count; move N steps in current dir
  *
  * Outgoing:
  *   TYPE 0x81 - ACK, LEN = echo of incoming LEN, PAYLOAD = echo of incoming payload
@@ -78,9 +83,16 @@
 #define SOF_BYTE_2      0x55
 #define TYPE_POINT      0x01
 #define TYPE_END        0x03
+#define TYPE_SPINDLE    0x04   /* payload[0]: 0=off, 1=on          */
+#define TYPE_STEPPER    0x05   /* payload[0]: 0=off, 1=on          */
+#define TYPE_LASER      0x06   /* payload[0]: 0=off, 1=on          */
+#define TYPE_DIR        0x07   /* payload[0]: 0=inward, 1=outward  */
+#define TYPE_ZERO       0x08   /* no payload - pulse zero_req line  */
+#define TYPE_JOG        0x09   /* int32 LE step count; move N steps in current dir */
 #define TYPE_ACK        0x81
 #define TYPE_DEBUG      0xF0
 #define POINT_LEN       0x08
+#define CTRL_LEN        0x01   /* payload length for control packets */
 #define MAX_PAYLOAD     255
 
 /* ------------------------------------------------------------------ */
@@ -93,14 +105,6 @@
 /* Physical disc radius in micrometres (33 mm standard CD).
  * 280 steps spans this full range: steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM). */
 #define DISC_RADIUS_UM   33000
-
-/*
- * How long to wait after asserting stepper_en for the VHDL ZEROING state
- * to drive the sled to the proximity switch and reset step_total to 0.
- * At the VHDL homing rate of ~50 steps/s, 30 s covers 1500 steps.
- * Increase ZERO_WAIT_US if the sled may start further from the inner edge.
- */
-#define ZERO_WAIT_US    30000000U   /* 30 seconds */
 
 /* ------------------------------------------------------------------ */
 /*  Globals                                                           */
@@ -273,33 +277,24 @@ int main(void)
 
     u32 config = 0;
 
-    /* ===== 1. ZEROING =============================================== */
-    /*
-     * Assert stepper_en so the VHDL FSM immediately enters ZEROING state
-     * and drives the sled towards the inner-edge proximity switch.
-     * Wait ZERO_WAIT_US for the VHDL to detect prox_stable and reset
-     * step_total to 0.  The PC waits a matching interval before sending
-     * point packets (see FPGA_INIT_WAIT_MS in pcCommunication.c).
-     */
+    /* ===== 1. ENABLE STEPPER ======================================== */
+    /* Stepper is already zeroed before this program runs. */
     config = (1u << BIT_STEPPER_EN);
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-    debug_printf("Zeroing started. Will wait %u s for sled to reach proximity switch...",
-                 ZERO_WAIT_US / 1000000u);
+    debug_printf("Stepper enabled. Disc radius: %u um, max steps: %u. Ready for points.",
+                 DISC_RADIUS_UM, MAX_STEPS);
 
     uint8_t rx_payload[MAX_PAYLOAD];
     uint8_t pkt_type;
 
-    /* ===== 2. ZEROING WAIT ========================================= */
-    usleep(ZERO_WAIT_US);
-    debug_printf("Zeroing complete. Disc radius: %u um, max steps: %u. Ready for points.",
-                 DISC_RADIUS_UM, MAX_STEPS);
-
-    /* ===== 3. ENABLE SPINDLE ======================================= */
+    /* ===== 2. ENABLE SPINDLE ======================================= */
     config |= (1u << BIT_SPINDLE_EN);
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-    debug_printf("Spindle enabled.");
+    debug_printf("Spindle enabled. Waiting 1 s for windup...");
+    usleep(1000000u);   /* 1 s spindle windup */
+    debug_printf("Spindle ready.");
 
-    /* ===== 4. POINT LOOP =========================================== */
+    /* ===== 3. POINT LOOP =========================================== */
     int32_t current_step = 0;
     int     first_point  = 1;
 
@@ -340,12 +335,12 @@ int main(void)
 
                 /*
                  * Wait for the move to finish:
-                 *   1200 us   WAKEUP hold (150,000 cycles @ 125 MHz)
-                 *   delta*125 RUNNING at 8 kHz step rate (125 us/step)
-                 *   10000 us  safety margin
+                 *   1200 us    WAKEUP hold (150,000 cycles @ 125 MHz)
+                 *   delta*2000 RUNNING at 500 Hz step rate (run_freq=250000 @ 125 MHz)
+                 *   10000 us   safety margin
                  * (The 100 ms step_go pulse already elapsed above.)
                  */
-                usleep(1200u + (uint32_t)delta * 125u + 10000u);
+                usleep(1200u + (uint32_t)delta * 2000u + 10000u);
             }
 
             current_step = target_step;
@@ -363,23 +358,101 @@ int main(void)
         }
 
         else if (pkt_type == TYPE_END) {
-            /* pattern finished - disable laser, spindle, and stepper */
+            /* Disable all hardware.  Does NOT exit — loop continues so the
+             * user can re-enable hardware or run another pattern. */
             config &= ~(1u << BIT_LASER_EN);
             config &= ~(1u << BIT_SPINDLE_EN);
             config &= ~(1u << BIT_STEPPER_EN);
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+            debug_printf("END received. Laser OFF. Motors stopped. Ready.");
+            first_point = 1;   /* next pattern re-arms the laser-on trigger */
+            uint8_t empty_end = 0;
+            send_frame(TYPE_ACK, &empty_end, 0);
+        }
 
-            debug_printf("Pattern complete. Laser OFF. Motors stopped.");
+        else if (pkt_type == TYPE_SPINDLE) {
+            if (rx_payload[0]) config |=  (1u << BIT_SPINDLE_EN);
+            else               config &= ~(1u << BIT_SPINDLE_EN);
+            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+            debug_printf("Spindle %s.", rx_payload[0] ? "ON" : "OFF");
+            send_frame(TYPE_ACK, rx_payload, CTRL_LEN);
+        }
 
-            /* ACK end packet (LEN=0, no payload) */
-            {
-                uint8_t empty = 0;
-                send_frame(TYPE_ACK, &empty, 0);
+        else if (pkt_type == TYPE_STEPPER) {
+            if (rx_payload[0]) config |=  (1u << BIT_STEPPER_EN);
+            else               config &= ~(1u << BIT_STEPPER_EN);
+            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+            debug_printf("Stepper %s.", rx_payload[0] ? "ON" : "OFF");
+            send_frame(TYPE_ACK, rx_payload, CTRL_LEN);
+        }
+
+        else if (pkt_type == TYPE_LASER) {
+            if (rx_payload[0]) config |=  (1u << BIT_LASER_EN);
+            else               config &= ~(1u << BIT_LASER_EN);
+            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+            debug_printf("Laser %s.", rx_payload[0] ? "ON" : "OFF");
+            send_frame(TYPE_ACK, rx_payload, CTRL_LEN);
+        }
+
+        else if (pkt_type == TYPE_DIR) {
+            if (rx_payload[0]) config |=  (1u << BIT_STEPPER_DIR);
+            else               config &= ~(1u << BIT_STEPPER_DIR);
+            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+            debug_printf("Stepper direction: %s.", rx_payload[0] ? "outward" : "inward");
+            send_frame(TYPE_ACK, rx_payload, CTRL_LEN);
+        }
+
+        else if (pkt_type == TYPE_ZERO) {
+            config |=  (1u << BIT_ZERO_REQ);
+            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+            usleep(100000);   /* 100 ms pulse */
+            config &= ~(1u << BIT_ZERO_REQ);
+            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+            current_step = 0;   /* reset step tracking — sled is now at home */
+            debug_printf("Zero request pulsed. Step tracking reset.");
+            uint8_t empty_zero = 0;
+            send_frame(TYPE_ACK, &empty_zero, 0);
+        }
+
+        else if (pkt_type == TYPE_JOG) {
+            int32_t steps = unpack_i32_le(&rx_payload[0]);
+            if (steps < 0) steps = -steps;   /* take absolute value */
+            int jog_dir = (int)((config >> BIT_STEPPER_DIR) & 1u);
+
+            /* clamp to avoid overrunning the physical range */
+            if (steps > 0) {
+                int32_t avail = jog_dir ? (MAX_STEPS - current_step)
+                                        : current_step;
+                if (steps > avail) steps = avail;
             }
 
-            cleanup_platform();
-            return 0;
+            if (steps > 0) {
+                config &= ~((u32)NUM_STEP_MAX << BIT_NUM_STEP);
+                config |=  ((u32)(steps & NUM_STEP_MAX) << BIT_NUM_STEP);
+                XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+
+                /* pulse step_go */
+                config |=  (1u << BIT_STEP_GO);
+                XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+                usleep(100000);   /* 100 ms pulse */
+                config &= ~(1u << BIT_STEP_GO);
+                XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+
+                usleep(1200u + (uint32_t)steps * 2000u + 10000u);
+
+                if (jog_dir) current_step += steps;
+                else         current_step -= steps;
+                if (current_step < 0)         current_step = 0;
+                if (current_step > MAX_STEPS) current_step = MAX_STEPS;
+            }
+
+            debug_printf("Jog %ld steps %s. Position: %ld",
+                         (long)steps,
+                         jog_dir ? "outward" : "inward",
+                         (long)current_step);
+            send_frame(TYPE_ACK, rx_payload, 4);
         }
+
         /* any other packet type is silently ignored */
     }
 }
