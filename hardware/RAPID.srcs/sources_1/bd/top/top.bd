@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x82899DC4F20313E7",
+      "boundary_crc": "0xE5BA8C8605210AC5",
       "device": "xc7z020clg400-1",
       "gen_directory": "../../../../RAPID.gen/sources_1/bd/top",
       "name": "top",
@@ -23,7 +23,8 @@
       "ilslice_3": "",
       "ilslice_4": "",
       "ilslice_5": "",
-      "ilslice_6": ""
+      "ilslice_6": "",
+      "axi_gpio_1": ""
     },
     "interface_ports": {
       "DDR": {
@@ -255,6 +256,9 @@
             "value_src": "default"
           }
         }
+      },
+      "RPM_Pulse_In_0": {
+        "direction": "I"
       }
     },
     "components": {
@@ -2103,10 +2107,24 @@
             }
           },
           "en": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "PortWidth": {
+                "value": "1",
+                "value_src": "user_prop"
+              }
+            }
           },
           "en_spindle": {
             "direction": "O"
+          },
+          "RPM_Out": {
+            "direction": "O",
+            "left": "15",
+            "right": "0"
+          },
+          "RPM_Pulse_In": {
+            "direction": "I"
           },
           "INHA": {
             "direction": "O"
@@ -2330,6 +2348,26 @@
             "mode": "Master",
             "vlnv_bus_definition": "xilinx.com:interface:aximm:1.0",
             "vlnv": "xilinx.com:interface:aximm_rtl:1.0",
+            "parameters": {
+              "NUM_READ_OUTSTANDING": {
+                "value": "8"
+              },
+              "NUM_READ_THREADS": {
+                "value": "1"
+              },
+              "NUM_WRITE_OUTSTANDING": {
+                "value": "8"
+              },
+              "NUM_WRITE_THREADS": {
+                "value": "1"
+              },
+              "RUSER_BITS_PER_BYTE": {
+                "value": "0"
+              },
+              "WUSER_BITS_PER_BYTE": {
+                "value": "0"
+              }
+            },
             "bd_attributes": {
               "TYPE": {
                 "value": "interior",
@@ -2418,6 +2456,22 @@
             "value": "26"
           }
         }
+      },
+      "axi_gpio_1": {
+        "vlnv": "xilinx.com:ip:axi_gpio:2.0",
+        "ip_revision": "37",
+        "xci_name": "top_axi_gpio_1_0",
+        "xci_path": "ip\\top_axi_gpio_1_0\\top_axi_gpio_1_0.xci",
+        "inst_hier_path": "axi_gpio_1",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "C_ALL_INPUTS": {
+            "value": "1"
+          },
+          "C_GPIO_WIDTH": {
+            "value": "16"
+          }
+        }
       }
     },
     "interface_nets": {
@@ -2425,6 +2479,12 @@
         "interface_ports": [
           "axi_smc/M00_AXI",
           "axi_gpio_0/S_AXI"
+        ]
+      },
+      "axi_smc_M01_AXI": {
+        "interface_ports": [
+          "axi_smc/M01_AXI",
+          "axi_gpio_1/S_AXI"
         ]
       },
       "processing_system7_0_DDR": {
@@ -2447,6 +2507,12 @@
       }
     },
     "nets": {
+      "RPM_Pulse_In_0_1": {
+        "ports": [
+          "RPM_Pulse_In_0",
+          "Spindle_0/RPM_Pulse_In"
+        ]
+      },
       "Spindle_0_INHA": {
         "ports": [
           "Spindle_0/INHA",
@@ -2481,6 +2547,12 @@
         "ports": [
           "Spindle_0/INLC",
           "INLC_0"
+        ]
+      },
+      "Spindle_0_RPM_Out": {
+        "ports": [
+          "Spindle_0/RPM_Out",
+          "axi_gpio_1/gpio_io_i"
         ]
       },
       "Spindle_0_en_spindle": {
@@ -2551,7 +2623,8 @@
           "processing_system7_0/M_AXI_GP0_ACLK",
           "rst_ps7_0_100M/slowest_sync_clk",
           "stepperDriver_0/clk",
-          "Spindle_0/clk"
+          "Spindle_0/clk",
+          "axi_gpio_1/s_axi_aclk"
         ]
       },
       "processing_system7_0_FCLK_RESET0_N": {
@@ -2570,7 +2643,8 @@
         "ports": [
           "rst_ps7_0_100M/peripheral_aresetn",
           "axi_gpio_0/s_axi_aresetn",
-          "axi_smc/aresetn"
+          "axi_smc/aresetn",
+          "axi_gpio_1/s_axi_aresetn"
         ]
       },
       "stepperDriver_0_dir_out": {
@@ -2606,6 +2680,11 @@
               "SEG_axi_gpio_0_Reg": {
                 "address_block": "/axi_gpio_0/S_AXI/Reg",
                 "offset": "0x41200000",
+                "range": "64K"
+              },
+              "SEG_axi_gpio_1_Reg": {
+                "address_block": "/axi_gpio_1/S_AXI/Reg",
+                "offset": "0x41210000",
                 "range": "64K"
               }
             }

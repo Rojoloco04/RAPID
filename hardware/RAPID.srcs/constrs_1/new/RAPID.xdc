@@ -59,3 +59,6 @@ set_property PULLTYPE PULLDOWN [get_ports prox_in_0]
 set_property PACKAGE_PIN P18 [get_ports {LaserEn[0]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {LaserEn[0]}]
 set_property PULLTYPE PULLDOWN [get_ports {LaserEn[0]}]
+
+set_property PACKAGE_PIN U17 [get_ports RPM_Pulse_In_0]
+set_property IOSTANDARD LVCMOS33 [get_ports RPM_Pulse_In_0]
