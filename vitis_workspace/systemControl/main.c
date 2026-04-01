@@ -1,5 +1,5 @@
 /*
- * systemControl.c - Automated polar-coordinate motor/laser controller for RAPID.
+ * main.c - Automated polar-coordinate motor/laser controller for RAPID.
  *
  * Runs on the Zynq PS (ARM Cortex-A9).  Merges the functions of the former
  * interactive systemControl app and the fpgaCommunication receiver into a
@@ -25,21 +25,7 @@
  *   Bit  25       step_go      Step go pulse          (momentary high)
  *   Bit  26       LaserEn      Laser On/Off           (0=off, 1=on)
  *
- * Wire format (shared with pcCommunication.c):
- *   SOF (0xAA 0x55) | TYPE (1 B) | LEN (1 B) | PAYLOAD (LEN B) | CRC8
- *
- * Incoming packet types:
- *   TYPE 0x01, LEN 0x08 - polar point: r_um (int32 LE) + theta_deg (float32 LE)
- *   TYPE 0x03, LEN 0x00 - end of sequence: disable all hardware, stay running
- *   TYPE 0x04, LEN 0x01 - spindle enable: payload[0] = 0/1
- *   TYPE 0x05, LEN 0x01 - stepper enable: payload[0] = 0/1
- *   TYPE 0x06, LEN 0x01 - laser enable:   payload[0] = 0/1
- *   TYPE 0x07, LEN 0x01 - stepper dir:    payload[0] = 0=inward, 1=outward
- *   TYPE 0x08, LEN 0x00 - zero request:   pulse zero_req line, reset step tracking
- *   TYPE 0x09, LEN 0x04 - jog:            int32 LE step count; move N steps in current dir
- *
- * Outgoing:
- *   TYPE 0x81 - ACK, LEN = echo of incoming LEN, PAYLOAD = echo of incoming payload
+ * Wire format: see protocol.h
  *
  * Build: Xilinx Vitis bare-metal project targeting Zynq-7000 PS.
  */
@@ -50,6 +36,7 @@
 #include "sleep.h"
 #include "xuartps.h"
 #include "xuartps_hw.h"
+#include "protocol.h"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -73,38 +60,22 @@
 #define NUM_STEP_MAX    ((1 << 21) - 1)   /* 2097151 */
 
 /* ------------------------------------------------------------------ */
-/*  UART / protocol constants                                         */
+/*  UART constants                                                    */
 /* ------------------------------------------------------------------ */
 
 #define UART_BASEADDR   XPAR_XUARTPS_0_BASEADDR
 #define BAUD_RATE       115200
-
-#define SOF_BYTE_1      0xAA
-#define SOF_BYTE_2      0x55
-#define TYPE_POINT      0x01
-#define TYPE_END        0x03
-#define TYPE_SPINDLE    0x04   /* payload[0]: 0=off, 1=on          */
-#define TYPE_STEPPER    0x05   /* payload[0]: 0=off, 1=on          */
-#define TYPE_LASER      0x06   /* payload[0]: 0=off, 1=on          */
-#define TYPE_DIR        0x07   /* payload[0]: 0=inward, 1=outward  */
-#define TYPE_ZERO       0x08   /* no payload - pulse zero_req line  */
-#define TYPE_JOG        0x09   /* int32 LE step count; move N steps in current dir */
-#define TYPE_ACK        0x81
-#define TYPE_DEBUG      0xF0
-#define POINT_LEN       0x08
-#define CTRL_LEN        0x01   /* payload length for control packets */
-#define MAX_PAYLOAD     255
 
 /* ------------------------------------------------------------------ */
 /*  Motor constants                                                   */
 /* ------------------------------------------------------------------ */
 
 /* Full stepper range: inner edge (home / step 0) to outer edge. */
-#define MAX_STEPS        280
+#define MAX_STEPS        250
 
-/* Physical disc radius in micrometres (33 mm standard CD).
- * 280 steps spans this full range: steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM). */
-#define DISC_RADIUS_UM   33000
+/* Physical disc radius in micrometres (30 mm).
+ * 250 steps spans this full range: steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM). */
+#define DISC_RADIUS_UM   30000
 
 /* ------------------------------------------------------------------ */
 /*  Globals                                                           */

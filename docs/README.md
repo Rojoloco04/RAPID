@@ -12,7 +12,7 @@ Streams GDS2 lithography patterns to an FPGA over UART for motor-driven stage co
 RAPID reads a GDS2 input file, converts the XY coordinates to polar form, and transmits each point as a framed binary packet over a serial COM port to a Zynq FPGA. The FPGA drives a stepper motor (radial axis) and laser to write the pattern on a spinning disc. The PC waits for each ACK before sending the next point (stop-and-wait flow control). A Python GUI provides real-time visualisation of the acknowledged points and full manual hardware control.
 
 ```
-input.gds  ──►  inputParser  ──►  rapidComm.exe  ──►  UART  ──►  systemControl
+input.gds  ──►  inputParser  ──►  RAPID.exe  ──►  UART  ──►  systemControl
                 (XY -> polar)    (frame + send)                  (recv + motor control)
                                       ▲                                  │
                                    gui.py  ◄──── ACK log ───────────────┘
@@ -31,9 +31,10 @@ input.gds  ──►  inputParser  ──►  rapidComm.exe  ──►  UART  �
 ```
 RAPID/
 ├── src/
-│   ├── rapidComm.c           # PC-side serial manager (compiled -> build/rapidComm.exe)
+│   ├── main.c                # PC-side serial manager (compiled -> build/RAPID.exe)
 │   ├── inputParser.c/h       # GDS2 parser: XY coordinates -> polar points
-│   ├── serialComm.c/h        # Shared Win32 serial utilities
+│   ├── serial.c/h            # Shared Win32 serial utilities
+│   ├── protocol.h            # Shared wire protocol constants
 │   └── gui.py                # PySide6 real-time visualisation + manual control GUI
 ├── vitis_workspace/          # Xilinx Vitis workspace (FPGA software)
 │   ├── platform/             # BSP platform project (generated from .xsa)
@@ -83,7 +84,7 @@ pip install -r requirements.txt
 - Xilinx Vivado 2025.1 (or compatible)
 - Xilinx Vitis 2025.1 (or compatible)
 - Target device: Arty Z7-20 (xc7z020clg400-1)
-- `vitis_workspace/systemControl/systemControl.c` must be built inside a Vitis bare-metal project — it is **not** part of the PC Makefile.
+- `vitis_workspace/systemControl/main.c` must be built inside a Vitis bare-metal project — it is **not** part of the PC Makefile.
 
 ---
 
@@ -122,13 +123,13 @@ The Vitis workspace is set up at `vitis_workspace/` with two components:
 
 > **Note:** The XDC constraints file at `hardware/RAPID.srcs/constrs_1/new/RAPID.xdc` contains all pin and I/O standard assignments. If you change block design port names, update the XDC to match.
 
-### 1 - Build `rapidComm.exe`
+### 1 - Build `RAPID.exe`
 
 ```
 make
 ```
 
-Output: `build/rapidComm.exe`
+Output: `build/RAPID.exe`
 
 ### 2 - Launch the GUI
 
@@ -143,7 +144,7 @@ python src/gui.py
 ```
 
 The GUI lets you:
-- Connect to the serial port and manage `rapidComm.exe` as a subprocess
+- Connect to the serial port and manage `RAPID.exe` as a subprocess
 - Select a GDS input file and stream a pattern with live ACK plotting
 - Toggle spindle and laser, jog the stepper, send a zero request — all from the Manual Control tab
 - Monitor ACK / CRC error counters and a scrolling output log
@@ -158,7 +159,7 @@ make clean
 
 ## Packet wire format
 
-Both `rapidComm.c` and `systemControl.c` use the same framing:
+Both `main.c` (PC) and `systemControl/main.c` (FPGA) use the same framing:
 
 ```
 [ 0xAA | 0x55 | TYPE | LEN | PAYLOAD (LEN bytes) | CRC8 ]
@@ -166,13 +167,14 @@ Both `rapidComm.c` and `systemControl.c` use the same framing:
 
 | Direction | TYPE | LEN | Payload | Purpose |
 |-----------|------|-----|---------|---------|
-| PC → FPGA | `0x01` | 8 | `r_um` (int32 LE, µm) + `theta_deg` (float32 LE, degrees) | Polar point |
-| PC → FPGA | `0x03` | 0 | (none) | End of sequence — disables hardware, firmware stays running |
-| PC → FPGA | `0x04` | 1 | `0x00`/`0x01` | Spindle off/on |
-| PC → FPGA | `0x05` | 1 | `0x00`/`0x01` | Stepper off/on |
-| PC → FPGA | `0x06` | 1 | `0x00`/`0x01` | Laser off/on |
-| PC → FPGA | `0x07` | 1 | `0x00`=inward, `0x01`=outward | Stepper direction |
-| PC → FPGA | `0x08` | 0 | (none) | Zero request |
+| PC → FPGA | `0x01` | 0 | (none) | End of sequence — disables hardware, firmware stays running |
+| PC → FPGA | `0x10` | 8 | `r_um` (int32 LE, µm) + `theta_deg` (float32 LE, degrees) | Polar point |
+| PC → FPGA | `0x21` | 1 | `0x00`/`0x01` | Spindle off/on |
+| PC → FPGA | `0x22` | 1 | `0x00`/`0x01` | Stepper off/on |
+| PC → FPGA | `0x23` | 1 | `0x00`/`0x01` | Laser off/on |
+| PC → FPGA | `0x24` | 1 | `0x00`=inward, `0x01`=outward | Stepper direction |
+| PC → FPGA | `0x25` | 0 | (none) | Zero request |
+| PC → FPGA | `0x26` | 4 | int32 LE step count | Jog — move N steps in current direction |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
 | FPGA → PC | `0xF0` | N | ASCII string | Debug / status message |
 
@@ -184,9 +186,9 @@ CRC8 is computed as XOR over `[TYPE, LEN, PAYLOAD...]`.
 
 ---
 
-## GPIO control word (`systemControl.c`)
+## GPIO control word (`systemControl/main.c`)
 
-`systemControl.c` drives the motor hardware via a packed 27-bit value written to AXI GPIO Channel 1:
+`systemControl/main.c` drives the motor hardware via a packed 27-bit value written to AXI GPIO Channel 1:
 
 | Bits | Field | Description |
 |------|-------|-------------|
@@ -198,17 +200,18 @@ CRC8 is computed as XOR over `[TYPE, LEN, PAYLOAD...]`.
 | [25] | `step_go` | Step go: momentary high pulse triggers move |
 | [26] | `laser_en` | Laser enable: 0=off, 1=on |
 
-### `systemControl.c` sequence
+### `systemControl/main.c` sequence
 
 The firmware enters a packet receive loop immediately — no startup zeroing delay (the stepper is pre-zeroed externally before launching the firmware).
 
 | Packet | Action |
 |--------|--------|
-| `TYPE_POINT` | Compute target step = `round(r_um / 33000 × 280)`, move stepper (dir set automatically), turn laser on after first move, ACK |
+| `TYPE_POINT` | Compute target step = `round(r_um / 30000 × 250)`, move stepper (dir set automatically), turn laser on after first move, ACK |
 | `TYPE_END` | Disable laser/spindle/stepper, reset state, ACK, **continue loop** |
 | `TYPE_SPINDLE/STEPPER/LASER/DIR` | Update corresponding GPIO bit, ACK |
 | `TYPE_ZERO` | Pulse `zero_req` 100 ms, reset `current_step=0`, ACK |
+| `TYPE_JOG` | Move N steps (int32 LE payload) in current direction, ACK |
 
-280 steps = 33 mm (full disc range, inner to outer edge). The stepper step rate is 500 Hz (2 ms/step).
+250 steps = 30 mm (full disc range, inner to outer edge). The stepper step rate is 500 Hz (2 ms/step).
 
 > **Spindle windup:** When streaming a pattern, the firmware waits 1 second after enabling the spindle before turning on the laser — allows the rotor to reach operating speed.

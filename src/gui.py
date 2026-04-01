@@ -1,7 +1,7 @@
 """
 gui.py - RAPID control GUI.
 
-Launches a single persistent rapidComm.exe child process that owns the
+Launches a single persistent RAPID.exe child process that owns the
 serial connection.  Both tabs send text commands to its stdin and read
 responses from its stdout — no serial library needed in Python.
 
@@ -30,7 +30,7 @@ from PySide6.QtWidgets import (
 import pyqtgraph as pg
 
 # ---------------------------------------------------------------------------
-# Regex patterns for parsing rapidComm.exe stdout
+# Regex patterns for parsing RAPID.exe stdout
 # ---------------------------------------------------------------------------
 ACK_RE      = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+um,\s+theta=(?P<t>-?\d+\.?\d*)\s+deg")
 CRC_RE      = re.compile(r"\[RX\]\s+CRC mismatch")
@@ -56,7 +56,7 @@ class GUI(QWidget):
         super().__init__()
         self.setWindowTitle("RAPID Control")
 
-        # ---- single rapidComm.exe process ----
+        # ---- single RAPID.exe process ----
         self.proc = QProcess(self)
         self.proc.setProcessChannelMode(QProcess.MergedChannels)
         self.proc.readyReadStandardOutput.connect(self._on_ready_read)
@@ -65,8 +65,8 @@ class GUI(QWidget):
 
         # ---- manual toggle state ----
         self.manual_spindle_on  = False
+        self.manual_stepper_on  = False
         self.manual_laser_on    = False
-        self.manual_dir_outward = False   # False = inward
         self.jog_dir_outward    = False   # direction used by the jog control
 
         # ---- data state ----
@@ -114,8 +114,8 @@ class GUI(QWidget):
         row = QHBoxLayout()
 
         self.exe_path = QLineEdit(
-            str(Path(__file__).parent.parent / "build" / "rapidComm.exe"))
-        self.exe_path.setPlaceholderText("path/to/rapidComm.exe")
+            str(Path(__file__).parent.parent / "build" / "RAPID.exe"))
+        self.exe_path.setPlaceholderText("path/to/RAPID.exe")
 
         self.port = QLineEdit("COM25")
         self.port.setMaximumWidth(80)
@@ -198,16 +198,16 @@ class GUI(QWidget):
         ctrl_layout = QHBoxLayout(ctrl_group)
 
         self.btn_spindle = QPushButton("Spindle: OFF")
+        self.btn_stepper = QPushButton("Stepper: OFF")
         self.btn_laser   = QPushButton("Laser: OFF")
-        self.btn_dir     = QPushButton("Dir: INWARD")
         self.btn_zero    = QPushButton("Zero")
 
         self.btn_spindle.clicked.connect(lambda: self._manual_toggle("spindle"))
+        self.btn_stepper.clicked.connect(lambda: self._manual_toggle("stepper"))
         self.btn_laser.clicked.connect(  lambda: self._manual_toggle("laser"))
-        self.btn_dir.clicked.connect(    lambda: self._manual_toggle("dir"))
         self.btn_zero.clicked.connect(   self.manual_zero)
 
-        for btn in (self.btn_spindle, self.btn_laser, self.btn_dir, self.btn_zero):
+        for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero):
             btn.setEnabled(False)
             ctrl_layout.addWidget(btn)
 
@@ -218,7 +218,7 @@ class GUI(QWidget):
         jog_layout = QHBoxLayout(jog_group)
 
         self.jog_steps = QSpinBox()
-        self.jog_steps.setRange(1, 280)
+        self.jog_steps.setRange(1, 250)
         self.jog_steps.setValue(1)
         self.jog_steps.setSuffix(" steps")
 
@@ -243,7 +243,7 @@ class GUI(QWidget):
         move_layout = QHBoxLayout(move_group)
 
         self.manual_r = QSpinBox()
-        self.manual_r.setRange(0, 33000)
+        self.manual_r.setRange(0, 30000)
         self.manual_r.setValue(0)
         self.manual_r.setSuffix(" µm")
 
@@ -292,7 +292,7 @@ class GUI(QWidget):
         port = self.port.text().strip()
 
         if not exe or not Path(exe).exists():
-            self._log(f"[GUI] rapidComm.exe not found at: {exe}  — run 'make' first.")
+            self._log(f"[GUI] RAPID.exe not found at: {exe}  — run 'make' first.")
             return
 
         if self.proc.state() != QProcess.NotRunning:
@@ -303,7 +303,7 @@ class GUI(QWidget):
         self.proc.start()
 
         if not self.proc.waitForStarted(2000):
-            self._log("[GUI] Failed to start rapidComm.exe")
+            self._log("[GUI] Failed to start RAPID.exe")
             return
 
         self._set_connected(True)
@@ -329,13 +329,13 @@ class GUI(QWidget):
         self.btn_end.setEnabled(connected)
         self.btn_jog.setEnabled(connected)
         self.btn_jog_dir.setEnabled(connected)
-        for btn in (self.btn_spindle, self.btn_laser, self.btn_dir, self.btn_zero):
+        for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero):
             btn.setEnabled(connected)
         if not connected:
             # reset toggle state so buttons show correct labels on reconnect
             self.manual_spindle_on  = False
+            self.manual_stepper_on  = False
             self.manual_laser_on    = False
-            self.manual_dir_outward = False
             self.jog_dir_outward    = False
             self._update_toggle_labels()
         self.lbl_conn_status.setText("connected" if connected else "disconnected")
@@ -380,12 +380,12 @@ class GUI(QWidget):
         if what == "spindle":
             self.manual_spindle_on  = not self.manual_spindle_on
             self.proc.write(f"SPINDLE {1 if self.manual_spindle_on  else 0}\n".encode())
+        elif what == "stepper":
+            self.manual_stepper_on  = not self.manual_stepper_on
+            self.proc.write(f"STEPPER {1 if self.manual_stepper_on  else 0}\n".encode())
         elif what == "laser":
             self.manual_laser_on    = not self.manual_laser_on
             self.proc.write(f"LASER {1 if self.manual_laser_on    else 0}\n".encode())
-        elif what == "dir":
-            self.manual_dir_outward = not self.manual_dir_outward
-            self.proc.write(f"DIR {1 if self.manual_dir_outward else 0}\n".encode())
         self._update_toggle_labels()
 
     def _jog_toggle_dir(self):
@@ -403,8 +403,8 @@ class GUI(QWidget):
 
     def _update_toggle_labels(self):
         self.btn_spindle.setText(f"Spindle: {'ON'  if self.manual_spindle_on  else 'OFF'}")
+        self.btn_stepper.setText(f"Stepper: {'ON'  if self.manual_stepper_on  else 'OFF'}")
         self.btn_laser.setText(  f"Laser: {'ON'    if self.manual_laser_on    else 'OFF'}")
-        self.btn_dir.setText(    f"Dir: {'OUTWARD' if self.manual_dir_outward else 'INWARD'}")
         self.btn_jog_dir.setText(f"Dir: {'OUTWARD' if self.jog_dir_outward    else 'INWARD'}")
 
     # -----------------------------------------------------------------------

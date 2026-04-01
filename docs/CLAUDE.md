@@ -8,7 +8,7 @@ It streams GDS2 lithography patterns from a PC to an Arty Z7-20 FPGA over UART f
 ## System Architecture
 
 ```
-input.gds → inputParser → rapidComm.exe → UART → systemControl.c
+input.gds → inputParser → RAPID.exe → UART → systemControl.c
              (XY→polar)   (frame+send)             (recv+ACK+motor control)
                                ↑                         │
                             gui.py ←── ACK log ──────────┘
@@ -20,7 +20,7 @@ systemControl.c ── AXI GPIO (PS→PL) ──→ stepperDriver.vhd
 ```
 
 `systemControl.c` handles both packet reception and motor/laser control in a single bare-metal app.
-`rapidComm.exe` is the single persistent PC-side process: it manages the serial link, streams GDS patterns, and accepts manual control commands — all through a stdin/stdout text protocol with `gui.py`.
+`RAPID.exe` is the single persistent PC-side process: it manages the serial link, streams GDS patterns, and accepts manual control commands — all through a stdin/stdout text protocol with `gui.py`.
 
 ---
 
@@ -28,11 +28,13 @@ systemControl.c ── AXI GPIO (PS→PL) ──→ stepperDriver.vhd
 
 | Path | Description |
 |------|-------------|
-| `src/rapidComm.c` | PC-side persistent serial manager — compiled into `build/rapidComm.exe` |
+| `src/main.c` | PC-side persistent serial manager — compiled into `build/RAPID.exe` |
 | `src/inputParser.c/h` | GDS2 text parser: XY coords → polar (r in µm, theta in degrees) |
-| `src/serialComm.c/h` | Shared Win32 serial utility functions used by rapidComm.c |
-| `src/gui.py` | PySide6 GUI — drives rapidComm.exe via QProcess stdin/stdout |
-| `vitis_workspace/systemControl/systemControl.c` | **Active** FPGA app — packet receiver + motor/laser control |
+| `src/serial.c/h` | Shared Win32 serial utility functions used by main.c |
+| `src/protocol.h` | Shared wire protocol constants (TYPE_*, SOF bytes, lengths, frame sizes) |
+| `src/gui.py` | PySide6 GUI — drives RAPID.exe via QProcess stdin/stdout |
+| `vitis_workspace/systemControl/main.c` | **Active** FPGA app — packet receiver + motor/laser control |
+| `vitis_workspace/systemControl/protocol.h` | Shared wire protocol constants (mirrors src/protocol.h) |
 | `vitis_workspace/fpgaCommunication/fpgaCommunication.c` | Archived reference only |
 | `hardware/RAPID.xpr` | Vivado project file |
 | `hardware/RAPID.srcs/sources_1/new/stepperDriver.vhd` | **Active** stepper FSM VHDL |
@@ -41,8 +43,7 @@ systemControl.c ── AXI GPIO (PS→PL) ──→ stepperDriver.vhd
 | `hardware/ip_repo/src/stepperDriver.vhd` | Old simple 2-phase stepper (archived, not in block design) |
 | `hardware/ip_repo/src/BLDC.vhd` | Old abstract BLDC (archived, not in block design) |
 | `Makefile` | PC-side build: `make`, `make gui`, `make clean` |
-| `pointGenerator.py` | Test utility — generates N points on a circle of radius R |
-| `requirements.txt` | Python deps: PySide6, pyqtgraph, numpy, colorama |
+| `requirements.txt` | Python deps: PySide6, pyqtgraph |
 | `docs/README.md` | User-facing project documentation |
 | `docs/CLAUDE.md` | This file — full technical context |
 
@@ -61,7 +62,7 @@ systemControl.c ── AXI GPIO (PS→PL) ──→ stepperDriver.vhd
 
 ## Packet Wire Format
 
-Identical on PC (`rapidComm.c`) and FPGA (`systemControl.c`):
+Identical on PC (`main.c`) and FPGA (`systemControl/main.c`):
 
 ```
 [ 0xAA | 0x55 | TYPE (1B) | LEN (1B) | PAYLOAD (LEN bytes) | CRC8 (1B) ]
@@ -69,13 +70,14 @@ Identical on PC (`rapidComm.c`) and FPGA (`systemControl.c`):
 
 | Direction | TYPE | LEN | Payload | Purpose |
 |-----------|------|-----|---------|---------|
-| PC → FPGA | `0x01` | 8 | `r_um` (int32 LE, µm) + `theta_deg` (float32 LE, degrees) | Polar point |
-| PC → FPGA | `0x03` | 0 | (none) | End of sequence — disables hardware, firmware stays running |
-| PC → FPGA | `0x04` | 1 | `0x00`=off, `0x01`=on | Spindle on/off |
-| PC → FPGA | `0x05` | 1 | `0x00`=off, `0x01`=on | Stepper on/off |
-| PC → FPGA | `0x06` | 1 | `0x00`=off, `0x01`=on | Laser on/off |
-| PC → FPGA | `0x07` | 1 | `0x00`=inward, `0x01`=outward | Stepper direction |
-| PC → FPGA | `0x08` | 0 | (none) | Zero request — pulses `zero_req` for 100 ms, resets `current_step=0` |
+| PC → FPGA | `0x01` | 0 | (none) | End of sequence — disables hardware, firmware stays running |
+| PC → FPGA | `0x10` | 8 | `r_um` (int32 LE, µm) + `theta_deg` (float32 LE, degrees) | Polar point |
+| PC → FPGA | `0x21` | 1 | `0x00`=off, `0x01`=on | Spindle on/off |
+| PC → FPGA | `0x22` | 1 | `0x00`=off, `0x01`=on | Stepper on/off |
+| PC → FPGA | `0x23` | 1 | `0x00`=off, `0x01`=on | Laser on/off |
+| PC → FPGA | `0x24` | 1 | `0x00`=inward, `0x01`=outward | Stepper direction |
+| PC → FPGA | `0x25` | 0 | (none) | Zero request — pulses `zero_req` for 100 ms, resets `current_step=0` |
+| PC → FPGA | `0x26` | 4 | int32 LE step count | Jog — move N steps in current direction |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
 | FPGA → PC | `0xF0` | N | ASCII string | Debug/status |
 
@@ -85,13 +87,13 @@ Identical on PC (`rapidComm.c`) and FPGA (`systemControl.c`):
 
 **TYPE_END behaviour:** Firmware disables laser, spindle, and stepper, resets `first_point=1`, sends ACK, then **continues the receive loop** — it does not exit. Multiple pattern runs and manual commands are possible within one FPGA session.
 
-**Frame sizes:** 13 bytes (point), 5 bytes (end/zero), 6 bytes (spindle/stepper/laser/dir control).
+**Frame sizes:** 5 bytes (end/zero), 13 bytes (point), 6 bytes (spindle/stepper/laser/dir), 9 bytes (jog).
 
 ---
 
 ## GPIO Control Word — Current Layout (27 bits, AXI GPIO Ch 1 output)
 
-Defined and written in `vitis_workspace/systemControl/systemControl.c`:
+Defined and written in `vitis_workspace/systemControl/main.c`:
 
 | Bits | `#define` | Description |
 |------|-----------|-------------|
@@ -108,27 +110,28 @@ Defined and written in `vitis_workspace/systemControl/systemControl.c`:
 ### Channel 2 (input)
 `XGpio_SetDataDirection(&gpio, 2, 0xFFFFFFFF)` — all inputs, reserved for future readback (e.g. `step_total_out` from stepper VHDL).
 
-### systemControl.c Sequence
+### Firmware Sequence
 
-`systemControl.c` enters a packet receive loop immediately on startup (no zeroing delay — stepper is pre-zeroed externally before launching). It processes packets as they arrive:
+`systemControl/main.c` enters a packet receive loop immediately on startup (no zeroing delay — stepper is pre-zeroed externally before launching). It processes packets as they arrive:
 
 | Packet | Action |
 |--------|--------|
-| `TYPE_POINT (0x01)` | Compute `target_step`, update dir+num_steps, pulse `step_go`, wait for move, turn laser on after first move, ACK |
-| `TYPE_END (0x03)` | Disable laser/spindle/stepper, reset `first_point=1`, ACK, **continue loop** |
-| `TYPE_SPINDLE (0x04)` | Set/clear `BIT_SPINDLE_EN`, write GPIO, ACK |
-| `TYPE_STEPPER (0x05)` | Set/clear `BIT_STEPPER_EN`, write GPIO, ACK |
-| `TYPE_LASER (0x06)` | Set/clear `BIT_LASER_EN`, write GPIO, ACK |
-| `TYPE_DIR (0x07)` | Set/clear `BIT_STEPPER_DIR`, write GPIO, ACK |
-| `TYPE_ZERO (0x08)` | Pulse `BIT_ZERO_REQ` high 100 ms, clear, reset `current_step=0`, ACK |
+| `TYPE_END (0x01)` | Disable laser/spindle/stepper, reset `first_point=1`, ACK, **continue loop** |
+| `TYPE_POINT (0x10)` | Compute `target_step`, update dir+num_steps, pulse `step_go`, wait for move, turn laser on after first move, ACK |
+| `TYPE_SPINDLE (0x21)` | Set/clear `BIT_SPINDLE_EN`, write GPIO, ACK |
+| `TYPE_STEPPER (0x22)` | Set/clear `BIT_STEPPER_EN`, write GPIO, ACK |
+| `TYPE_LASER (0x23)` | Set/clear `BIT_LASER_EN`, write GPIO, ACK |
+| `TYPE_DIR (0x24)` | Set/clear `BIT_STEPPER_DIR`, write GPIO, ACK |
+| `TYPE_ZERO (0x25)` | Pulse `BIT_ZERO_REQ` high 100 ms, clear, reset `current_step=0`, ACK |
+| `TYPE_JOG (0x26)` | Move N steps (int32 LE payload) in current direction, ACK |
 
 **Spindle windup:** After the first `TYPE_POINT` enables the spindle, firmware calls `usleep(1000000u)` (1 s) to allow the rotor to reach speed before the laser turns on.
 
 **Step-count mapping (fixed physical scale):**
 ```
-target_step = clamp( round( r_um / 33000 × 280 ), 0, 280 )
+target_step = clamp( round( r_um / 30000 × 250 ), 0, 250 )
 ```
-280 steps = 33 mm (full disc range). `r_um` is the radius in micrometres. After homing, `current_step = 0`.
+250 steps = 30 mm (full disc range). `r_um` is the radius in micrometres. After homing, `current_step = 0`.
 
 **Move wait time** (after 100 ms `step_go` pulse):
 ```
@@ -138,16 +141,16 @@ usleep( 1200 + delta × 2000 + 10000 )   /* µs: wakeup + running (500 Hz step r
 
 **Key constants:**
 ```c
-#define MAX_STEPS       280
-#define DISC_RADIUS_UM  33000
+#define MAX_STEPS       250
+#define DISC_RADIUS_UM  30000
 /* No ZERO_WAIT_US — zeroing delay removed; stepper is pre-zeroed externally */
 ```
 
 ---
 
-## PC-side `rapidComm.c` — stdin/stdout Protocol
+## PC-side `main.c` — stdin/stdout Protocol
 
-`rapidComm.exe <port>` opens the serial link on startup and reads text commands from stdin line-by-line:
+`RAPID.exe <port>` opens the serial link on startup and reads text commands from stdin line-by-line:
 
 | Command | Action |
 |---------|--------|
@@ -282,14 +285,14 @@ All I/O banks run at 3.3 V (LVCMOS33). `clk`, `en`, `dir` are internal PS/PL sig
 ## PC-side Build
 
 ```bash
-make            # builds build/rapidComm.exe
+make            # builds build/RAPID.exe
 make gui        # launches src/gui.py (uses venv if present)
 make clean      # removes build/
 ```
 
 **Toolchain:** MinGW-w64 / MSYS2 UCRT64 gcc, `-O2 -Wall -Wextra -std=c11 -lm`.
 
-**Sources compiled into rapidComm.exe:** `src/rapidComm.c` + `src/inputParser.c` + `src/serialComm.c`.
+**Sources compiled into RAPID.exe:** `src/main.c` + `src/inputParser.c` + `src/serial.c`.
 
 ---
 
@@ -317,14 +320,14 @@ Note: uses `PI = 3.14159` (not `M_PI`).
 ## GUI (`src/gui.py`)
 
 - **Framework:** PySide6 + pyqtgraph
-- Single `QProcess` running `rapidComm.exe <port>` (merged stdout+stderr)
-- Commands sent to `rapidComm.exe` via `process.write()`; replies parsed from stdout line-by-line
+- Single `QProcess` running `RAPID.exe <port>` (merged stdout+stderr)
+- Commands sent to `RAPID.exe` via `process.write()`; replies parsed from stdout line-by-line
 
 ### Top bar
 EXE path field + Port field + **Connect** button + **Disconnect** button + **Stop** button + status label.
-- **Connect:** starts `rapidComm.exe <port>`
+- **Connect:** starts `RAPID.exe <port>`
 - **Stop:** sends `END\n` — disables FPGA hardware, process stays connected
-- **Disconnect:** sends `EXIT\n` — graceful shutdown of rapidComm.exe
+- **Disconnect:** sends `EXIT\n` — graceful shutdown of RAPID.exe
 
 ### Pattern Stream tab
 GDS file field + **Stream** button + ACK/CRC counters + progress label + pyqtgraph scatter plot + **Clear Plot** button.
@@ -333,23 +336,23 @@ GDS file field + **Stream** button + ACK/CRC counters + progress label + pyqtgra
 
 **Hardware Controls group:**
 - Spindle ON/OFF toggle
+- Stepper ON/OFF toggle
 - Laser ON/OFF toggle
-- Dir INWARD/OUTWARD toggle
 - **Zero** button (pulses `zero_req`)
 
-**Stepper Move group:**
-- Steps QSpinBox (1–2097151)
-- Direction radio buttons (Inward / Outward)
-- **Move** button — sends `DIR 0/1` then a single `POINT` that achieves the requested absolute step count (or the `STEPPER`/`DIR` + step commands)
+**Stepper Jog group:**
+- Steps QSpinBox (1–250)
+- Direction toggle (Inward / Outward)
+- **Jog** button — sends `JOG <steps>` in the selected direction
 
 **Send Single Point group:**
-- r_um QSpinBox (0–33000 µm)
+- r_um QSpinBox (0–30000 µm)
 - theta QDoubleSpinBox (0–360°)
 - **Move** button
 - **Send END** button
 
 ### Output log
-Shared `QPlainTextEdit` (fixed height 180 px) below tabs. Receives all stdout from rapidComm.exe.
+Shared `QPlainTextEdit` (fixed height 180 px) below tabs. Receives all stdout from RAPID.exe.
 
 ### stdout parsing regexes
 - `ACK_RE` → `\[ACK\] r=(\S+) um, theta=(\S+) deg` — updates scatter plot + ACK counter
@@ -364,6 +367,6 @@ See `docs/ISSUES.md` for full list. Summary:
 
 1. **`step_total_out` readback:** GPIO channel 2 configured as input for position readback; connection from `step_total_out` to GPIO channel 2 in block design needs verification.
 
-2. **Spindle runs open-loop:** No encoder feedback; `theta_deg` is received and available in `systemControl.c` but not yet used for angle control. Full theta control requires encoder + feedback loop.
+2. **Spindle runs open-loop:** No encoder feedback; `theta_deg` is received and available in `systemControl/main.c` but not yet used for angle control. Full theta control requires encoder + feedback loop.
 
 3. **MLX90393 magnetometer:** I2C0 via EMIO (A5/A4 header pins). Logs `[THETA] %.2f deg` after each stepper move. See `vitis_workspace/systemControl/mlx90393.h/c`.
