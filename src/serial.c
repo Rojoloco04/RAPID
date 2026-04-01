@@ -1,10 +1,10 @@
 /*
- * serialComm.c - Shared Win32 serial port utilities for the RAPID PC tools.
+ * serial.c - Shared Win32 serial port utilities for the RAPID PC tools.
  *
- * See serialComm.h for the public API.
+ * See serial.h for the public API.
  */
 
-#include "serialComm.h"
+#include "serial.h"
 
 #include <string.h>   /* memcpy */
 #include <stdio.h>    /* snprintf */

@@ -1,7 +1,7 @@
 /*
- * serialComm.h - Shared Win32 serial port utilities for the RAPID PC tools.
+ * serial.h - Shared Win32 serial port utilities for the RAPID PC tools.
  *
- * Included by pcCommunication.c and manualControl.c.  Provides:
+ * Included by main.c.  Provides:
  *   - open_serial()        open and configure a COM port (8N1, non-blocking reads)
  *   - write_all()          reliably write a full buffer via WriteFile
  *   - crc8_xor()           XOR-based CRC-8 used in the packet framing protocol

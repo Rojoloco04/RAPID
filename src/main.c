@@ -1,5 +1,5 @@
 /*
- * rapidComm.c - Unified PC-side controller for the RAPID system.
+ * main.c - Unified PC-side controller for the RAPID system.
  *
  * Replaces pcCommunication.c and manualControl.c with a single persistent
  * process.  Opens a COM port once at startup, keeps a framed-packet reader
@@ -8,7 +8,7 @@
  * through the same connection.
  *
  * Usage:
- *   rapidComm.exe <port>          e.g. rapidComm.exe COM25
+ *   main.exe <port>          e.g. main.exe COM25
  *
  * Stdin command protocol (one command per line):
  *   POINT <r_um_int> <theta_float>   send one TYPE_POINT, wait for ACK
@@ -26,16 +26,11 @@
  *   [RX] CRC mismatch            framing error       (from reader thread)
  *   [ERROR] ...                  command / I/O errors
  *
- * Wire protocol (systemControl firmware only):
- *   SOF(0xAA 0x55) | TYPE(1B) | LEN(1B) | PAYLOAD(LEN B) | CRC8-XOR
- *   TYPE_POINT 0x01  LEN 0x08  r_um(int32 LE) + theta_deg(float32 LE)
- *   TYPE_END   0x03  LEN 0x00
- *   TYPE_ACK   0x81            echoes incoming payload
- *   TYPE_DEBUG 0xF0            FPGA debug string
+ * Wire protocol: see protocol.h
  *
  * Build (MinGW / MSYS2 UCRT64):
  *   gcc -O2 -Wall -Wextra -std=c11 \
- *       -o rapidComm.exe rapidComm.c inputParser.c serialComm.c -lm
+ *       -o main.exe main.c inputParser.c serial.c -lm
  */
 
 #include <windows.h>
@@ -46,32 +41,14 @@
 #include <math.h>
 
 #include "inputParser.h"
-#include "serialComm.h"
+#include "serial.h"
+#include "protocol.h"
 
 /* ------------------------------------------------------------------ */
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
 
 #define BAUD_RATE      115200
-#define SOF_BYTE_1     0xAA
-#define SOF_BYTE_2     0x55
-#define TYPE_POINT     0x01
-#define TYPE_END       0x03
-#define TYPE_SPINDLE   0x04
-#define TYPE_STEPPER   0x05
-#define TYPE_LASER     0x06
-#define TYPE_DIR       0x07
-#define TYPE_ZERO      0x08
-#define TYPE_JOG       0x09
-#define TYPE_ACK       0x81
-#define TYPE_DEBUG     0xF0
-#define POINT_LEN      0x08
-#define CTRL_LEN       0x01
-#define FRAME_SIZE     13        /* SOF(2)+TYPE+LEN+PAYLOAD(8)+CRC */
-#define CTRL_FRAME_SIZE 6        /* SOF(2)+TYPE+LEN=1+PAYLOAD(1)+CRC */
-#define END_FRAME_SIZE 5         /* SOF(2)+TYPE+LEN=0+CRC          */
-#define JOG_FRAME_SIZE 9         /* SOF(2)+TYPE+LEN=4+PAYLOAD(4)+CRC */
-#define JOG_LEN        0x04
 #define RX_BUF_SIZE    256
 #define ACK_TIMEOUT    5000      /* ms — generous for stepper moves  */
 
@@ -132,7 +109,7 @@ static int wait_for_ack(ReaderCtx *ctx, LONG target, DWORD timeout_ms) {
 /* ------------------------------------------------------------------ */
 
 static int send_polar_point(HANDLE h, int32_t r_um, float theta_deg) {
-    uint8_t frame[FRAME_SIZE];
+    uint8_t frame[POINT_FRAME_SIZE];
     size_t  idx = 0;
     frame[idx++] = SOF_BYTE_1;
     frame[idx++] = SOF_BYTE_2;
@@ -141,7 +118,7 @@ static int send_polar_point(HANDLE h, int32_t r_um, float theta_deg) {
     pack_i32_le(&frame[idx], r_um);      idx += 4;
     pack_f32_le(&frame[idx], theta_deg); idx += 4;
     frame[idx]   = crc8_xor(&frame[2], 2 + POINT_LEN);
-    return write_all(h, frame, FRAME_SIZE);
+    return write_all(h, frame, POINT_FRAME_SIZE);
 }
 
 static int send_end_packet(HANDLE h) {
@@ -462,7 +439,7 @@ int main(int argc, char **argv) {
     setvbuf(stderr, NULL, _IONBF, 0);
 
     if (argc < 2) {
-        fprintf(stderr, "Usage: rapidComm.exe <COMport>\n");
+        fprintf(stderr, "Usage: main.exe <COMport>\n");
         return 1;
     }
     const char *port_name = argv[1];

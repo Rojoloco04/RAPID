@@ -47,3 +47,34 @@ jobs:
 
     - name: Syntax check gui.py
       run: python -m py_compile src/gui.py
+
+  # ---- C static analysis (cppcheck) ------------------------------------------
+  cppcheck:
+    name: C static analysis
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install cppcheck
+      run: sudo apt-get install -y cppcheck
+
+    - name: Run cppcheck
+      run: |
+        cppcheck --enable=all --error-exitcode=1 --suppress=missingIncludeSystem \
+          src/main.c src/inputParser.c src/serial.c src/serial.h
+
+  # ---- Protocol header sync check --------------------------------------------
+  check-protocol-sync:
+    name: Check protocol.h sync
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Diff protocol headers
+      run: |
+        if ! diff -u src/protocol.h vitis_workspace/systemControl/protocol.h; then
+          echo "ERROR: src/protocol.h and vitis_workspace/systemControl/protocol.h are out of sync"
+          exit 1
+        fi

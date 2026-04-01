@@ -6,7 +6,7 @@
 #   Windows (uses Win32 serial API)
 #
 # Usage:
-#   make          - build build/rapidComm.exe
+#   make          - build build/RAPID.exe
 #   make clean    - remove build artefacts
 #   make gui      - launch the Python GUI
 # =============================================================================
@@ -21,9 +21,9 @@ SRCDIR   := src
 BUILDDIR := build
 
 # ---- Target ------------------------------------------------------------------
-TARGET := $(BUILDDIR)/rapidComm.exe
+TARGET := $(BUILDDIR)/RAPID.exe
 
-SRCS := $(SRCDIR)/rapidComm.c $(SRCDIR)/inputParser.c $(SRCDIR)/serialComm.c
+SRCS := $(SRCDIR)/main.c $(SRCDIR)/inputParser.c $(SRCDIR)/serial.c
 OBJS := $(SRCS:$(SRCDIR)/%.c=$(BUILDDIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 

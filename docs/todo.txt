@@ -1,10 +1,2 @@
 laser on/off to etch specific points
 RPM readback
-
-put magnetometer driver test code in test/ directory,
-    then remove tests branch
-rename files to main
-stepper power toggle button in manual control
-there's 2 stepper dir toggles in the gui
-search for and remove any unused or duplicated functionality, code, or comments
-update documentation
