@@ -21,6 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 entity Spindle is
     Port (  clk : in  STD_LOGIC; -- 125 MHz
@@ -50,6 +51,13 @@ signal in_startup : std_logic := '0';
 signal in_startup_s1 : std_logic := '0';
 signal in_startup_sync : std_logic := '0';
 signal duty_cycle_count : integer range 0 to 5000 := 4000; -- 80% at 25kHz
+
+constant RPM_CLK : integer := 125000;
+signal RPM_CLK_DIV : integer range 0 to 125001 := 0;
+signal RPM_CLK_EDGE : std_logic;
+signal RPM_PULSE_CNT : integer range 0 to 7 := 0;
+signal RPM_CLK_CNT : integer range 0 to 65535 := 0;
+signal RPM_OUT_SIG : std_logic_vector (15 downto 0);
 
 begin
 
@@ -132,6 +140,21 @@ begin
     end if;
 end process;
 
+--rpm clock div
+process(clk)
+begin
+    if rising_edge(clk) then 
+        if (RPM_CLK_DIV < (RPM_CLK / 2)) THEN
+            RPM_CLK_EDGE <= '0';
+        elsif (RPM_CLK_DIV >= (RPM_CLK / 2)) and (RPM_CLK_DIV <= (RPM_CLK)) then
+            RPM_CLK_EDGE <= '1';
+        else
+            RPM_CLK_EDGE <= '0';
+            RPM_CLK_DIV <= 0;
+        end if;
+     end if;
+end process;
+
 -- Brushless Logic
 process(clk_div, en) 
 begin
@@ -187,6 +210,25 @@ begin
     end if;    
 end process; 
 
+--RPM logic
+process(RPM_CLK_EDGE)
+begin
+
+    if rising_edge(RPM_Pulse_In) then
+        RPM_PULSE_CNT <= RPM_PULSE_CNT + 1;
+    end if; 
+    
+    if (RPM_PULSE_CNT < 6) then
+        RPM_CLK_CNT <= RPM_CLK_CNT + 1;
+    elsif (RPM_PULSE_CNT = 6) then
+        RPM_OUT_SIG <= std_logic_vector(to_unsigned(RPM_CLK_CNT,16));
+    else
+        RPM_CLK_CNT <= 0;
+        RPM_PULSE_CNT <= 0;
+    end if;
+end process;
+        
+RPM_Out <= RPM_OUT_SIG;
 INHA <= pwm_signal;
 INHC <= '0'; --DIR
 INLC <= '1';
