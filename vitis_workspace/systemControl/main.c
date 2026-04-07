@@ -379,6 +379,12 @@ int main(void)
         }
 
         else if (pkt_type == TYPE_ZERO) {
+            if (!((config >> BIT_STEPPER_EN) & 1u)) {
+                debug_printf("Zero ignored: stepper is disabled.");
+                uint8_t empty_zero = 0;
+                send_frame(TYPE_ACK, &empty_zero, 0);
+                continue;
+            }
             config |=  (1u << BIT_ZERO_REQ);
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
             usleep(100000);   /* 100 ms pulse */
@@ -401,6 +407,12 @@ int main(void)
                 int32_t avail = jog_dir ? (MAX_STEPS - current_step)
                                         : current_step;
                 if (steps > avail) steps = avail;
+            }
+
+            if (!((config >> BIT_STEPPER_EN) & 1u)) {
+                debug_printf("Jog ignored: stepper is disabled.");
+                send_frame(TYPE_ACK, rx_payload, 4);
+                continue;
             }
 
             if (steps > 0) {

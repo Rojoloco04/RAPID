@@ -146,7 +146,7 @@ python src/gui.py
 
 The GUI lets you:
 - Connect to the serial port and manage `RAPID.exe` as a subprocess
-- Select a GDS input file and stream a pattern with live ACK plotting
+- Select a GDS input file and stream a pattern with live ACK plotting — the sled is automatically zeroed before each stream
 - Toggle spindle and laser, jog the stepper, send a zero request — all from the Manual Control tab
 - Monitor ACK / CRC error counters and a scrolling output log
 
@@ -203,15 +203,15 @@ CRC8 is computed as XOR over `[TYPE, LEN, PAYLOAD...]`.
 
 ### `systemControl/main.c` sequence
 
-The firmware enters a packet receive loop immediately — no startup zeroing delay (the stepper is pre-zeroed externally before launching the firmware).
+The firmware enters a packet receive loop immediately — no startup zeroing delay (the VHDL ZEROING state homes the sled at power-on). When streaming, `RAPID.exe` always zeros the sled before the first point is sent.
 
 | Packet | Action |
 |--------|--------|
 | `TYPE_POINT` | Compute target step = `round(r_um / 30000 × 250)`, move stepper (dir set automatically), turn laser on after first move, ACK |
 | `TYPE_END` | Disable laser/spindle/stepper, reset state, ACK, **continue loop** |
 | `TYPE_SPINDLE/STEPPER/LASER/DIR` | Update corresponding GPIO bit, ACK |
-| `TYPE_ZERO` | Pulse `zero_req` 100 ms, reset `current_step=0`, ACK |
-| `TYPE_JOG` | Move N steps (int32 LE payload) in current direction, ACK |
+| `TYPE_ZERO` | Pulse `zero_req` 100 ms, reset `current_step=0`, ACK — **ignored if stepper is disabled** |
+| `TYPE_JOG` | Move N steps (int32 LE payload) in current direction, ACK — **ignored if stepper is disabled** |
 
 250 steps = 30 mm (full disc range, inner to outer edge). The stepper step rate is 500 Hz (2 ms/step).
 

@@ -257,10 +257,14 @@ static void cmd_stream(AppState *app, const char *filepath) {
     LONG t_st = next_target(app);
     if (!send_wait(app, t_st, send_ctrl_packet(app->rx.h, TYPE_STEPPER, 1), "STEPPER"))
         { free(polar); return; }
+    /* Zero the sled so position tracking is always correct, even on reconnect. */
+    LONG t_z = next_target(app);
+    if (!send_wait(app, t_z, send_zero_packet(app->rx.h), "ZERO"))
+        { free(polar); return; }
     LONG t_sp = next_target(app);
     if (!send_wait(app, t_sp, send_ctrl_packet(app->rx.h, TYPE_SPINDLE, 1), "SPINDLE"))
         { free(polar); return; }
-    PRINT(app, "[STATUS] Motors enabled — waiting 1 s for spindle windup\n");
+    PRINT(app, "[STATUS] Motors enabled, sled zeroed — waiting 1 s for spindle windup\n");
     Sleep(1000);
 
     InterlockedExchange(&app->stream_active, 1);
@@ -325,8 +329,7 @@ static void run_command_loop(AppState *app) {
         } else if (strcmp(line, "ZERO") == 0) {
             cmd_zero(app);
         } else if (strcmp(line, "EXIT") == 0) {
-            if (InterlockedCompareExchange(&app->stream_active, 0, 0))
-                cmd_end(app);
+            cmd_end(app);
             break;
         } else {
             PRINT(app, "[ERROR] Unknown command: %s\n", line);

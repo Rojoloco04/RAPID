@@ -121,8 +121,11 @@ class GUI(QWidget):
         self.port.setMaximumWidth(80)
 
         self.btn_connect    = QPushButton("Connect")
-        self.btn_disconnect = QPushButton("Disconnect")
-        self.btn_stop       = QPushButton("Stop")
+        self.btn_stop       = QPushButton("END")
+        self.btn_disconnect = QPushButton("EXIT")
+        self.btn_connect.setToolTip("Start RAPID.exe and open the serial connection")
+        self.btn_stop.setToolTip("Send END packet — disables laser, spindle, and stepper on the FPGA")
+        self.btn_disconnect.setToolTip("Send END then EXIT — shuts down all hardware and kills RAPID.exe")
         self.btn_disconnect.setEnabled(False)
         self.btn_stop.setEnabled(False)
 
@@ -137,8 +140,8 @@ class GUI(QWidget):
         row.addWidget(QLabel("Port:"))
         row.addWidget(self.port)
         row.addWidget(self.btn_connect)
-        row.addWidget(self.btn_disconnect)
         row.addWidget(self.btn_stop)
+        row.addWidget(self.btn_disconnect)
         row.addStretch(1)
         row.addWidget(self.lbl_conn_status)
 
@@ -153,6 +156,7 @@ class GUI(QWidget):
         file_row = QHBoxLayout()
         self.gds_file = QLineEdit("input.gds")
         btn_browse = QPushButton("Browse")
+        btn_browse.setToolTip("Select a GDS2 file to stream")
         btn_browse.clicked.connect(self._pick_file)
         file_row.addWidget(QLabel("GDS File:"))
         file_row.addWidget(self.gds_file, 1)
@@ -162,6 +166,7 @@ class GUI(QWidget):
         # Stream button + counters
         ctrl_row = QHBoxLayout()
         self.btn_stream = QPushButton("Stream")
+        self.btn_stream.setToolTip("Parse the GDS file and stream all points to the FPGA")
         self.btn_stream.setEnabled(False)
         self.btn_stream.clicked.connect(self.stream)
         self.lbl_ack      = QLabel("ACK: 0")
@@ -185,6 +190,7 @@ class GUI(QWidget):
         parent.addWidget(self.plot, 1)
 
         btn_clear = QPushButton("Clear Plot")
+        btn_clear.setToolTip("Clear the ACK scatter plot and reset counters")
         btn_clear.clicked.connect(self.clear_plot)
         parent.addWidget(btn_clear)
 
@@ -201,6 +207,11 @@ class GUI(QWidget):
         self.btn_stepper = QPushButton("Stepper: OFF")
         self.btn_laser   = QPushButton("Laser: OFF")
         self.btn_zero    = QPushButton("Zero")
+
+        self.btn_spindle.setToolTip("Toggle spindle motor on/off (TYPE_SPINDLE)")
+        self.btn_stepper.setToolTip("Toggle stepper motor on/off (TYPE_STEPPER) — must be ON to jog or zero")
+        self.btn_laser.setToolTip("Toggle laser on/off (TYPE_LASER)")
+        self.btn_zero.setToolTip("Pulse zero_req to home the sled and reset step count (TYPE_ZERO) — stepper must be ON")
 
         self.btn_spindle.clicked.connect(lambda: self._manual_toggle("spindle"))
         self.btn_stepper.clicked.connect(lambda: self._manual_toggle("stepper"))
@@ -223,10 +234,12 @@ class GUI(QWidget):
         self.jog_steps.setSuffix(" steps")
 
         self.btn_jog_dir = QPushButton("Dir: INWARD")
+        self.btn_jog_dir.setToolTip("Toggle jog direction between inward (toward centre) and outward")
         self.btn_jog_dir.setEnabled(False)
         self.btn_jog_dir.clicked.connect(self._jog_toggle_dir)
 
         self.btn_jog = QPushButton("Jog")
+        self.btn_jog.setToolTip("Move the sled by the specified number of steps (TYPE_JOG) — stepper must be ON")
         self.btn_jog.setEnabled(False)
         self.btn_jog.clicked.connect(self.manual_jog)
 
@@ -254,19 +267,15 @@ class GUI(QWidget):
         self.manual_theta.setSuffix(" °")
 
         self.btn_move = QPushButton("Move")
+        self.btn_move.setToolTip("Send a single polar coordinate point to the FPGA (TYPE_POINT)")
         self.btn_move.setEnabled(False)
         self.btn_move.clicked.connect(self.manual_move)
-
-        self.btn_end = QPushButton("Send END")
-        self.btn_end.setEnabled(False)
-        self.btn_end.clicked.connect(self.manual_end)
 
         move_layout.addWidget(QLabel("r:"))
         move_layout.addWidget(self.manual_r)
         move_layout.addWidget(QLabel("θ:"))
         move_layout.addWidget(self.manual_theta)
         move_layout.addWidget(self.btn_move)
-        move_layout.addWidget(self.btn_end)
         move_layout.addStretch(1)
 
         parent.addWidget(move_group)
@@ -319,6 +328,10 @@ class GUI(QWidget):
         """Send END — tells the FPGA to disable motors/laser.  Stays connected."""
         if self.proc.state() != QProcess.NotRunning:
             self.proc.write(b"END\n")
+        self.manual_spindle_on = False
+        self.manual_stepper_on = False
+        self.manual_laser_on   = False
+        self._update_toggle_labels()
 
     def _set_connected(self, connected: bool):
         self.btn_connect.setEnabled(not connected)
@@ -326,7 +339,6 @@ class GUI(QWidget):
         self.btn_stop.setEnabled(connected)
         self.btn_stream.setEnabled(connected)
         self.btn_move.setEnabled(connected)
-        self.btn_end.setEnabled(connected)
         self.btn_jog.setEnabled(connected)
         self.btn_jog_dir.setEnabled(connected)
         for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero):
@@ -338,6 +350,8 @@ class GUI(QWidget):
             self.manual_laser_on    = False
             self.jog_dir_outward    = False
             self._update_toggle_labels()
+        if not connected and self.lbl_conn_status.text() == "disconnected":
+            return
         self.lbl_conn_status.setText("connected" if connected else "disconnected")
         if not connected:
             self._log("[GUI] Disconnected.")
@@ -372,9 +386,6 @@ class GUI(QWidget):
         r     = self.manual_r.value()
         theta = self.manual_theta.value()
         self.proc.write(f"POINT {r} {theta:.2f}\n".encode())
-
-    def manual_end(self):
-        self.proc.write(b"END\n")
 
     def _manual_toggle(self, what: str):
         if what == "spindle":
