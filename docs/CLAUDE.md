@@ -367,10 +367,4 @@ Shared `QPlainTextEdit` (fixed height 180 px) below tabs. Receives all stdout fr
 
 ## Known Issues / Active Development Notes
 
-See `docs/ISSUES.md` for full list. Summary:
-
-1. **`step_total_out` readback:** GPIO channel 2 configured as input for position readback; connection from `step_total_out` to GPIO channel 2 in block design needs verification.
-
-2. **Spindle runs open-loop:** No encoder feedback; `theta_deg` is received and available in `systemControl/main.c` but not yet used for angle control. Full theta control requires encoder + feedback loop.
-
-3. **MLX90393 magnetometer:** I2C0 via EMIO (A5/A4 header pins). Logs `[THETA] %.2f deg` after each stepper move. See `vitis_workspace/systemControl/mlx90393.h/c`.
+1. **Spindle runs open-loop:** No encoder feedback; `theta_deg` is received and available in `systemControl/main.c` but not yet used for angle control. Full theta control requires encoder + feedback loop.
