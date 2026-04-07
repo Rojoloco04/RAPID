@@ -1,20 +1,25 @@
 /*
  * main.c - Automated polar-coordinate motor/laser controller for RAPID.
  *
- * Runs on the Zynq PS (ARM Cortex-A9).  Merges the functions of the former
- * interactive systemControl app and the fpgaCommunication receiver into a
- * single automated pipeline:
+ * Runs on the Zynq PS (ARM Cortex-A9).  Single bare-metal app that handles
+ * both packet reception and motor/laser control:
  *
- *   1. Enable stepper (stepper is pre-zeroed before program runs).
- *   2. Enable spindle.
- *   3. For each TYPE_POINT packet:
- *        a. Map r_um -> target step count using fixed physical scale:
- *             steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM)
- *        b. Compute delta and direction from current position.
- *        c. Update GPIO and pulse step_go; wait for move to complete.
- *        d. Turn on laser after the first point's move.
- *        e. ACK the point.
- *   4. On TYPE_END packet: disable laser/spindle/stepper, ACK, return.
+ *   Startup:
+ *     1. Enable stepper (stepper is pre-zeroed before program runs).
+ *     2. Enable spindle; wait 1 s for rotor windup.
+ *     3. Enter packet receive loop (runs forever).
+ *
+ *   Packet handling (all types ACK'd after action):
+ *     TYPE_POINT  (0x10): Map r_um -> target step, move stepper, turn laser
+ *                         on after first point's move.
+ *     TYPE_END    (0x01): Disable laser/spindle/stepper, reset first_point,
+ *                         ACK, continue loop (does NOT exit).
+ *     TYPE_SPINDLE(0x21): Set/clear spindle enable bit.
+ *     TYPE_STEPPER(0x22): Set/clear stepper enable bit.
+ *     TYPE_LASER  (0x23): Set/clear laser enable bit.
+ *     TYPE_DIR    (0x24): Set/clear stepper direction bit.
+ *     TYPE_ZERO   (0x25): Pulse zero_req 100 ms, reset current_step=0.
+ *     TYPE_JOG    (0x26): Move N steps (int32 LE) in current direction.
  *
  * GPIO output word layout (27 bits, AXI GPIO channel 1):
  *   Bit  0        spindle_en   Spindle enable         (0=off, 1=on)

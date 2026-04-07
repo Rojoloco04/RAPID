@@ -8,13 +8,18 @@
  * through the same connection.
  *
  * Usage:
- *   main.exe <port>          e.g. main.exe COM25
+ *   RAPID.exe <port>         e.g. RAPID.exe COM25
  *
  * Stdin command protocol (one command per line):
  *   POINT <r_um_int> <theta_float>   send one TYPE_POINT, wait for ACK
- *   STREAM <filepath>                parse GDS file, stream all points
+ *   STREAM <filepath>                parse GDS file, stream all points, auto-send END
  *   END                              send TYPE_END (disables FPGA hardware)
  *   EXIT                             send TYPE_END if mid-stream, then exit
+ *   SPINDLE 0|1                      send TYPE_SPINDLE (spindle off/on)
+ *   STEPPER 0|1                      send TYPE_STEPPER (stepper off/on)
+ *   LASER 0|1                        send TYPE_LASER (laser off/on)
+ *   DIR 0|1                          send TYPE_DIR (0=inward, 1=outward)
+ *   ZERO                             send TYPE_ZERO (pulse zero_req, reset step tracking)
  *   JOG <n>                          send TYPE_JOG (move N steps in current direction)
  *
  * Stdout output:
@@ -30,7 +35,7 @@
  *
  * Build (MinGW / MSYS2 UCRT64):
  *   gcc -O2 -Wall -Wextra -std=c11 \
- *       -o main.exe main.c inputParser.c serial.c -lm
+ *       -o RAPID.exe main.c inputParser.c serial.c packets.c -lm
  */
 
 #include <windows.h>
@@ -43,6 +48,7 @@
 #include "inputParser.h"
 #include "serial.h"
 #include "protocol.h"
+#include "packets.h"
 
 /* ------------------------------------------------------------------ */
 /*  Constants                                                          */
@@ -104,66 +110,19 @@ static int wait_for_ack(ReaderCtx *ctx, LONG target, DWORD timeout_ms) {
     }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Packet framing — transmit                                          */
-/* ------------------------------------------------------------------ */
-
-static int send_polar_point(HANDLE h, int32_t r_um, float theta_deg) {
-    uint8_t frame[POINT_FRAME_SIZE];
-    size_t  idx = 0;
-    frame[idx++] = SOF_BYTE_1;
-    frame[idx++] = SOF_BYTE_2;
-    frame[idx++] = TYPE_POINT;
-    frame[idx++] = POINT_LEN;
-    pack_i32_le(&frame[idx], r_um);      idx += 4;
-    pack_f32_le(&frame[idx], theta_deg); idx += 4;
-    frame[idx]   = crc8_xor(&frame[2], 2 + POINT_LEN);
-    return write_all(h, frame, POINT_FRAME_SIZE);
+/* Atomically snapshot the next expected ACK target. Must be called
+ * before the send so the count is captured before the ACK can arrive. */
+static LONG next_target(AppState *app) {
+    return InterlockedCompareExchange(&app->rx.ack_count, 0, 0) + 1;
 }
 
-static int send_end_packet(HANDLE h) {
-    uint8_t frame[END_FRAME_SIZE];
-    frame[0] = SOF_BYTE_1;
-    frame[1] = SOF_BYTE_2;
-    frame[2] = TYPE_END;
-    frame[3] = 0x00;
-    frame[4] = TYPE_END ^ 0x00;   /* CRC over TYPE + LEN */
-    return write_all(h, frame, END_FRAME_SIZE);
-}
-
-/* Send a 1-byte control packet (TYPE_SPINDLE / STEPPER / LASER / DIR). */
-static int send_ctrl_packet(HANDLE h, uint8_t type, uint8_t value) {
-    uint8_t frame[CTRL_FRAME_SIZE];
-    frame[0] = SOF_BYTE_1;
-    frame[1] = SOF_BYTE_2;
-    frame[2] = type;
-    frame[3] = CTRL_LEN;
-    frame[4] = value;
-    frame[5] = crc8_xor(&frame[2], 3);  /* CRC over TYPE + LEN + value */
-    return write_all(h, frame, CTRL_FRAME_SIZE);
-}
-
-/* Send a 4-byte jog packet (TYPE_JOG) — N steps in current direction. */
-static int send_jog_packet(HANDLE h, int32_t steps) {
-    uint8_t frame[JOG_FRAME_SIZE];
-    frame[0] = SOF_BYTE_1;
-    frame[1] = SOF_BYTE_2;
-    frame[2] = TYPE_JOG;
-    frame[3] = JOG_LEN;
-    pack_i32_le(&frame[4], steps);
-    frame[8] = crc8_xor(&frame[2], 2 + JOG_LEN);
-    return write_all(h, frame, JOG_FRAME_SIZE);
-}
-
-/* Send a 0-byte pulse packet (TYPE_ZERO). */
-static int send_zero_packet(HANDLE h) {
-    uint8_t frame[END_FRAME_SIZE];
-    frame[0] = SOF_BYTE_1;
-    frame[1] = SOF_BYTE_2;
-    frame[2] = TYPE_ZERO;
-    frame[3] = 0x00;
-    frame[4] = TYPE_ZERO ^ 0x00;
-    return write_all(h, frame, END_FRAME_SIZE);
+/* Check send result then wait for ACK; print errors and return success. */
+static int send_wait(AppState *app, LONG target, int sent, const char *name) {
+    if (!sent) { PRINT(app, "[ERROR] Serial write failed (%s)\n", name); return 0; }
+    if (!wait_for_ack(&app->rx, target, ACK_TIMEOUT)) {
+        PRINT(app, "[ERROR] Timeout waiting for %s ACK\n", name); return 0;
+    }
+    return 1;
 }
 
 /* ------------------------------------------------------------------ */
@@ -244,38 +203,6 @@ static DWORD WINAPI reader_thread(LPVOID param) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Abort detection                                                    */
-/* ------------------------------------------------------------------ */
-
-/*
- * check_abort — peek at stdin during STREAM to detect END or EXIT.
- *
- * Returns 1 if an abort command is waiting, without consuming it.
- * The line is left in stdin so the main command loop can re-read it
- * after cmd_stream returns and dispatch it normally.
- *
- * PeekNamedPipe works on anonymous pipes (QProcess on Windows) and
- * returns FALSE on a real console handle — in which case we return 0
- * so interactive sessions are never aborted mid-stream.
- */
-static int check_abort(void) {
-    HANDLE h_stdin = GetStdHandle(STD_INPUT_HANDLE);
-    DWORD  avail   = 0;
-    if (!PeekNamedPipe(h_stdin, NULL, 0, NULL, &avail, NULL))
-        return 0;
-    if (avail == 0)
-        return 0;
-    char   buf[8];
-    DWORD  peeked = 0;
-    DWORD  to_peek = (avail < sizeof(buf) - 1) ? avail : (DWORD)(sizeof(buf) - 1);
-    if (!PeekNamedPipe(h_stdin, buf, to_peek, &peeked, NULL, NULL))
-        return 0;
-    buf[peeked] = '\0';
-    return (strncmp(buf, "END",  3) == 0 ||
-            strncmp(buf, "EXIT", 4) == 0);
-}
-
-/* ------------------------------------------------------------------ */
 /*  Command handlers                                                   */
 /* ------------------------------------------------------------------ */
 
@@ -283,58 +210,32 @@ static void cmd_point(AppState *app, const char *args) {
     long  r_um_long;
     float theta;
     if (sscanf(args, "%ld %f", &r_um_long, &theta) != 2) {
-        PRINT(app, "[ERROR] POINT syntax: POINT <r_um_int> <theta_float>\n");
-        return;
+        PRINT(app, "[ERROR] POINT syntax: POINT <r_um_int> <theta_float>\n"); return;
     }
-    int32_t r_um = (int32_t)r_um_long;
-    LONG target = InterlockedCompareExchange(&app->rx.ack_count, 0, 0) + 1;
-    if (!send_polar_point(app->rx.h, r_um, theta)) {
-        PRINT(app, "[ERROR] Serial write failed (POINT)\n"); return;
-    }
-    if (!wait_for_ack(&app->rx, target, ACK_TIMEOUT)) {
-        PRINT(app, "[ERROR] Timeout waiting for POINT ACK\n");
-    }
+    LONG t = next_target(app);
+    send_wait(app, t, send_polar_point(app->rx.h, (int32_t)r_um_long, theta), "POINT");
     /* [ACK] line is printed by the reader thread */
 }
 
-/* Send a 1-byte control command and wait for ACK. */
 static void cmd_ctrl(AppState *app, uint8_t type, uint8_t value, const char *name) {
-    LONG target = InterlockedCompareExchange(&app->rx.ack_count, 0, 0) + 1;
-    if (!send_ctrl_packet(app->rx.h, type, value)) {
-        PRINT(app, "[ERROR] Serial write failed (%s)\n", name); return;
-    }
-    if (!wait_for_ack(&app->rx, target, ACK_TIMEOUT))
-        PRINT(app, "[ERROR] Timeout waiting for %s ACK\n", name);
+    LONG t = next_target(app);
+    send_wait(app, t, send_ctrl_packet(app->rx.h, type, value), name);
 }
 
 static void cmd_jog(AppState *app, int32_t steps) {
-    LONG target = InterlockedCompareExchange(&app->rx.ack_count, 0, 0) + 1;
-    if (!send_jog_packet(app->rx.h, steps)) {
-        PRINT(app, "[ERROR] Serial write failed (JOG)\n"); return;
-    }
-    if (!wait_for_ack(&app->rx, target, ACK_TIMEOUT))
-        PRINT(app, "[ERROR] Timeout waiting for JOG ACK\n");
+    LONG t = next_target(app);
+    send_wait(app, t, send_jog_packet(app->rx.h, steps), "JOG");
 }
 
 static void cmd_zero(AppState *app) {
-    LONG target = InterlockedCompareExchange(&app->rx.ack_count, 0, 0) + 1;
-    if (!send_zero_packet(app->rx.h)) {
-        PRINT(app, "[ERROR] Serial write failed (ZERO)\n"); return;
-    }
-    if (!wait_for_ack(&app->rx, target, ACK_TIMEOUT))
-        PRINT(app, "[ERROR] Timeout waiting for ZERO ACK\n");
+    LONG t = next_target(app);
+    send_wait(app, t, send_zero_packet(app->rx.h), "ZERO");
 }
 
 static void cmd_end(AppState *app) {
-    /* No-op if hardware is already disabled (e.g. called twice). */
-    LONG target = InterlockedCompareExchange(&app->rx.ack_count, 0, 0) + 1;
-    if (!send_end_packet(app->rx.h)) {
-        PRINT(app, "[ERROR] Serial write failed (END)\n"); return;
-    }
-    if (!wait_for_ack(&app->rx, target, ACK_TIMEOUT)) {
-        PRINT(app, "[ERROR] Timeout waiting for END ACK\n"); return;
-    }
-    PRINT(app, "[STATUS] END acknowledged — FPGA hardware disabled\n");
+    LONG t = next_target(app);
+    if (send_wait(app, t, send_end_packet(app->rx.h), "END"))
+        PRINT(app, "[STATUS] END acknowledged — FPGA hardware disabled\n");
 }
 
 static void cmd_stream(AppState *app, const char *filepath) {
@@ -355,12 +256,6 @@ static void cmd_stream(AppState *app, const char *filepath) {
 
     int aborted = 0;
     for (size_t i = 0; i < count; i++) {
-
-        if (check_abort()) {
-            PRINT(app, "[STATUS] Stream aborted at %zu/%zu\n", i, count);
-            aborted = 1;
-            break;
-        }
 
         LONG target = InterlockedCompareExchange(&app->rx.ack_count, 0, 0) + 1;
         if (!send_polar_point(app->rx.h, (int32_t)llround(polar[i].r), (float)polar[i].theta)) {
@@ -386,8 +281,6 @@ static void cmd_stream(AppState *app, const char *filepath) {
             PRINT(app, "[ERROR] END packet failed after stream\n");
         }
     }
-    /* If aborted, the END/EXIT line is still in stdin.  The command loop
-     * will re-read it and call cmd_end() / exit which sends TYPE_END. */
 }
 
 /* ------------------------------------------------------------------ */

@@ -34,6 +34,7 @@ RAPID/
 │   ├── main.c                # PC-side serial manager (compiled -> build/RAPID.exe)
 │   ├── inputParser.c/h       # GDS2 parser: XY coordinates -> polar points
 │   ├── serial.c/h            # Shared Win32 serial utilities
+│   ├── packets.c/h           # PC-side packet constructors (send_polar_point, send_ctrl_packet, etc.)
 │   ├── protocol.h            # Shared wire protocol constants
 │   └── gui.py                # PySide6 real-time visualisation + manual control GUI
 ├── vitis_workspace/          # Xilinx Vitis workspace (FPGA software)
