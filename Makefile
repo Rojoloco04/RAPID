@@ -23,7 +23,7 @@ BUILDDIR := build
 # ---- Target ------------------------------------------------------------------
 TARGET := $(BUILDDIR)/RAPID.exe
 
-SRCS := $(SRCDIR)/main.c $(SRCDIR)/inputParser.c $(SRCDIR)/serial.c
+SRCS := $(SRCDIR)/main.c $(SRCDIR)/inputParser.c $(SRCDIR)/serial.c $(SRCDIR)/packets.c
 OBJS := $(SRCS:$(SRCDIR)/%.c=$(BUILDDIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 

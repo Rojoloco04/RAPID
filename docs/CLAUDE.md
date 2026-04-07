@@ -30,7 +30,8 @@ systemControl.c ── AXI GPIO (PS→PL) ──→ stepperDriver.vhd
 |------|-------------|
 | `src/main.c` | PC-side persistent serial manager — compiled into `build/RAPID.exe` |
 | `src/inputParser.c/h` | GDS2 text parser: XY coords → polar (r in µm, theta in degrees) |
-| `src/serial.c/h` | Shared Win32 serial utility functions used by main.c |
+| `src/serial.c/h` | Shared Win32 serial utility functions — `open_serial`, `write_all`, pack/unpack helpers, CRC8 |
+| `src/packets.c/h` | PC-side packet constructors — `send_polar_point`, `send_end_packet`, `send_ctrl_packet`, `send_jog_packet`, `send_zero_packet` |
 | `src/protocol.h` | Shared wire protocol constants (TYPE_*, SOF bytes, lengths, frame sizes) |
 | `src/gui.py` | PySide6 GUI — drives RAPID.exe via QProcess stdin/stdout |
 | `vitis_workspace/systemControl/main.c` | **Active** FPGA app — packet receiver + motor/laser control |
@@ -112,7 +113,7 @@ Defined and written in `vitis_workspace/systemControl/main.c`:
 
 ### Firmware Sequence
 
-`systemControl/main.c` enters a packet receive loop immediately on startup (no zeroing delay — stepper is pre-zeroed externally before launching). It processes packets as they arrive:
+On startup, `systemControl/main.c` enables the stepper, then enables the spindle and waits 1 s (`usleep(1000000u)`) for the rotor to reach speed. After spindle windup it enters the packet receive loop — no zeroing delay (stepper is pre-zeroed externally before launching). It processes packets as they arrive:
 
 | Packet | Action |
 |--------|--------|
@@ -125,7 +126,7 @@ Defined and written in `vitis_workspace/systemControl/main.c`:
 | `TYPE_ZERO (0x25)` | Pulse `BIT_ZERO_REQ` high 100 ms, clear, reset `current_step=0`, ACK |
 | `TYPE_JOG (0x26)` | Move N steps (int32 LE payload) in current direction, ACK |
 
-**Spindle windup:** After the first `TYPE_POINT` enables the spindle, firmware calls `usleep(1000000u)` (1 s) to allow the rotor to reach speed before the laser turns on.
+**Spindle windup:** The spindle is enabled at startup before the first packet arrives. The firmware waits `usleep(1000000u)` (1 s) for the rotor to reach speed before entering the packet receive loop. The laser is not enabled until after the first point's stepper move completes (`first_point` flag).
 
 **Step-count mapping (fixed physical scale):**
 ```
@@ -163,14 +164,16 @@ usleep( 1200 + delta × 2000 + 10000 )   /* µs: wakeup + running (500 Hz step r
 | `LASER 0\|1` | Send `TYPE_LASER` packet |
 | `DIR 0\|1` | Send `TYPE_DIR` packet |
 | `ZERO` | Send `TYPE_ZERO` packet |
+| `JOG <n>` | Send `TYPE_JOG` packet (move N steps in current direction) |
 
 **stdout lines** (parsed by `gui.py`):
-- `[ACK] r=<r> um, theta=<t> deg` — point acknowledged
-- `[ACK] control ok` — control packet acknowledged
+- `[ACK] r=<r> um, theta=<t> deg` — point acknowledged (reader thread, POINT ACKs only)
+- `[FPGA] <msg>` — TYPE_DEBUG string from FPGA (reader thread)
 - `[RX] CRC mismatch` — CRC error
-- `[PROGRESS] <n>/<total>` — stream progress
-
-**Abort detection mid-stream:** `check_abort()` uses `PeekNamedPipe` on stdin between points — detects END/EXIT without consuming the line, so it is processed normally after the stream loop exits.
+- `[PROGRESS] <n>/<total>` — stream progress (after each ACKed point)
+- `[DONE] N points sent — FPGA hardware disabled` — stream completed cleanly (TYPE_END auto-sent)
+- `[STATUS] ...` — connection / informational messages
+- `[ERROR] ...` — command or I/O errors
 
 **Thread safety:** `CRITICAL_SECTION stdout_cs` in `AppState` and a `PRINT()` macro prevent interleaving between the main thread and the ACK reader thread.
 
@@ -292,7 +295,7 @@ make clean      # removes build/
 
 **Toolchain:** MinGW-w64 / MSYS2 UCRT64 gcc, `-O2 -Wall -Wextra -std=c11 -lm`.
 
-**Sources compiled into RAPID.exe:** `src/main.c` + `src/inputParser.c` + `src/serial.c`.
+**Sources compiled into RAPID.exe:** `src/main.c` + `src/inputParser.c` + `src/serial.c` + `src/packets.c`.
 
 ---
 
