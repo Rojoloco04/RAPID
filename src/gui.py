@@ -218,7 +218,7 @@ class GUI(QWidget):
         jog_layout = QHBoxLayout(jog_group)
 
         self.jog_steps = QSpinBox()
-        self.jog_steps.setRange(1, 250)
+        self.jog_steps.setRange(4, 250)
         self.jog_steps.setValue(1)
         self.jog_steps.setSuffix(" steps")
 

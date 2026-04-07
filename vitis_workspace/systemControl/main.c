@@ -393,6 +393,7 @@ int main(void)
         else if (pkt_type == TYPE_JOG) {
             int32_t steps = unpack_i32_le(&rx_payload[0]);
             if (steps < 0) steps = -steps;   /* take absolute value */
+            if (steps > 0 && steps < 4) steps = 4;   /* minimum 4 steps — hardware won't move for fewer */
             int jog_dir = (int)((config >> BIT_STEPPER_DIR) & 1u);
 
             /* clamp to avoid overrunning the physical range */
