@@ -113,7 +113,7 @@ Defined and written in `vitis_workspace/systemControl/main.c`:
 
 ### Firmware Sequence
 
-On startup, `systemControl/main.c` enables the stepper, then enables the spindle and waits 1 s (`usleep(1000000u)`) for the rotor to reach speed. After spindle windup it enters the packet receive loop — no zeroing delay (stepper is pre-zeroed externally before launching). It processes packets as they arrive:
+On startup, `systemControl/main.c` enables the stepper, then enables the spindle and waits 1 s (`usleep(1000000u)`) for the rotor to reach speed. After spindle windup it enters the packet receive loop — no zeroing delay on boot (stepper is pre-zeroed by the VHDL ZEROING state at power-on). It processes packets as they arrive:
 
 | Packet | Action |
 |--------|--------|
@@ -123,8 +123,8 @@ On startup, `systemControl/main.c` enables the stepper, then enables the spindle
 | `TYPE_STEPPER (0x22)` | Set/clear `BIT_STEPPER_EN`, write GPIO, ACK |
 | `TYPE_LASER (0x23)` | Set/clear `BIT_LASER_EN`, write GPIO, ACK |
 | `TYPE_DIR (0x24)` | Set/clear `BIT_STEPPER_DIR`, write GPIO, ACK |
-| `TYPE_ZERO (0x25)` | Pulse `BIT_ZERO_REQ` high 100 ms, clear, reset `current_step=0`, ACK |
-| `TYPE_JOG (0x26)` | Move N steps (int32 LE payload) in current direction, ACK |
+| `TYPE_ZERO (0x25)` | **If stepper disabled:** log message, ACK, skip. Else: pulse `BIT_ZERO_REQ` high 100 ms, clear, reset `current_step=0`, ACK |
+| `TYPE_JOG (0x26)` | **If stepper disabled:** log message, ACK, skip. Else: move N steps (int32 LE payload) in current direction, ACK |
 
 **Spindle windup:** The spindle is enabled at startup before the first packet arrives. The firmware waits `usleep(1000000u)` (1 s) for the rotor to reach speed before entering the packet receive loop. The laser is not enabled until after the first point's stepper move completes (`first_point` flag).
 
@@ -156,9 +156,9 @@ usleep( 1200 + delta × 2000 + 10000 )   /* µs: wakeup + running (500 Hz step r
 | Command | Action |
 |---------|--------|
 | `POINT <r_um> <theta>` | Send one `TYPE_POINT` packet, wait for ACK |
-| `STREAM <filepath>` | Parse GDS file, stream all points with stop-and-wait ACK, check stdin for abort between each point |
+| `STREAM <filepath>` | Enable stepper → zero sled → enable spindle → wait 1 s → stream all points with stop-and-wait ACK → auto-send END |
 | `END` | Send `TYPE_END` packet (disables FPGA hardware, firmware stays running) |
-| `EXIT` | Send `TYPE_END`, close serial port, process exits |
+| `EXIT` | Always send `TYPE_END` (regardless of stream state), close serial port, process exits |
 | `SPINDLE 0\|1` | Send `TYPE_SPINDLE` packet |
 | `STEPPER 0\|1` | Send `TYPE_STEPPER` packet |
 | `LASER 0\|1` | Send `TYPE_LASER` packet |
@@ -327,10 +327,12 @@ Note: uses `PI = 3.14159` (not `M_PI`).
 - Commands sent to `RAPID.exe` via `process.write()`; replies parsed from stdout line-by-line
 
 ### Top bar
-EXE path field + Port field + **Connect** button + **Disconnect** button + **Stop** button + status label.
+EXE path field + Port field + **Connect** button + **END** button + **EXIT** button + status label.
 - **Connect:** starts `RAPID.exe <port>`
-- **Stop:** sends `END\n` — disables FPGA hardware, process stays connected
-- **Disconnect:** sends `EXIT\n` — graceful shutdown of RAPID.exe
+- **END:** sends `END\n` — disables FPGA hardware, process stays connected; also resets spindle/stepper/laser toggle state in the GUI
+- **EXIT:** sends `END\n` then `EXIT\n` — shuts down all hardware and kills RAPID.exe
+
+`_set_connected(False)` is idempotent (guarded by checking the status label) so the disconnect log line only appears once even when `finished` and `disconnect` both fire.
 
 ### Pattern Stream tab
 GDS file field + **Stream** button + ACK/CRC counters + progress label + pyqtgraph scatter plot + **Clear Plot** button.
@@ -341,18 +343,17 @@ GDS file field + **Stream** button + ACK/CRC counters + progress label + pyqtgra
 - Spindle ON/OFF toggle
 - Stepper ON/OFF toggle
 - Laser ON/OFF toggle
-- **Zero** button (pulses `zero_req`)
+- **Zero** button (pulses `zero_req`) — **ignored by FPGA if stepper is disabled**
 
 **Stepper Jog group:**
-- Steps QSpinBox (1–250)
+- Steps QSpinBox (4–250)
 - Direction toggle (Inward / Outward)
-- **Jog** button — sends `JOG <steps>` in the selected direction
+- **Jog** button — sends `DIR` then `JOG <steps>` — **ignored by FPGA if stepper is disabled**
 
 **Send Single Point group:**
 - r_um QSpinBox (0–30000 µm)
 - theta QDoubleSpinBox (0–360°)
 - **Move** button
-- **Send END** button
 
 ### Output log
 Shared `QPlainTextEdit` (fixed height 180 px) below tabs. Receives all stdout from RAPID.exe.
