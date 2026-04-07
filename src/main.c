@@ -252,6 +252,17 @@ static void cmd_stream(AppState *app, const char *filepath) {
     }
 
     PRINT(app, "[STATUS] Streaming %zu points from %s\n", count, filepath);
+
+    /* Re-enable stepper and spindle in case a previous TYPE_END disabled them. */
+    LONG t_st = next_target(app);
+    if (!send_wait(app, t_st, send_ctrl_packet(app->rx.h, TYPE_STEPPER, 1), "STEPPER"))
+        { free(polar); return; }
+    LONG t_sp = next_target(app);
+    if (!send_wait(app, t_sp, send_ctrl_packet(app->rx.h, TYPE_SPINDLE, 1), "SPINDLE"))
+        { free(polar); return; }
+    PRINT(app, "[STATUS] Motors enabled — waiting 1 s for spindle windup\n");
+    Sleep(1000);
+
     InterlockedExchange(&app->stream_active, 1);
 
     int aborted = 0;

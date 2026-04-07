@@ -62,7 +62,7 @@ jobs:
     - name: Run cppcheck
       run: |
         cppcheck --enable=all --error-exitcode=1 --suppress=missingIncludeSystem \
-          src/main.c src/inputParser.c src/serial.c src/serial.h
+          src/main.c src/inputParser.c src/serial.c src/serial.h src/packets.c src/packets.h
 
   # ---- Protocol header sync check --------------------------------------------
   check-protocol-sync:
