@@ -16,9 +16,14 @@
  *   TYPE_DIR     0x24  LEN 0x01  payload[0]: 0=inward, 1=outward
  *   TYPE_ZERO    0x25  LEN 0x00  pulse zero_req, reset step tracking
  *   TYPE_JOG     0x26  LEN 0x04  int32 LE step count
+ *   TYPE_RPM_REQ 0x27  LEN 0x00  request current spindle RPM reading
  *
  * FPGA → PC packet types:
  *   TYPE_ACK     0x81  echoes incoming payload
+ *   TYPE_RPM     0x82  LEN 0x02  computed RPM as uint16 LE
+ *                      (axi_gpio_1 ch1 bits[15:0] hold the 1 kHz tick count
+ *                       between consecutive hall sensor pulses; 6 pulses/rev
+ *                       so RPM = 10000 / ticks)
  *   TYPE_DEBUG   0xF0  ASCII debug string
  */
 
@@ -40,15 +45,18 @@
 #define TYPE_DIR         0x24
 #define TYPE_ZERO        0x25
 #define TYPE_JOG         0x26
+#define TYPE_RPM_REQ     0x27
 
 /* ---- FPGA → PC ---- */
 #define TYPE_ACK         0x81
+#define TYPE_RPM         0x82
 #define TYPE_DEBUG       0xF0
 
 /* ---- Payload lengths ---- */
 #define POINT_LEN        0x08   /* r_um (int32 LE) + theta_deg (float32 LE) */
 #define CTRL_LEN         0x01   /* single on/off byte                       */
 #define JOG_LEN          0x04   /* step count (int32 LE)                    */
+#define RPM_LEN          0x02   /* computed RPM (uint16 LE)                 */
 
 /* ---- Frame sizes (SOF(2) + TYPE(1) + LEN(1) + PAYLOAD + CRC(1)) ---- */
 #define END_FRAME_SIZE   5      /* 0-byte payload */

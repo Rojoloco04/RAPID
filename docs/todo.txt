@@ -1,2 +1,1 @@
 laser on/off to etch specific points
-RPM readback
