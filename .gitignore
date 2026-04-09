@@ -31,13 +31,10 @@ __pycache__/
 
 # Vivado generated/cache/run directories
 hardware/RAPID.cache/
-hardware/RAPID.gen/
 hardware/RAPID.hw/
 hardware/RAPID.runs/
 hardware/RAPID.sim/
 hardware/RAPID.tmp/
-hardware/RAPID.ioplanning/
-hardware/RAPID.ip_user_files/
 
 # Vivado journals and logs (root of hardware/)
 hardware/vivado.jou

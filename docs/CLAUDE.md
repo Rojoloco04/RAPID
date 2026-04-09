@@ -79,7 +79,9 @@ Identical on PC (`main.c`) and FPGA (`systemControl/main.c`):
 | PC → FPGA | `0x24` | 1 | `0x00`=inward, `0x01`=outward | Stepper direction |
 | PC → FPGA | `0x25` | 0 | (none) | Zero request — pulses `zero_req` for 100 ms, resets `current_step=0` |
 | PC → FPGA | `0x26` | 4 | int32 LE step count | Jog — move N steps in current direction |
+| PC → FPGA | `0x27` | 0 | (none) | RPM request — firmware reads `axi_gpio_1` and responds with `TYPE_RPM` |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
+| FPGA → PC | `0x82` | 2 | uint16 LE computed RPM | RPM response — `RPM = 10000 / ticks` (6 hall pulses/rev, 1 kHz tick clock) |
 | FPGA → PC | `0xF0` | N | ASCII string | Debug/status |
 
 **CRC8:** XOR over `[TYPE, LEN, PAYLOAD...]`.
@@ -111,6 +113,15 @@ Defined and written in `vitis_workspace/systemControl/main.c`:
 ### Channel 2 (input)
 `XGpio_SetDataDirection(&gpio, 2, 0xFFFFFFFF)` — all inputs, reserved for future readback (e.g. `step_total_out` from stepper VHDL).
 
+### `axi_gpio_1` — RPM input (`gpio_rpm` instance, `XPAR_AXI_GPIO_1_BASEADDR = 0x41210000`)
+Single-channel, 16-bit. Ch1 connected to `Spindle_0/RPM_Out`.
+`RPM_Out` holds the count of 1 kHz ticks between consecutive hall sensor rising edges.
+Firmware computes `RPM = 10000 / ticks` (6 hall pulses per revolution).
+
+> **SDT init note:** In Vitis 2025.1 SDT flow `XGpio_Initialize` takes a **BaseAddress**, not a DeviceId.
+> Passing `0` works only by accident (SDT `LookupConfig` returns the first table entry when `BaseAddress == 0`).
+> Always use `XPAR_AXI_GPIO_x_BASEADDR` macros.
+
 ### Firmware Sequence
 
 On startup, `systemControl/main.c` enables the stepper, then enables the spindle and waits 1 s (`usleep(1000000u)`) for the rotor to reach speed. After spindle windup it enters the packet receive loop — no zeroing delay on boot (stepper is pre-zeroed by the VHDL ZEROING state at power-on). It processes packets as they arrive:
@@ -125,6 +136,7 @@ On startup, `systemControl/main.c` enables the stepper, then enables the spindle
 | `TYPE_DIR (0x24)` | Set/clear `BIT_STEPPER_DIR`, write GPIO, ACK |
 | `TYPE_ZERO (0x25)` | **If stepper disabled:** log message, ACK, skip. Else: pulse `BIT_ZERO_REQ` high 100 ms, clear, reset `current_step=0`, ACK |
 | `TYPE_JOG (0x26)` | **If stepper disabled:** log message, ACK, skip. Else: move N steps (int32 LE payload) in current direction, ACK |
+| `TYPE_RPM_REQ (0x27)` | Read `axi_gpio_1` ch1 bits[15:0] (1 kHz tick count between hall pulses), compute `RPM = 10000 / ticks`, send `TYPE_RPM (0x82)` + debug_printf |
 
 **Spindle windup:** The spindle is enabled at startup before the first packet arrives. The firmware waits `usleep(1000000u)` (1 s) for the rotor to reach speed before entering the packet receive loop. The laser is not enabled until after the first point's stepper move completes (`first_point` flag).
 
@@ -229,7 +241,7 @@ ZEROING → (prox_stable) → IDLE ───────────────
 
 BLDC 6-step open-loop commutation. Drives DRV8323 3-phase gate driver. Clock: 125 MHz.
 
-**Ports:** `clk`, `en`, `en_spindle` (out), `INHA/INLA/INHB/INLB/INHC/INLC` (out).
+**Ports:** `clk`, `en`, `en_spindle` (out), `RPM_Out` (out, 16-bit), `RPM_Pulse_In` (in), `INHA/INLA/INHB/INLB/INHC/INLC` (out).
 
 The spindle runs **fixed speed, fixed direction** — control is purely on/off via `en`.
 
@@ -237,8 +249,14 @@ The spindle runs **fixed speed, fixed direction** — control is purely on/off v
 - `INHC <= '0'` — phase C high-side permanently low (direction fixed)
 - `INLC <= '1'` — brake always released
 - `en_spindle <= '1'` — DRV8323 always enabled
-- `count_max = 6,410,256` → ~14.5 Hz commutation → ~1 revolution per 1.8 seconds
-- PWM at ~10 kHz (period = 6250 counts), 50% duty cycle (3125 counts high)
+- `count_max = 12,500,000` → 10 Hz commutation
+- PWM at ~10 Hz, 1% duty cycle (`pwm_counter` period 12,500,000, high for 125,000 counts)
+
+**RPM measurement:**
+- Internal 1 kHz tick clock (`RPM_CLK = 125000` divider from 125 MHz)
+- `RPM_CLK_CNT` counts ticks between rising edges of `RPM_Pulse_In` (hall sensor)
+- `RPM_Out` (16-bit) holds the captured period in ticks; connected to `axi_gpio_1/gpio_io_i`
+- Firmware formula: `RPM = 10000 / RPM_Out` (6 hall pulses per revolution)
 
 **Startup alignment:** On `en` rising edge, all phases held high for 187,500,000 cycles (1.5 s) for rotor alignment before commutation starts. `start_check` resets to '1' when `en` goes low.
 
@@ -367,4 +385,5 @@ Shared `QPlainTextEdit` (fixed height 180 px) below tabs. Receives all stdout fr
 
 ## Known Issues / Active Development Notes
 
-1. **Spindle runs open-loop:** No encoder feedback; `theta_deg` is received and available in `systemControl/main.c` but not yet used for angle control. Full theta control requires encoder + feedback loop.
+1. **Spindle runs open-loop:** No closed-loop angle control; `theta_deg` is received but not used. RPM is now measurable via hall sensor (`RPM_Pulse_In` → `RPM_Out` → `axi_gpio_1`), but theta position control still requires a feedback loop.
+2. **step_total_out → GPIO ch2 wiring unverified:** `axi_gpio_0` ch2 is configured as input but stepper absolute position readback is not yet implemented in firmware.

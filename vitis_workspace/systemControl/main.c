@@ -83,10 +83,18 @@
 #define DISC_RADIUS_UM   30000
 
 /* ------------------------------------------------------------------ */
+/*  Spindle RPM constants                                             */
+/* ------------------------------------------------------------------ */
+
+/* Log spindle RPM to the GUI console once per this many TYPE_POINT packets. */
+#define RPM_PRINT_EVERY  10
+
+/* ------------------------------------------------------------------ */
 /*  Globals                                                           */
 /* ------------------------------------------------------------------ */
 
-static XGpio   gpio;
+static XGpio   gpio;        /* axi_gpio_0: motor/laser outputs (ch1) + step_total input (ch2) */
+static XGpio   gpio_rpm;   /* axi_gpio_1: spindle RPM_Out input (ch1) */
 static XUartPs Uart_Ps;
 
 /* ------------------------------------------------------------------ */
@@ -230,6 +238,34 @@ static uint8_t receive_packet(uint8_t *out_payload)
 }
 
 /* ------------------------------------------------------------------ */
+/*  RPM measurement                                                   */
+/* ------------------------------------------------------------------ */
+
+/*
+ * read_rpm - read the 1 kHz tick count between consecutive hall sensor pulses
+ * from axi_gpio_1 ch1 bits[15:0] and convert to RPM.
+ *
+ * The spindle disc has 6 hall sensor poles, so 6 pulses per revolution.
+ * The VHDL counts 1 kHz ticks between rising edges of RPM_Pulse_In.
+ *
+ *   tick_rate = 1000 ticks/s
+ *   pulse_freq = 1000 / ticks   (Hz)
+ *   rev_freq   = pulse_freq / 6 (Hz)
+ *   RPM        = rev_freq * 60  = 10000 / ticks
+ *
+ * Returns 0 if ticks == 0 (spindle not spinning or no pulse yet captured).
+ */
+static uint16_t read_rpm(void)
+{
+    u32 raw = XGpio_DiscreteRead(&gpio_rpm, 1);
+    uint32_t ticks = raw & 0xFFFFu;   /* RPM_Out is 16-bit */
+    if (ticks == 0)
+        return 0;
+    uint32_t rpm = 10000u / ticks;
+    return (uint16_t)(rpm > 0xFFFFu ? 0xFFFFu : rpm);
+}
+
+/* ------------------------------------------------------------------ */
 /*  Main                                                              */
 /* ------------------------------------------------------------------ */
 
@@ -238,10 +274,16 @@ int main(void)
     init_platform();
 
     /* ---- initialise AXI GPIO ---- */
-    if (XGpio_Initialize(&gpio, 0) != XST_SUCCESS)
+    /* SDT flow: XGpio_Initialize takes BaseAddress, not DeviceId */
+    if (XGpio_Initialize(&gpio, XPAR_AXI_GPIO_0_BASEADDR) != XST_SUCCESS)
         return XST_FAILURE;   /* UART not yet up - can't send debug packet */
     XGpio_SetDataDirection(&gpio, 1, 0x00000000);  /* ch1: all outputs */
     XGpio_SetDataDirection(&gpio, 2, 0xFFFFFFFF);  /* ch2: all inputs  */
+
+    /* axi_gpio_1: RPM_Out from Spindle IP (ch1 input, 16-bit) */
+    if (XGpio_Initialize(&gpio_rpm, XPAR_AXI_GPIO_1_BASEADDR) != XST_SUCCESS)
+        return XST_FAILURE;
+    XGpio_SetDataDirection(&gpio_rpm, 1, 0xFFFFFFFF);  /* ch1: all inputs */
 
     /* ---- initialise PS UART ---- */
     XUartPs_Config *cfg = XUartPs_LookupConfig(UART_BASEADDR);
@@ -273,6 +315,7 @@ int main(void)
     /* ===== 3. POINT LOOP =========================================== */
     int32_t current_step = 0;
     int     first_point  = 1;
+    uint32_t point_count = 0;   /* counts TYPE_POINT packets; RPM logged every RPM_PRINT_EVERY */
 
     for (;;) {
         pkt_type = receive_packet(rx_payload);
@@ -331,6 +374,10 @@ int main(void)
 
             /* ACK the point - echo payload back to PC */
             send_frame(TYPE_ACK, rx_payload, POINT_LEN);
+
+            /* Periodically log RPM to the GUI console */
+            if (++point_count % RPM_PRINT_EVERY == 0)
+                debug_printf("RPM: %u", (unsigned)read_rpm());
         }
 
         else if (pkt_type == TYPE_END) {
@@ -341,7 +388,8 @@ int main(void)
             config &= ~(1u << BIT_STEPPER_EN);
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
             debug_printf("END received. Laser OFF. Motors stopped. Ready.");
-            first_point = 1;   /* next pattern re-arms the laser-on trigger */
+            first_point  = 1;   /* next pattern re-arms the laser-on trigger */
+            point_count  = 0;   /* reset RPM print counter */
             uint8_t empty_end = 0;
             send_frame(TYPE_ACK, &empty_end, 0);
         }
@@ -440,6 +488,15 @@ int main(void)
                          jog_dir ? "outward" : "inward",
                          (long)current_step);
             send_frame(TYPE_ACK, rx_payload, 4);
+        }
+
+        else if (pkt_type == TYPE_RPM_REQ) {
+            uint16_t rpm = read_rpm();
+            uint8_t rpm_payload[2];
+            rpm_payload[0] = (uint8_t)(rpm & 0xFF);         /* uint16 LE */
+            rpm_payload[1] = (uint8_t)((rpm >> 8) & 0xFF);
+            send_frame(TYPE_RPM, rpm_payload, RPM_LEN);
+            debug_printf("RPM: %u", (unsigned)rpm);
         }
 
         /* any other packet type is silently ignored */

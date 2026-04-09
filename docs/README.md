@@ -176,7 +176,9 @@ Both `main.c` (PC) and `systemControl/main.c` (FPGA) use the same framing:
 | PC → FPGA | `0x24` | 1 | `0x00`=inward, `0x01`=outward | Stepper direction |
 | PC → FPGA | `0x25` | 0 | (none) | Zero request |
 | PC → FPGA | `0x26` | 4 | int32 LE step count | Jog — move N steps in current direction |
+| PC → FPGA | `0x27` | 0 | (none) | RPM request — FPGA reads hall sensor period and responds |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
+| FPGA → PC | `0x82` | 2 | uint16 LE | Computed spindle RPM (`10000 / hall_period_ticks`) |
 | FPGA → PC | `0xF0` | N | ASCII string | Debug / status message |
 
 CRC8 is computed as XOR over `[TYPE, LEN, PAYLOAD...]`.
@@ -212,7 +214,10 @@ The firmware enters a packet receive loop immediately — no startup zeroing del
 | `TYPE_SPINDLE/STEPPER/LASER/DIR` | Update corresponding GPIO bit, ACK |
 | `TYPE_ZERO` | Pulse `zero_req` 100 ms, reset `current_step=0`, ACK — **ignored if stepper is disabled** |
 | `TYPE_JOG` | Move N steps (int32 LE payload) in current direction, ACK — **ignored if stepper is disabled** |
+| `TYPE_RPM_REQ` | Read hall sensor period from `axi_gpio_1`, compute `RPM = 10000 / ticks` (6 pulses/rev, 1 kHz tick clock), respond with `TYPE_RPM` |
 
 250 steps = 30 mm (full disc range, inner to outer edge). The stepper step rate is 500 Hz (2 ms/step).
 
 > **Spindle windup:** When streaming a pattern, the firmware waits 1 second after enabling the spindle before turning on the laser — allows the rotor to reach operating speed.
+
+> **RPM readout:** `spindle.vhd` measures the period between consecutive hall sensor pulses using a 1 kHz tick counter and exposes the result via `axi_gpio_1`. The firmware computes `RPM = 10000 / ticks` (6 hall pulses per revolution) and logs it to the GUI console every 10 points during a stream. The PC can also request an on-demand reading by sending `TYPE_RPM_REQ (0x27)`.
