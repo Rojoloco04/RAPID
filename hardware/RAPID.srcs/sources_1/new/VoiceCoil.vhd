@@ -59,31 +59,38 @@ signal PWM_2_sig : std_logic;
 
 begin
 
+--remove when adding processor inputs
+DC_cnt_1 <= 0;
+DC_cnt_2 <= 0;
 
 --clock dividers giving 32k Hz to voice coils (actual ~32,002.04)
 --clock divider PWM 1
 process(clk)
 begin
-    if (clk_div_cnt1 < DC_cnt_1) then
-        PWM_1_sig <= '1';
-    elsif (clk_div_cnt1 <= clk_div) and (clk_div_cnt1 >= DC_cnt_1) then
-        PWM_1_sig <= '0';
-    else 
-        PWM_1_sig <= '1';
-        clk_div_cnt1 <= 0;
+    if (rising_edge(clk)) then
+        if (clk_div_cnt1 < DC_cnt_1) then
+            PWM_1_sig <= '1';
+        elsif (clk_div_cnt1 <= clk_div) and (clk_div_cnt1 >= DC_cnt_1) then
+            PWM_1_sig <= '0';
+        else 
+            PWM_1_sig <= '1';
+            clk_div_cnt1 <= 0;
+        end if;
     end if;
 end process;
 
 --clock divider PWM 2
 process(clk)
 begin
-    if (clk_div_cnt2 < DC_cnt_2) then
-        PWM_2_sig <= '1';
-    elsif (clk_div_cnt2 <= clk_div) and (clk_div_cnt2 >= DC_cnt_2) then
-        PWM_2_sig <= '0';
-    else 
-        PWM_2_sig <= '1';
-        clk_div_cnt2 <= 0;
+    if (rising_edge(clk)) then
+        if (clk_div_cnt2 < DC_cnt_2) then
+            PWM_2_sig <= '1';
+        elsif (clk_div_cnt2 <= clk_div) and (clk_div_cnt2 >= DC_cnt_2) then
+            PWM_2_sig <= '0';
+        else 
+            PWM_2_sig <= '1';
+            clk_div_cnt2 <= 0;
+        end if;
     end if;
 end process;
 
@@ -93,7 +100,8 @@ end process;
 --begin
 --case VC1_DC is
 --    when "0000000"=>
---        PWM_1_sig <= '0';
+--        DC_cnt_1 <= 0;
+--        --PWM_1_sig <= '0';
 --    when "0000001"=>
 --        DC_cnt_1 <= 39;
 --    when "0000010"=> 
@@ -293,7 +301,8 @@ end process;
 --    when "1100011" =>
 --        DC_cnt_1 <= 3861;
 --    when "1100100" =>
---        PWM_1_sig<='1';
+--        DC_cnt_1 <= 3906;
+--        --PWM_1_sig<='1';
 --    when "others" =>
 --        PWM_1_sig<='0';
 --    end case;
@@ -303,7 +312,8 @@ end process;
 --begin
 --case VC2_DC is
 --    when "0000000"=>        --0% DC
---        PWM_2_sig <= '0';
+--        DC_cnt_2 <= 0;   
+--        --PWM_2_sig <= '0';
 --    when "0000001"=>        --increments 1% 
 --        DC_cnt_2 <= 39;
 --    when "0000010"=> 
@@ -503,11 +513,14 @@ end process;
 --    when "1100011" =>
 --        DC_cnt_2 <= 3861;
 --    when "1100100" =>       --100% DC
---        PWM_2_sig <= '1';
+--        DC_cnt_2 <= 3906; 
+--        --PWM_2_sig <= '1';
 --    when "others" =>
 --        PWM_2_sig <= '0';
 --end case;
 --end process;
+
+
 
 
 --output signals for voice coils
