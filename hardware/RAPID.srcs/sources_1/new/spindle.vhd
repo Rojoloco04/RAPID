@@ -55,7 +55,6 @@ signal duty_cycle_count : integer range 0 to 5000 := 4000; -- 80% at 25kHz
 constant RPM_CLK : integer := 125000;
 signal RPM_CLK_DIV : integer range 0 to 125001 := 0;
 signal RPM_CLK_EDGE : std_logic;
-signal RPM_PULSE_CNT : integer range 0 to 7 := 0;
 signal RPM_CLK_CNT : integer range 0 to 65535 := 0;
 signal RPM_OUT_SIG : std_logic_vector (15 downto 0);
 
@@ -140,19 +139,30 @@ begin
     end if;
 end process;
 
---rpm clock div
+-- RPM measurement
 process(clk)
 begin
-    if rising_edge(clk) then 
-        if (RPM_CLK_DIV < (RPM_CLK / 2)) THEN
+    if rising_edge(clk) then
+        -- 1 kHz clock enable
+        if RPM_CLK_DIV < RPM_CLK - 1 then
+            RPM_CLK_DIV  <= RPM_CLK_DIV + 1;
             RPM_CLK_EDGE <= '0';
-        elsif (RPM_CLK_DIV >= (RPM_CLK / 2)) and (RPM_CLK_DIV <= (RPM_CLK)) then
-            RPM_CLK_EDGE <= '1';
         else
-            RPM_CLK_EDGE <= '0';
-            RPM_CLK_DIV <= 0;
+            RPM_CLK_DIV  <= 0;
+            RPM_CLK_EDGE <= '1';
         end if;
-     end if;
+
+        -- Edge detection and period measurement
+        RPM_PULSE_PREV <= RPM_Pulse_In;
+
+        if RPM_Pulse_In = '1' and RPM_PULSE_PREV = '0' then
+            -- Rising edge: capture period, reset counter
+            RPM_OUT_SIG <= std_logic_vector(to_unsigned(RPM_CLK_CNT, 16));
+            RPM_CLK_CNT <= 0;
+        elsif RPM_CLK_EDGE = '1' then
+            RPM_CLK_CNT <= RPM_CLK_CNT + 1;
+        end if;
+    end if;
 end process;
 
 -- Brushless Logic
@@ -209,24 +219,6 @@ begin
         end if; 
     end if;    
 end process; 
-
---RPM logic
-process(RPM_CLK_EDGE)
-begin
-
-    if rising_edge(RPM_Pulse_In) then
-        RPM_PULSE_CNT <= RPM_PULSE_CNT + 1;
-    end if; 
-    
-    if (RPM_PULSE_CNT < 6) then
-        RPM_CLK_CNT <= RPM_CLK_CNT + 1;
-    elsif (RPM_PULSE_CNT = 6) then
-        RPM_OUT_SIG <= std_logic_vector(to_unsigned(RPM_CLK_CNT,16));
-    else
-        RPM_CLK_CNT <= 0;
-        RPM_PULSE_CNT <= 0;
-    end if;
-end process;
         
 RPM_Out <= RPM_OUT_SIG;
 INHA <= pwm_signal;
