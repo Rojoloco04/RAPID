@@ -207,21 +207,23 @@ class GUI(QWidget):
         self.btn_stepper = QPushButton("Stepper: OFF")
         self.btn_laser   = QPushButton("Laser: OFF")
         self.btn_zero    = QPushButton("Zero")
+        self.btn_rpm     = QPushButton("Read RPM")
 
         self.btn_spindle.setToolTip("Toggle spindle motor on/off (TYPE_SPINDLE)")
         self.btn_stepper.setToolTip("Toggle stepper motor on/off (TYPE_STEPPER) — must be ON to jog or zero")
         self.btn_laser.setToolTip("Toggle laser on/off (TYPE_LASER)")
         self.btn_zero.setToolTip("Pulse zero_req to home the sled and reset step count (TYPE_ZERO) — stepper must be ON")
+        self.btn_rpm.setToolTip("Request current spindle RPM from the FPGA (TYPE_RPM_REQ)")
 
         self.btn_spindle.clicked.connect(lambda: self._manual_toggle("spindle"))
         self.btn_stepper.clicked.connect(lambda: self._manual_toggle("stepper"))
         self.btn_laser.clicked.connect(  lambda: self._manual_toggle("laser"))
         self.btn_zero.clicked.connect(   self.manual_zero)
+        self.btn_rpm.clicked.connect(    self.manual_rpm)
 
-        for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero):
+        for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero, self.btn_rpm):
             btn.setEnabled(False)
             ctrl_layout.addWidget(btn)
-
         parent.addWidget(ctrl_group)
 
         # -- stepper jog --
@@ -341,7 +343,7 @@ class GUI(QWidget):
         self.btn_move.setEnabled(connected)
         self.btn_jog.setEnabled(connected)
         self.btn_jog_dir.setEnabled(connected)
-        for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero):
+        for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero, self.btn_rpm):
             btn.setEnabled(connected)
         if not connected:
             # reset toggle state so buttons show correct labels on reconnect
@@ -412,6 +414,9 @@ class GUI(QWidget):
     def manual_zero(self):
         self.proc.write(b"ZERO\n")
 
+    def manual_rpm(self):
+        self.proc.write(b"RPM\n")
+
     def _update_toggle_labels(self):
         self.btn_spindle.setText(f"Spindle: {'ON'  if self.manual_spindle_on  else 'OFF'}")
         self.btn_stepper.setText(f"Stepper: {'ON'  if self.manual_stepper_on  else 'OFF'}")
@@ -467,6 +472,7 @@ class GUI(QWidget):
         m = PROGRESS_RE.search(line)
         if m:
             self.lbl_progress.setText(f"{m.group('i')}/{m.group('n')}")
+
 
     # -----------------------------------------------------------------------
     # Helpers

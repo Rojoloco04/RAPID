@@ -232,6 +232,13 @@ static void cmd_zero(AppState *app) {
     send_wait(app, t, send_zero_packet(app->rx.h), "ZERO");
 }
 
+static void cmd_rpm(AppState *app) {
+    /* TYPE_RPM_REQ has no ACK — the FPGA replies with TYPE_RPM which the
+     * reader thread prints as "[RPM] X RPM". */
+    if (!send_rpm_req_packet(app->rx.h))
+        PRINT(app, "[ERROR] Serial write failed (RPM_REQ)\n");
+}
+
 static void cmd_end(AppState *app) {
     LONG t = next_target(app);
     if (send_wait(app, t, send_end_packet(app->rx.h), "END"))
@@ -328,6 +335,8 @@ static void run_command_loop(AppState *app) {
             cmd_jog(app, (int32_t)atol(line + 4));
         } else if (strcmp(line, "ZERO") == 0) {
             cmd_zero(app);
+        } else if (strcmp(line, "RPM") == 0) {
+            cmd_rpm(app);
         } else if (strcmp(line, "EXIT") == 0) {
             cmd_end(app);
             break;

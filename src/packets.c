@@ -17,8 +17,9 @@ static int send_pulse_packet(HANDLE h, uint8_t type) {
     return write_all(h, frame, END_FRAME_SIZE);
 }
 
-int send_end_packet(HANDLE h)  { return send_pulse_packet(h, TYPE_END); }
-int send_zero_packet(HANDLE h) { return send_pulse_packet(h, TYPE_ZERO); }
+int send_end_packet(HANDLE h)     { return send_pulse_packet(h, TYPE_END);     }
+int send_zero_packet(HANDLE h)    { return send_pulse_packet(h, TYPE_ZERO);    }
+int send_rpm_req_packet(HANDLE h) { return send_pulse_packet(h, TYPE_RPM_REQ); }
 
 int send_polar_point(HANDLE h, int32_t r_um, float theta_deg) {
     uint8_t frame[POINT_FRAME_SIZE];

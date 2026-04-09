@@ -2,7 +2,7 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
--- Date        : Thu Apr  9 15:31:41 2026
+-- Date        : Thu Apr  9 17:32:00 2026
 -- Host        : MDD-ECE-HP3853 running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim
 --               c:/Users/jparrack/Desktop/RAPID/hardware/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0_sim_netlist.vhdl
@@ -22,9 +22,9 @@ entity top_Spindle_0_0_Spindle is
     INHB : out STD_LOGIC;
     INLB : out STD_LOGIC;
     INLA : out STD_LOGIC;
-    en : in STD_LOGIC;
+    clk : in STD_LOGIC;
     RPM_Pulse_In : in STD_LOGIC;
-    clk : in STD_LOGIC
+    en : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
   attribute ORIG_REF_NAME of top_Spindle_0_0_Spindle : entity is "Spindle";
@@ -37,6 +37,7 @@ architecture STRUCTURE of top_Spindle_0_0_Spindle is
   signal INLA_i_1_n_0 : STD_LOGIC;
   signal \^inlb\ : STD_LOGIC;
   signal INLB_i_1_n_0 : STD_LOGIC;
+  signal RPM_CLK_CNT0 : STD_LOGIC;
   signal \RPM_CLK_CNT[0]_i_2_n_0\ : STD_LOGIC;
   signal RPM_CLK_CNT_reg : STD_LOGIC_VECTOR ( 15 downto 0 );
   signal \RPM_CLK_CNT_reg[0]_i_1_n_0\ : STD_LOGIC;
@@ -70,7 +71,6 @@ architecture STRUCTURE of top_Spindle_0_0_Spindle is
   signal \RPM_CLK_CNT_reg[8]_i_1_n_5\ : STD_LOGIC;
   signal \RPM_CLK_CNT_reg[8]_i_1_n_6\ : STD_LOGIC;
   signal \RPM_CLK_CNT_reg[8]_i_1_n_7\ : STD_LOGIC;
-  signal \RPM_CLK_DIV[0]_i_1_n_0\ : STD_LOGIC;
   signal \RPM_CLK_DIV[0]_i_3_n_0\ : STD_LOGIC;
   signal \RPM_CLK_DIV[0]_i_4_n_0\ : STD_LOGIC;
   signal \RPM_CLK_DIV[0]_i_5_n_0\ : STD_LOGIC;
@@ -109,9 +109,10 @@ architecture STRUCTURE of top_Spindle_0_0_Spindle is
   signal \RPM_CLK_DIV_reg[8]_i_1_n_5\ : STD_LOGIC;
   signal \RPM_CLK_DIV_reg[8]_i_1_n_6\ : STD_LOGIC;
   signal \RPM_CLK_DIV_reg[8]_i_1_n_7\ : STD_LOGIC;
-  signal RPM_CLK_EDGE : STD_LOGIC;
-  signal RPM_OUT_SIG0 : STD_LOGIC;
   signal RPM_PULSE_PREV : STD_LOGIC;
+  signal \RPM_PULSE_REG_reg[2]_srl2_n_0\ : STD_LOGIC;
+  signal \RPM_PULSE_REG_reg_n_0_[0]\ : STD_LOGIC;
+  signal clear : STD_LOGIC;
   signal clk_div : STD_LOGIC;
   signal clk_div_i_1_n_0 : STD_LOGIC;
   signal clk_div_i_2_n_0 : STD_LOGIC;
@@ -190,8 +191,8 @@ architecture STRUCTURE of top_Spindle_0_0_Spindle is
   signal in_startup_i_1_n_0 : STD_LOGIC;
   signal in_startup_s1 : STD_LOGIC;
   signal in_startup_sync : STD_LOGIC;
+  signal p_0_in8_in : STD_LOGIC;
   signal p_1_in : STD_LOGIC;
-  signal \pwm_counter[0]_i_1_n_0\ : STD_LOGIC;
   signal \pwm_counter[0]_i_3_n_0\ : STD_LOGIC;
   signal \pwm_counter[0]_i_4_n_0\ : STD_LOGIC;
   signal \pwm_counter[0]_i_5_n_0\ : STD_LOGIC;
@@ -253,6 +254,7 @@ architecture STRUCTURE of top_Spindle_0_0_Spindle is
   signal pwm_signal_i_3_n_0 : STD_LOGIC;
   signal pwm_signal_i_4_n_0 : STD_LOGIC;
   signal pwm_signal_i_5_n_0 : STD_LOGIC;
+  signal sel : STD_LOGIC;
   signal start_check_i_1_n_0 : STD_LOGIC;
   signal start_check_reg_n_0 : STD_LOGIC;
   signal \start_count[0]_i_10_n_0\ : STD_LOGIC;
@@ -347,6 +349,10 @@ architecture STRUCTURE of top_Spindle_0_0_Spindle is
   attribute ADDER_THRESHOLD of \RPM_CLK_DIV_reg[16]_i_1\ : label is 11;
   attribute ADDER_THRESHOLD of \RPM_CLK_DIV_reg[4]_i_1\ : label is 11;
   attribute ADDER_THRESHOLD of \RPM_CLK_DIV_reg[8]_i_1\ : label is 11;
+  attribute srl_bus_name : string;
+  attribute srl_bus_name of \RPM_PULSE_REG_reg[2]_srl2\ : label is "\U0/RPM_PULSE_REG_reg ";
+  attribute srl_name : string;
+  attribute srl_name of \RPM_PULSE_REG_reg[2]_srl2\ : label is "\U0/RPM_PULSE_REG_reg[2]_srl2 ";
   attribute SOFT_HLUTNM : string;
   attribute SOFT_HLUTNM of clk_div_i_4 : label is "soft_lutpair1";
   attribute SOFT_HLUTNM of clk_div_i_6 : label is "soft_lutpair2";
@@ -458,10 +464,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[0]_i_1_n_7\,
       Q => RPM_CLK_CNT_reg(0),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[0]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -485,10 +491,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[8]_i_1_n_5\,
       Q => RPM_CLK_CNT_reg(10),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[11]\: unisim.vcomponents.FDRE
     generic map(
@@ -496,10 +502,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[8]_i_1_n_4\,
       Q => RPM_CLK_CNT_reg(11),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[12]\: unisim.vcomponents.FDRE
     generic map(
@@ -507,10 +513,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[12]_i_1_n_7\,
       Q => RPM_CLK_CNT_reg(12),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[12]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -533,10 +539,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[12]_i_1_n_6\,
       Q => RPM_CLK_CNT_reg(13),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[14]\: unisim.vcomponents.FDRE
     generic map(
@@ -544,10 +550,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[12]_i_1_n_5\,
       Q => RPM_CLK_CNT_reg(14),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[15]\: unisim.vcomponents.FDRE
     generic map(
@@ -555,10 +561,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[12]_i_1_n_4\,
       Q => RPM_CLK_CNT_reg(15),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[1]\: unisim.vcomponents.FDRE
     generic map(
@@ -566,10 +572,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[0]_i_1_n_6\,
       Q => RPM_CLK_CNT_reg(1),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[2]\: unisim.vcomponents.FDRE
     generic map(
@@ -577,10 +583,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[0]_i_1_n_5\,
       Q => RPM_CLK_CNT_reg(2),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[3]\: unisim.vcomponents.FDRE
     generic map(
@@ -588,10 +594,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[0]_i_1_n_4\,
       Q => RPM_CLK_CNT_reg(3),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[4]\: unisim.vcomponents.FDRE
     generic map(
@@ -599,10 +605,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[4]_i_1_n_7\,
       Q => RPM_CLK_CNT_reg(4),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[4]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -625,10 +631,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[4]_i_1_n_6\,
       Q => RPM_CLK_CNT_reg(5),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[6]\: unisim.vcomponents.FDRE
     generic map(
@@ -636,10 +642,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[4]_i_1_n_5\,
       Q => RPM_CLK_CNT_reg(6),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[7]\: unisim.vcomponents.FDRE
     generic map(
@@ -647,10 +653,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[4]_i_1_n_4\,
       Q => RPM_CLK_CNT_reg(7),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[8]\: unisim.vcomponents.FDRE
     generic map(
@@ -658,10 +664,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[8]_i_1_n_7\,
       Q => RPM_CLK_CNT_reg(8),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_CNT_reg[8]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -684,10 +690,10 @@ INLB_reg: unisim.vcomponents.FDRE
     )
         port map (
       C => clk,
-      CE => RPM_CLK_EDGE,
+      CE => sel,
       D => \RPM_CLK_CNT_reg[8]_i_1_n_6\,
       Q => RPM_CLK_CNT_reg(9),
-      R => RPM_OUT_SIG0
+      R => RPM_CLK_CNT0
     );
 \RPM_CLK_DIV[0]_i_1\: unisim.vcomponents.LUT6
     generic map(
@@ -700,7 +706,7 @@ INLB_reg: unisim.vcomponents.FDRE
       I3 => \RPM_CLK_DIV[0]_i_4_n_0\,
       I4 => RPM_CLK_DIV_reg(12),
       I5 => \RPM_CLK_DIV[0]_i_5_n_0\,
-      O => \RPM_CLK_DIV[0]_i_1_n_0\
+      O => sel
     );
 \RPM_CLK_DIV[0]_i_3\: unisim.vcomponents.LUT4
     generic map(
@@ -754,7 +760,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[0]_i_2_n_7\,
       Q => RPM_CLK_DIV_reg(0),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[0]_i_2\: unisim.vcomponents.CARRY4
      port map (
@@ -781,7 +787,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[8]_i_1_n_5\,
       Q => RPM_CLK_DIV_reg(10),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[11]\: unisim.vcomponents.FDRE
     generic map(
@@ -792,7 +798,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[8]_i_1_n_4\,
       Q => RPM_CLK_DIV_reg(11),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[12]\: unisim.vcomponents.FDRE
     generic map(
@@ -803,7 +809,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[12]_i_1_n_7\,
       Q => RPM_CLK_DIV_reg(12),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[12]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -829,7 +835,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[12]_i_1_n_6\,
       Q => RPM_CLK_DIV_reg(13),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[14]\: unisim.vcomponents.FDRE
     generic map(
@@ -840,7 +846,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[12]_i_1_n_5\,
       Q => RPM_CLK_DIV_reg(14),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[15]\: unisim.vcomponents.FDRE
     generic map(
@@ -851,7 +857,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[12]_i_1_n_4\,
       Q => RPM_CLK_DIV_reg(15),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[16]\: unisim.vcomponents.FDRE
     generic map(
@@ -862,7 +868,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[16]_i_1_n_7\,
       Q => RPM_CLK_DIV_reg(16),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[16]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -884,7 +890,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[0]_i_2_n_6\,
       Q => RPM_CLK_DIV_reg(1),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[2]\: unisim.vcomponents.FDRE
     generic map(
@@ -895,7 +901,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[0]_i_2_n_5\,
       Q => RPM_CLK_DIV_reg(2),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[3]\: unisim.vcomponents.FDRE
     generic map(
@@ -906,7 +912,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[0]_i_2_n_4\,
       Q => RPM_CLK_DIV_reg(3),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[4]\: unisim.vcomponents.FDRE
     generic map(
@@ -917,7 +923,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[4]_i_1_n_7\,
       Q => RPM_CLK_DIV_reg(4),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[4]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -943,7 +949,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[4]_i_1_n_6\,
       Q => RPM_CLK_DIV_reg(5),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[6]\: unisim.vcomponents.FDRE
     generic map(
@@ -954,7 +960,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[4]_i_1_n_5\,
       Q => RPM_CLK_DIV_reg(6),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[7]\: unisim.vcomponents.FDRE
     generic map(
@@ -965,7 +971,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[4]_i_1_n_4\,
       Q => RPM_CLK_DIV_reg(7),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[8]\: unisim.vcomponents.FDRE
     generic map(
@@ -976,7 +982,7 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[8]_i_1_n_7\,
       Q => RPM_CLK_DIV_reg(8),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
+      R => sel
     );
 \RPM_CLK_DIV_reg[8]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -1002,29 +1008,21 @@ INLB_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \RPM_CLK_DIV_reg[8]_i_1_n_6\,
       Q => RPM_CLK_DIV_reg(9),
-      R => \RPM_CLK_DIV[0]_i_1_n_0\
-    );
-RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
-     port map (
-      C => clk,
-      CE => '1',
-      D => \RPM_CLK_DIV[0]_i_1_n_0\,
-      Q => RPM_CLK_EDGE,
-      R => '0'
+      R => sel
     );
 \RPM_OUT_SIG[15]_i_1\: unisim.vcomponents.LUT2
     generic map(
       INIT => X"2"
     )
         port map (
-      I0 => RPM_Pulse_In,
+      I0 => p_0_in8_in,
       I1 => RPM_PULSE_PREV,
-      O => RPM_OUT_SIG0
+      O => RPM_CLK_CNT0
     );
 \RPM_OUT_SIG_reg[0]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(0),
       Q => RPM_Out(0),
       R => '0'
@@ -1032,7 +1030,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[10]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(10),
       Q => RPM_Out(10),
       R => '0'
@@ -1040,7 +1038,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[11]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(11),
       Q => RPM_Out(11),
       R => '0'
@@ -1048,7 +1046,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[12]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(12),
       Q => RPM_Out(12),
       R => '0'
@@ -1056,7 +1054,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[13]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(13),
       Q => RPM_Out(13),
       R => '0'
@@ -1064,7 +1062,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[14]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(14),
       Q => RPM_Out(14),
       R => '0'
@@ -1072,7 +1070,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[15]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(15),
       Q => RPM_Out(15),
       R => '0'
@@ -1080,7 +1078,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[1]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(1),
       Q => RPM_Out(1),
       R => '0'
@@ -1088,7 +1086,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[2]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(2),
       Q => RPM_Out(2),
       R => '0'
@@ -1096,7 +1094,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[3]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(3),
       Q => RPM_Out(3),
       R => '0'
@@ -1104,7 +1102,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[4]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(4),
       Q => RPM_Out(4),
       R => '0'
@@ -1112,7 +1110,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[5]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(5),
       Q => RPM_Out(5),
       R => '0'
@@ -1120,7 +1118,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[6]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(6),
       Q => RPM_Out(6),
       R => '0'
@@ -1128,7 +1126,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[7]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(7),
       Q => RPM_Out(7),
       R => '0'
@@ -1136,7 +1134,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[8]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(8),
       Q => RPM_Out(8),
       R => '0'
@@ -1144,7 +1142,7 @@ RPM_CLK_EDGE_reg: unisim.vcomponents.FDRE
 \RPM_OUT_SIG_reg[9]\: unisim.vcomponents.FDRE
      port map (
       C => clk,
-      CE => RPM_OUT_SIG0,
+      CE => RPM_CLK_CNT0,
       D => RPM_CLK_CNT_reg(9),
       Q => RPM_Out(9),
       R => '0'
@@ -1153,8 +1151,35 @@ RPM_PULSE_PREV_reg: unisim.vcomponents.FDRE
      port map (
       C => clk,
       CE => '1',
-      D => RPM_Pulse_In,
+      D => p_0_in8_in,
       Q => RPM_PULSE_PREV,
+      R => '0'
+    );
+\RPM_PULSE_REG_reg[0]\: unisim.vcomponents.FDRE
+     port map (
+      C => clk,
+      CE => '1',
+      D => RPM_Pulse_In,
+      Q => \RPM_PULSE_REG_reg_n_0_[0]\,
+      R => '0'
+    );
+\RPM_PULSE_REG_reg[2]_srl2\: unisim.vcomponents.SRL16E
+     port map (
+      A0 => '1',
+      A1 => '0',
+      A2 => '0',
+      A3 => '0',
+      CE => '1',
+      CLK => clk,
+      D => \RPM_PULSE_REG_reg_n_0_[0]\,
+      Q => \RPM_PULSE_REG_reg[2]_srl2_n_0\
+    );
+\RPM_PULSE_REG_reg[3]\: unisim.vcomponents.FDRE
+     port map (
+      C => clk,
+      CE => '1',
+      D => \RPM_PULSE_REG_reg[2]_srl2_n_0\,
+      Q => p_0_in8_in,
       R => '0'
     );
 clk_div_i_1: unisim.vcomponents.LUT2
@@ -1828,7 +1853,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       I3 => pwm_counter_reg(16),
       I4 => \pwm_counter[0]_i_4_n_0\,
       I5 => \pwm_counter[0]_i_5_n_0\,
-      O => \pwm_counter[0]_i_1_n_0\
+      O => clear
     );
 \pwm_counter[0]_i_3\: unisim.vcomponents.LUT5
     generic map(
@@ -1893,7 +1918,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[0]_i_2_n_7\,
       Q => \pwm_counter_reg_n_0_[0]\,
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[0]_i_2\: unisim.vcomponents.CARRY4
      port map (
@@ -1922,7 +1947,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[8]_i_1_n_5\,
       Q => pwm_counter_reg(10),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[11]\: unisim.vcomponents.FDRE
     generic map(
@@ -1933,7 +1958,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[8]_i_1_n_4\,
       Q => pwm_counter_reg(11),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[12]\: unisim.vcomponents.FDRE
     generic map(
@@ -1944,7 +1969,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[12]_i_1_n_7\,
       Q => pwm_counter_reg(12),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[12]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -1970,7 +1995,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[12]_i_1_n_6\,
       Q => pwm_counter_reg(13),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[14]\: unisim.vcomponents.FDRE
     generic map(
@@ -1981,7 +2006,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[12]_i_1_n_5\,
       Q => pwm_counter_reg(14),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[15]\: unisim.vcomponents.FDRE
     generic map(
@@ -1992,7 +2017,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[12]_i_1_n_4\,
       Q => pwm_counter_reg(15),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[16]\: unisim.vcomponents.FDRE
     generic map(
@@ -2003,7 +2028,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[16]_i_1_n_7\,
       Q => pwm_counter_reg(16),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[16]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -2029,7 +2054,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[16]_i_1_n_6\,
       Q => pwm_counter_reg(17),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[18]\: unisim.vcomponents.FDRE
     generic map(
@@ -2040,7 +2065,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[16]_i_1_n_5\,
       Q => pwm_counter_reg(18),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[19]\: unisim.vcomponents.FDRE
     generic map(
@@ -2051,7 +2076,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[16]_i_1_n_4\,
       Q => pwm_counter_reg(19),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[1]\: unisim.vcomponents.FDRE
     generic map(
@@ -2062,7 +2087,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[0]_i_2_n_6\,
       Q => \pwm_counter_reg_n_0_[1]\,
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[20]\: unisim.vcomponents.FDRE
     generic map(
@@ -2073,7 +2098,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[20]_i_1_n_7\,
       Q => pwm_counter_reg(20),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[20]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -2099,7 +2124,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[20]_i_1_n_6\,
       Q => pwm_counter_reg(21),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[22]\: unisim.vcomponents.FDRE
     generic map(
@@ -2110,7 +2135,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[20]_i_1_n_5\,
       Q => pwm_counter_reg(22),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[23]\: unisim.vcomponents.FDRE
     generic map(
@@ -2121,7 +2146,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[20]_i_1_n_4\,
       Q => pwm_counter_reg(23),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[2]\: unisim.vcomponents.FDRE
     generic map(
@@ -2132,7 +2157,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[0]_i_2_n_5\,
       Q => \pwm_counter_reg_n_0_[2]\,
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[3]\: unisim.vcomponents.FDRE
     generic map(
@@ -2143,7 +2168,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[0]_i_2_n_4\,
       Q => pwm_counter_reg(3),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[4]\: unisim.vcomponents.FDRE
     generic map(
@@ -2154,7 +2179,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[4]_i_1_n_7\,
       Q => pwm_counter_reg(4),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[4]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -2180,7 +2205,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[4]_i_1_n_6\,
       Q => pwm_counter_reg(5),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[6]\: unisim.vcomponents.FDRE
     generic map(
@@ -2191,7 +2216,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[4]_i_1_n_5\,
       Q => pwm_counter_reg(6),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[7]\: unisim.vcomponents.FDRE
     generic map(
@@ -2202,7 +2227,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[4]_i_1_n_4\,
       Q => pwm_counter_reg(7),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[8]\: unisim.vcomponents.FDRE
     generic map(
@@ -2213,7 +2238,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[8]_i_1_n_7\,
       Q => pwm_counter_reg(8),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 \pwm_counter_reg[8]_i_1\: unisim.vcomponents.CARRY4
      port map (
@@ -2239,7 +2264,7 @@ in_startup_sync_reg: unisim.vcomponents.FDRE
       CE => '1',
       D => \pwm_counter_reg[8]_i_1_n_6\,
       Q => pwm_counter_reg(9),
-      R => \pwm_counter[0]_i_1_n_0\
+      R => clear
     );
 pwm_signal_i_1: unisim.vcomponents.LUT5
     generic map(

@@ -2,10 +2,10 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
--- Date        : Thu Apr  9 15:32:21 2026
+-- Date        : Thu Apr  9 15:32:18 2026
 -- Host        : MDD-ECE-HP3853 running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode synth_stub
---               c:/Users/jparrack/Desktop/RAPID/hardware/RAPID.gen/sources_1/bd/top/ip/top_axi_smc_1/top_axi_smc_1_stub.vhdl
+-- Command     : write_vhdl -force -mode synth_stub -rename_top top_axi_smc_1 -prefix
+--               top_axi_smc_1_ top_axi_smc_1_stub.vhdl
 -- Design      : top_axi_smc_1
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7z020clg400-1
