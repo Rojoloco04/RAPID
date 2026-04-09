@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x8456EC8C7AF769C8",
+      "boundary_crc": "0xE5BA8C8690525D46",
       "device": "xc7z020clg400-1",
       "gen_directory": "../../../../RAPID.gen/sources_1/bd/top",
       "name": "top",
@@ -24,8 +24,7 @@
       "ilslice_4": "",
       "ilslice_5": "",
       "ilslice_6": "",
-      "axi_gpio_1": "",
-      "VoiceCoil_0": ""
+      "axi_gpio_1": ""
     },
     "interface_ports": {
       "DDR": {
@@ -260,18 +259,6 @@
       },
       "RPM_Pulse_In_0": {
         "direction": "I"
-      },
-      "PWM1_0": {
-        "direction": "O"
-      },
-      "PWM1r_0": {
-        "direction": "O"
-      },
-      "PWM2_0": {
-        "direction": "O"
-      },
-      "PWM2r_0": {
-        "direction": "O"
       }
     },
     "components": {
@@ -2120,13 +2107,7 @@
             }
           },
           "en": {
-            "direction": "I",
-            "parameters": {
-              "PortWidth": {
-                "value": "1",
-                "value_src": "user_prop"
-              }
-            }
+            "direction": "I"
           },
           "en_spindle": {
             "direction": "O"
@@ -2485,47 +2466,6 @@
             "value": "16"
           }
         }
-      },
-      "VoiceCoil_0": {
-        "vlnv": "xilinx.com:module_ref:VoiceCoil:1.0",
-        "ip_revision": "1",
-        "xci_name": "top_VoiceCoil_0_0",
-        "xci_path": "ip\\top_VoiceCoil_0_0\\top_VoiceCoil_0_0.xci",
-        "inst_hier_path": "VoiceCoil_0",
-        "has_run_ip_tcl": "true",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "VoiceCoil",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "clk": {
-            "type": "clk",
-            "direction": "I",
-            "parameters": {
-              "FREQ_HZ": {
-                "value": "125000000",
-                "value_src": "user_prop"
-              },
-              "CLK_DOMAIN": {
-                "value": "top_processing_system7_0_0_FCLK_CLK0",
-                "value_src": "default_prop"
-              }
-            }
-          },
-          "PWM1": {
-            "direction": "O"
-          },
-          "PWM1r": {
-            "direction": "O"
-          },
-          "PWM2": {
-            "direction": "O"
-          },
-          "PWM2r": {
-            "direction": "O"
-          }
-        }
       }
     },
     "interface_nets": {
@@ -2615,30 +2555,6 @@
           "En_Spindle"
         ]
       },
-      "VoiceCoil_0_PWM1": {
-        "ports": [
-          "VoiceCoil_0/PWM1",
-          "PWM1_0"
-        ]
-      },
-      "VoiceCoil_0_PWM1r": {
-        "ports": [
-          "VoiceCoil_0/PWM1r",
-          "PWM1r_0"
-        ]
-      },
-      "VoiceCoil_0_PWM2": {
-        "ports": [
-          "VoiceCoil_0/PWM2",
-          "PWM2_0"
-        ]
-      },
-      "VoiceCoil_0_PWM2r": {
-        "ports": [
-          "VoiceCoil_0/PWM2r",
-          "PWM2r_0"
-        ]
-      },
       "axi_gpio_0_gpio_io_o": {
         "ports": [
           "axi_gpio_0/gpio_io_o",
@@ -2701,9 +2617,8 @@
           "processing_system7_0/M_AXI_GP0_ACLK",
           "rst_ps7_0_100M/slowest_sync_clk",
           "stepperDriver_0/clk",
-          "Spindle_0/clk",
           "axi_gpio_1/s_axi_aclk",
-          "VoiceCoil_0/clk"
+          "Spindle_0/clk"
         ]
       },
       "processing_system7_0_FCLK_RESET0_N": {
