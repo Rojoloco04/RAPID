@@ -57,6 +57,7 @@ signal RPM_CLK_DIV : integer range 0 to 125001 := 0;
 signal RPM_CLK_EDGE : std_logic;
 signal RPM_CLK_CNT : integer range 0 to 65535 := 0;
 signal RPM_OUT_SIG : std_logic_vector (15 downto 0);
+signal RPM_PULSE_PREV : std_logic;
 
 begin
 

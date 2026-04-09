@@ -70,8 +70,10 @@ begin
     if (rising_edge(clk)) then
         if (clk_div_cnt1 < DC_cnt_1) then
             PWM_1_sig <= '1';
+            clk_div_cnt1 <= clk_div_cnt1 + 1;
         elsif (clk_div_cnt1 <= clk_div) and (clk_div_cnt1 >= DC_cnt_1) then
             PWM_1_sig <= '0';
+            clk_div_cnt1 <= clk_div_cnt1 + 1;
         else 
             PWM_1_sig <= '1';
             clk_div_cnt1 <= 0;
@@ -85,8 +87,10 @@ begin
     if (rising_edge(clk)) then
         if (clk_div_cnt2 < DC_cnt_2) then
             PWM_2_sig <= '1';
+            clk_div_cnt2 <= clk_div_cnt2 + 1;
         elsif (clk_div_cnt2 <= clk_div) and (clk_div_cnt2 >= DC_cnt_2) then
             PWM_2_sig <= '0';
+            clk_div_cnt2 <= clk_div_cnt2 + 1;
         else 
             PWM_2_sig <= '1';
             clk_div_cnt2 <= 0;
