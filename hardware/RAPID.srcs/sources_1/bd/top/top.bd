@@ -2702,8 +2702,8 @@
           "rst_ps7_0_100M/slowest_sync_clk",
           "stepperDriver_0/clk",
           "axi_gpio_1/s_axi_aclk",
-          "Spindle_0/clk",
-          "VoiceCoil_0/clk"
+          "VoiceCoil_0/clk",
+          "Spindle_0/clk"
         ]
       },
       "processing_system7_0_FCLK_RESET0_N": {

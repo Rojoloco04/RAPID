@@ -87,7 +87,7 @@
 /* ------------------------------------------------------------------ */
 
 /* Log spindle RPM to the GUI console once per this many TYPE_POINT packets. */
-#define RPM_PRINT_EVERY  10
+#define RPM_PRINT_EVERY  1
 
 /* ------------------------------------------------------------------ */
 /*  Globals                                                           */

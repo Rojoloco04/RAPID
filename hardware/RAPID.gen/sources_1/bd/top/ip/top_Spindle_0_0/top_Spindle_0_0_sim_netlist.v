@@ -2,7 +2,7 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
-// Date        : Thu Apr  9 15:31:41 2026
+// Date        : Thu Apr  9 17:32:00 2026
 // Host        : MDD-ECE-HP3853 running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
 //               c:/Users/jparrack/Desktop/RAPID/hardware/RAPID.gen/sources_1/bd/top/ip/top_Spindle_0_0/top_Spindle_0_0_sim_netlist.v
@@ -76,17 +76,17 @@ module top_Spindle_0_0_Spindle
     INHB,
     INLB,
     INLA,
-    en,
+    clk,
     RPM_Pulse_In,
-    clk);
+    en);
   output [15:0]RPM_Out;
   output INHA;
   output INHB;
   output INLB;
   output INLA;
-  input en;
-  input RPM_Pulse_In;
   input clk;
+  input RPM_Pulse_In;
+  input en;
 
   wire INHA;
   wire INHB;
@@ -95,6 +95,7 @@ module top_Spindle_0_0_Spindle
   wire INLA_i_1_n_0;
   wire INLB;
   wire INLB_i_1_n_0;
+  wire RPM_CLK_CNT0;
   wire \RPM_CLK_CNT[0]_i_2_n_0 ;
   wire [15:0]RPM_CLK_CNT_reg;
   wire \RPM_CLK_CNT_reg[0]_i_1_n_0 ;
@@ -128,7 +129,6 @@ module top_Spindle_0_0_Spindle
   wire \RPM_CLK_CNT_reg[8]_i_1_n_5 ;
   wire \RPM_CLK_CNT_reg[8]_i_1_n_6 ;
   wire \RPM_CLK_CNT_reg[8]_i_1_n_7 ;
-  wire \RPM_CLK_DIV[0]_i_1_n_0 ;
   wire \RPM_CLK_DIV[0]_i_3_n_0 ;
   wire \RPM_CLK_DIV[0]_i_4_n_0 ;
   wire \RPM_CLK_DIV[0]_i_5_n_0 ;
@@ -167,11 +167,12 @@ module top_Spindle_0_0_Spindle
   wire \RPM_CLK_DIV_reg[8]_i_1_n_5 ;
   wire \RPM_CLK_DIV_reg[8]_i_1_n_6 ;
   wire \RPM_CLK_DIV_reg[8]_i_1_n_7 ;
-  wire RPM_CLK_EDGE;
-  wire RPM_OUT_SIG0;
   wire [15:0]RPM_Out;
   wire RPM_PULSE_PREV;
+  wire \RPM_PULSE_REG_reg[2]_srl2_n_0 ;
+  wire \RPM_PULSE_REG_reg_n_0_[0] ;
   wire RPM_Pulse_In;
+  wire clear;
   wire clk;
   wire clk_div;
   wire clk_div_i_1_n_0;
@@ -252,8 +253,8 @@ module top_Spindle_0_0_Spindle
   wire in_startup_i_1_n_0;
   wire in_startup_s1;
   wire in_startup_sync;
+  wire p_0_in8_in;
   wire p_1_in;
-  wire \pwm_counter[0]_i_1_n_0 ;
   wire \pwm_counter[0]_i_3_n_0 ;
   wire \pwm_counter[0]_i_4_n_0 ;
   wire \pwm_counter[0]_i_5_n_0 ;
@@ -315,6 +316,7 @@ module top_Spindle_0_0_Spindle
   wire pwm_signal_i_3_n_0;
   wire pwm_signal_i_4_n_0;
   wire pwm_signal_i_5_n_0;
+  wire sel;
   wire start_check_i_1_n_0;
   wire start_check_reg_n_0;
   wire \start_count[0]_i_10_n_0 ;
@@ -457,10 +459,10 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[0] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[0]_i_1_n_7 ),
         .Q(RPM_CLK_CNT_reg[0]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \RPM_CLK_CNT_reg[0]_i_1 
        (.CI(1'b0),
@@ -473,26 +475,26 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[10] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[8]_i_1_n_5 ),
         .Q(RPM_CLK_CNT_reg[10]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[11] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[8]_i_1_n_4 ),
         .Q(RPM_CLK_CNT_reg[11]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[12] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[12]_i_1_n_7 ),
         .Q(RPM_CLK_CNT_reg[12]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \RPM_CLK_CNT_reg[12]_i_1 
        (.CI(\RPM_CLK_CNT_reg[8]_i_1_n_0 ),
@@ -505,58 +507,58 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[13] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[12]_i_1_n_6 ),
         .Q(RPM_CLK_CNT_reg[13]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[14] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[12]_i_1_n_5 ),
         .Q(RPM_CLK_CNT_reg[14]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[15] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[12]_i_1_n_4 ),
         .Q(RPM_CLK_CNT_reg[15]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[1] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[0]_i_1_n_6 ),
         .Q(RPM_CLK_CNT_reg[1]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[2] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[0]_i_1_n_5 ),
         .Q(RPM_CLK_CNT_reg[2]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[3] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[0]_i_1_n_4 ),
         .Q(RPM_CLK_CNT_reg[3]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[4] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[4]_i_1_n_7 ),
         .Q(RPM_CLK_CNT_reg[4]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \RPM_CLK_CNT_reg[4]_i_1 
        (.CI(\RPM_CLK_CNT_reg[0]_i_1_n_0 ),
@@ -569,34 +571,34 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[5] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[4]_i_1_n_6 ),
         .Q(RPM_CLK_CNT_reg[5]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[6] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[4]_i_1_n_5 ),
         .Q(RPM_CLK_CNT_reg[6]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[7] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[4]_i_1_n_4 ),
         .Q(RPM_CLK_CNT_reg[7]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[8] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[8]_i_1_n_7 ),
         .Q(RPM_CLK_CNT_reg[8]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \RPM_CLK_CNT_reg[8]_i_1 
        (.CI(\RPM_CLK_CNT_reg[4]_i_1_n_0 ),
@@ -609,10 +611,10 @@ module top_Spindle_0_0_Spindle
     .INIT(1'b0)) 
     \RPM_CLK_CNT_reg[9] 
        (.C(clk),
-        .CE(RPM_CLK_EDGE),
+        .CE(sel),
         .D(\RPM_CLK_CNT_reg[8]_i_1_n_6 ),
         .Q(RPM_CLK_CNT_reg[9]),
-        .R(RPM_OUT_SIG0));
+        .R(RPM_CLK_CNT0));
   LUT6 #(
     .INIT(64'h00000000FFFFA888)) 
     \RPM_CLK_DIV[0]_i_1 
@@ -622,7 +624,7 @@ module top_Spindle_0_0_Spindle
         .I3(\RPM_CLK_DIV[0]_i_4_n_0 ),
         .I4(RPM_CLK_DIV_reg[12]),
         .I5(\RPM_CLK_DIV[0]_i_5_n_0 ),
-        .O(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .O(sel));
   LUT4 #(
     .INIT(16'hFFFE)) 
     \RPM_CLK_DIV[0]_i_3 
@@ -661,7 +663,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[0]_i_2_n_7 ),
         .Q(RPM_CLK_DIV_reg[0]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \RPM_CLK_DIV_reg[0]_i_2 
        (.CI(1'b0),
@@ -677,7 +679,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[8]_i_1_n_5 ),
         .Q(RPM_CLK_DIV_reg[10]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[11] 
@@ -685,7 +687,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[8]_i_1_n_4 ),
         .Q(RPM_CLK_DIV_reg[11]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[12] 
@@ -693,7 +695,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[12]_i_1_n_7 ),
         .Q(RPM_CLK_DIV_reg[12]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \RPM_CLK_DIV_reg[12]_i_1 
        (.CI(\RPM_CLK_DIV_reg[8]_i_1_n_0 ),
@@ -709,7 +711,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[12]_i_1_n_6 ),
         .Q(RPM_CLK_DIV_reg[13]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[14] 
@@ -717,7 +719,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[12]_i_1_n_5 ),
         .Q(RPM_CLK_DIV_reg[14]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[15] 
@@ -725,7 +727,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[12]_i_1_n_4 ),
         .Q(RPM_CLK_DIV_reg[15]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[16] 
@@ -733,7 +735,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[16]_i_1_n_7 ),
         .Q(RPM_CLK_DIV_reg[16]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \RPM_CLK_DIV_reg[16]_i_1 
        (.CI(\RPM_CLK_DIV_reg[12]_i_1_n_0 ),
@@ -749,7 +751,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[0]_i_2_n_6 ),
         .Q(RPM_CLK_DIV_reg[1]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[2] 
@@ -757,7 +759,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[0]_i_2_n_5 ),
         .Q(RPM_CLK_DIV_reg[2]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[3] 
@@ -765,7 +767,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[0]_i_2_n_4 ),
         .Q(RPM_CLK_DIV_reg[3]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[4] 
@@ -773,7 +775,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[4]_i_1_n_7 ),
         .Q(RPM_CLK_DIV_reg[4]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \RPM_CLK_DIV_reg[4]_i_1 
        (.CI(\RPM_CLK_DIV_reg[0]_i_2_n_0 ),
@@ -789,7 +791,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[4]_i_1_n_6 ),
         .Q(RPM_CLK_DIV_reg[5]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[6] 
@@ -797,7 +799,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[4]_i_1_n_5 ),
         .Q(RPM_CLK_DIV_reg[6]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[7] 
@@ -805,7 +807,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[4]_i_1_n_4 ),
         .Q(RPM_CLK_DIV_reg[7]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   FDRE #(
     .INIT(1'b0)) 
     \RPM_CLK_DIV_reg[8] 
@@ -813,7 +815,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[8]_i_1_n_7 ),
         .Q(RPM_CLK_DIV_reg[8]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
+        .R(sel));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \RPM_CLK_DIV_reg[8]_i_1 
        (.CI(\RPM_CLK_DIV_reg[4]_i_1_n_0 ),
@@ -829,120 +831,137 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\RPM_CLK_DIV_reg[8]_i_1_n_6 ),
         .Q(RPM_CLK_DIV_reg[9]),
-        .R(\RPM_CLK_DIV[0]_i_1_n_0 ));
-  FDRE RPM_CLK_EDGE_reg
-       (.C(clk),
-        .CE(1'b1),
-        .D(\RPM_CLK_DIV[0]_i_1_n_0 ),
-        .Q(RPM_CLK_EDGE),
-        .R(1'b0));
+        .R(sel));
   LUT2 #(
     .INIT(4'h2)) 
     \RPM_OUT_SIG[15]_i_1 
-       (.I0(RPM_Pulse_In),
+       (.I0(p_0_in8_in),
         .I1(RPM_PULSE_PREV),
-        .O(RPM_OUT_SIG0));
+        .O(RPM_CLK_CNT0));
   FDRE \RPM_OUT_SIG_reg[0] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[0]),
         .Q(RPM_Out[0]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[10] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[10]),
         .Q(RPM_Out[10]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[11] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[11]),
         .Q(RPM_Out[11]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[12] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[12]),
         .Q(RPM_Out[12]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[13] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[13]),
         .Q(RPM_Out[13]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[14] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[14]),
         .Q(RPM_Out[14]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[15] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[15]),
         .Q(RPM_Out[15]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[1] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[1]),
         .Q(RPM_Out[1]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[2] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[2]),
         .Q(RPM_Out[2]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[3] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[3]),
         .Q(RPM_Out[3]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[4] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[4]),
         .Q(RPM_Out[4]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[5] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[5]),
         .Q(RPM_Out[5]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[6] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[6]),
         .Q(RPM_Out[6]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[7] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[7]),
         .Q(RPM_Out[7]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[8] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[8]),
         .Q(RPM_Out[8]),
         .R(1'b0));
   FDRE \RPM_OUT_SIG_reg[9] 
        (.C(clk),
-        .CE(RPM_OUT_SIG0),
+        .CE(RPM_CLK_CNT0),
         .D(RPM_CLK_CNT_reg[9]),
         .Q(RPM_Out[9]),
         .R(1'b0));
   FDRE RPM_PULSE_PREV_reg
        (.C(clk),
         .CE(1'b1),
-        .D(RPM_Pulse_In),
+        .D(p_0_in8_in),
         .Q(RPM_PULSE_PREV),
+        .R(1'b0));
+  FDRE \RPM_PULSE_REG_reg[0] 
+       (.C(clk),
+        .CE(1'b1),
+        .D(RPM_Pulse_In),
+        .Q(\RPM_PULSE_REG_reg_n_0_[0] ),
+        .R(1'b0));
+  (* srl_bus_name = "\\U0/RPM_PULSE_REG_reg " *) 
+  (* srl_name = "\\U0/RPM_PULSE_REG_reg[2]_srl2 " *) 
+  SRL16E \RPM_PULSE_REG_reg[2]_srl2 
+       (.A0(1'b1),
+        .A1(1'b0),
+        .A2(1'b0),
+        .A3(1'b0),
+        .CE(1'b1),
+        .CLK(clk),
+        .D(\RPM_PULSE_REG_reg_n_0_[0] ),
+        .Q(\RPM_PULSE_REG_reg[2]_srl2_n_0 ));
+  FDRE \RPM_PULSE_REG_reg[3] 
+       (.C(clk),
+        .CE(1'b1),
+        .D(\RPM_PULSE_REG_reg[2]_srl2_n_0 ),
+        .Q(p_0_in8_in),
         .R(1'b0));
   LUT2 #(
     .INIT(4'h2)) 
@@ -1418,7 +1437,7 @@ module top_Spindle_0_0_Spindle
         .I3(pwm_counter_reg[16]),
         .I4(\pwm_counter[0]_i_4_n_0 ),
         .I5(\pwm_counter[0]_i_5_n_0 ),
-        .O(\pwm_counter[0]_i_1_n_0 ));
+        .O(clear));
   LUT5 #(
     .INIT(32'h7FFFFFFF)) 
     \pwm_counter[0]_i_3 
@@ -1465,7 +1484,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[0]_i_2_n_7 ),
         .Q(\pwm_counter_reg_n_0_[0] ),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \pwm_counter_reg[0]_i_2 
        (.CI(1'b0),
@@ -1481,7 +1500,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[8]_i_1_n_5 ),
         .Q(pwm_counter_reg[10]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[11] 
@@ -1489,7 +1508,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[8]_i_1_n_4 ),
         .Q(pwm_counter_reg[11]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[12] 
@@ -1497,7 +1516,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[12]_i_1_n_7 ),
         .Q(pwm_counter_reg[12]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \pwm_counter_reg[12]_i_1 
        (.CI(\pwm_counter_reg[8]_i_1_n_0 ),
@@ -1513,7 +1532,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[12]_i_1_n_6 ),
         .Q(pwm_counter_reg[13]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[14] 
@@ -1521,7 +1540,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[12]_i_1_n_5 ),
         .Q(pwm_counter_reg[14]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[15] 
@@ -1529,7 +1548,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[12]_i_1_n_4 ),
         .Q(pwm_counter_reg[15]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[16] 
@@ -1537,7 +1556,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[16]_i_1_n_7 ),
         .Q(pwm_counter_reg[16]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \pwm_counter_reg[16]_i_1 
        (.CI(\pwm_counter_reg[12]_i_1_n_0 ),
@@ -1553,7 +1572,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[16]_i_1_n_6 ),
         .Q(pwm_counter_reg[17]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[18] 
@@ -1561,7 +1580,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[16]_i_1_n_5 ),
         .Q(pwm_counter_reg[18]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[19] 
@@ -1569,7 +1588,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[16]_i_1_n_4 ),
         .Q(pwm_counter_reg[19]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[1] 
@@ -1577,7 +1596,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[0]_i_2_n_6 ),
         .Q(\pwm_counter_reg_n_0_[1] ),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[20] 
@@ -1585,7 +1604,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[20]_i_1_n_7 ),
         .Q(pwm_counter_reg[20]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \pwm_counter_reg[20]_i_1 
        (.CI(\pwm_counter_reg[16]_i_1_n_0 ),
@@ -1601,7 +1620,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[20]_i_1_n_6 ),
         .Q(pwm_counter_reg[21]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[22] 
@@ -1609,7 +1628,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[20]_i_1_n_5 ),
         .Q(pwm_counter_reg[22]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[23] 
@@ -1617,7 +1636,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[20]_i_1_n_4 ),
         .Q(pwm_counter_reg[23]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[2] 
@@ -1625,7 +1644,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[0]_i_2_n_5 ),
         .Q(\pwm_counter_reg_n_0_[2] ),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[3] 
@@ -1633,7 +1652,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[0]_i_2_n_4 ),
         .Q(pwm_counter_reg[3]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[4] 
@@ -1641,7 +1660,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[4]_i_1_n_7 ),
         .Q(pwm_counter_reg[4]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \pwm_counter_reg[4]_i_1 
        (.CI(\pwm_counter_reg[0]_i_2_n_0 ),
@@ -1657,7 +1676,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[4]_i_1_n_6 ),
         .Q(pwm_counter_reg[5]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[6] 
@@ -1665,7 +1684,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[4]_i_1_n_5 ),
         .Q(pwm_counter_reg[6]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[7] 
@@ -1673,7 +1692,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[4]_i_1_n_4 ),
         .Q(pwm_counter_reg[7]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   FDRE #(
     .INIT(1'b0)) 
     \pwm_counter_reg[8] 
@@ -1681,7 +1700,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[8]_i_1_n_7 ),
         .Q(pwm_counter_reg[8]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   (* ADDER_THRESHOLD = "11" *) 
   CARRY4 \pwm_counter_reg[8]_i_1 
        (.CI(\pwm_counter_reg[4]_i_1_n_0 ),
@@ -1697,7 +1716,7 @@ module top_Spindle_0_0_Spindle
         .CE(1'b1),
         .D(\pwm_counter_reg[8]_i_1_n_6 ),
         .Q(pwm_counter_reg[9]),
-        .R(\pwm_counter[0]_i_1_n_0 ));
+        .R(clear));
   LUT5 #(
     .INIT(32'h00000002)) 
     pwm_signal_i_1

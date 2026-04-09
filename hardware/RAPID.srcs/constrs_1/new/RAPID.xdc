@@ -71,3 +71,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports PWM1_0]
 set_property IOSTANDARD LVCMOS33 [get_ports PWM1r_0]
 set_property IOSTANDARD LVCMOS33 [get_ports PWM2_0]
 set_property IOSTANDARD LVCMOS33 [get_ports PWM2r_0]
+
+set_property PULLTYPE PULLDOWN [get_ports PWM1_0]
+set_property PULLTYPE PULLDOWN [get_ports PWM1r_0]
+set_property PULLTYPE PULLDOWN [get_ports PWM2_0]
+set_property PULLTYPE PULLDOWN [get_ports PWM2r_0]
