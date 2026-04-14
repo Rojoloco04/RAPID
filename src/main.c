@@ -190,6 +190,11 @@ static DWORD WINAPI reader_thread(LPVOID param) {
                     }
                     InterlockedIncrement(&ctx->ack_count);
                     SetEvent(ctx->ack_event);
+                } else if (type == TYPE_RPM) {
+                    if (len >= 2) {
+                        uint16_t rpm = (uint16_t)payload[0] | ((uint16_t)payload[1] << 8);
+                        PRINT(app, "[RPM] %u RPM\n", (unsigned)rpm);
+                    }
                 } else {
                     PRINT(app, "[RX] type=0x%02X len=%u\n", type, len);
                 }

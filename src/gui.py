@@ -19,6 +19,7 @@ import sys
 import signal
 import re
 import math
+import time
 from pathlib import Path
 
 from PySide6.QtCore import QProcess, QTimer
@@ -35,6 +36,8 @@ import pyqtgraph as pg
 ACK_RE      = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+um,\s+theta=(?P<t>-?\d+\.?\d*)\s+deg")
 CRC_RE      = re.compile(r"\[RX\]\s+CRC mismatch")
 PROGRESS_RE = re.compile(r"\[PROGRESS\]\s+(?P<i>\d+)/(?P<n>\d+)")
+# Matches both "[RPM] 1234 RPM" (TYPE_RPM response) and "[FPGA] RPM: 1234" (debug_printf)
+RPM_RE      = re.compile(r"(?:\[RPM\]\s+(?P<a>\d+)\s+RPM|\[FPGA\]\s+RPM:\s*(?P<b>\d+))")
 
 _CIRCLE_PTS = 256
 
@@ -77,6 +80,12 @@ class GUI(QWidget):
         self._read_buf = ""
         self._plot_dirty = False
 
+        # ---- RPM data ----
+        self.rpm_values: list[float] = []
+        self.rpm_times:  list[float] = []   # seconds since first RPM reading
+        self._rpm_t0: float | None = None
+        self._rpm_plot_dirty = False
+
         # ---- build UI ----
         root = QVBoxLayout(self)
         self._build_top_bar(root)
@@ -93,16 +102,26 @@ class GUI(QWidget):
         self._build_manual_tab(mtab)
         tabs.addTab(manual_tab, "Manual Control")
 
+        rpm_tab = QWidget()
+        rtab = QVBoxLayout(rpm_tab)
+        self._build_rpm_tab(rtab)
+        tabs.addTab(rpm_tab, "RPM Monitor")
+
         root.addWidget(tabs, 1)
 
         # shared log — always visible below the tabs
         self._build_log(root)
 
-        # Plot refresh timer
+        # Plot refresh timers
         self._plot_timer = QTimer(self)
         self._plot_timer.setInterval(100)
         self._plot_timer.timeout.connect(self._refresh_plot)
         self._plot_timer.start()
+
+        self._rpm_timer = QTimer(self)
+        self._rpm_timer.setInterval(100)
+        self._rpm_timer.timeout.connect(self._refresh_rpm_plot)
+        self._rpm_timer.start()
 
 
 
@@ -284,6 +303,37 @@ class GUI(QWidget):
         parent.addStretch(1)
 
     # -----------------------------------------------------------------------
+    # RPM Monitor tab
+    # -----------------------------------------------------------------------
+
+    def _build_rpm_tab(self, parent):
+        # Time-series plot
+        self.rpm_plot = pg.PlotWidget()
+        self.rpm_plot.setLabel("bottom", "Time (s)")
+        self.rpm_plot.setLabel("left",   "RPM")
+        self.rpm_plot.showGrid(x=True, y=True, alpha=0.2)
+        self.rpm_curve = self.rpm_plot.plot(
+            [], [], pen=pg.mkPen(color="#00bfff", width=2),
+            symbol="o", symbolSize=4, symbolBrush="#00bfff",
+        )
+        parent.addWidget(self.rpm_plot, 1)
+
+        btn_row = QHBoxLayout()
+        btn_clear_rpm = QPushButton("Clear")
+        btn_clear_rpm.setToolTip("Clear RPM plot and log")
+        btn_clear_rpm.clicked.connect(self.clear_rpm)
+        btn_row.addWidget(btn_clear_rpm)
+        btn_row.addStretch(1)
+        parent.addLayout(btn_row)
+
+        # RPM-only log
+        self.rpm_log = QPlainTextEdit()
+        self.rpm_log.setReadOnly(True)
+        self.rpm_log.setMaximumBlockCount(2000)
+        self.rpm_log.setFixedHeight(160)
+        parent.addWidget(self.rpm_log)
+
+    # -----------------------------------------------------------------------
     # Shared log
     # -----------------------------------------------------------------------
 
@@ -380,6 +430,14 @@ class GUI(QWidget):
         self.lbl_progress.setText("")
         self._refresh_plot()
 
+    def clear_rpm(self):
+        self.rpm_values.clear()
+        self.rpm_times.clear()
+        self._rpm_t0 = None
+        self._rpm_plot_dirty = True
+        self.rpm_log.clear()
+        self._refresh_rpm_plot()
+
     # -----------------------------------------------------------------------
     # Manual Control actions
     # -----------------------------------------------------------------------
@@ -473,6 +531,17 @@ class GUI(QWidget):
         if m:
             self.lbl_progress.setText(f"{m.group('i')}/{m.group('n')}")
 
+        m = RPM_RE.search(line)
+        if m:
+            rpm = int(m.group("a") or m.group("b"))
+            now = time.monotonic()
+            if self._rpm_t0 is None:
+                self._rpm_t0 = now
+            self.rpm_times.append(now - self._rpm_t0)
+            self.rpm_values.append(rpm)
+            self.rpm_log.appendPlainText(f"t={self.rpm_times[-1]:.1f}s  {rpm} RPM")
+            self._rpm_plot_dirty = True
+
 
     # -----------------------------------------------------------------------
     # Helpers
@@ -509,6 +578,12 @@ class GUI(QWidget):
             )
         else:
             self.ref_circle.setData([], [])
+
+    def _refresh_rpm_plot(self):
+        if not self._rpm_plot_dirty:
+            return
+        self._rpm_plot_dirty = False
+        self.rpm_curve.setData(self.rpm_times, self.rpm_values)
 
 
 # ---------------------------------------------------------------------------
