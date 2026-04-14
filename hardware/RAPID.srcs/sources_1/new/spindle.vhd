@@ -141,8 +141,6 @@ begin
     end if;
 end process;
 
-
--- TODO: fix RPM measurement
 -- RPM measurement
 process(clk)
 begin
