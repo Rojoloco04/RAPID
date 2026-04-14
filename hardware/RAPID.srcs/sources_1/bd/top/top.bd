@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x8456EC8C37CF15CB",
+      "boundary_crc": "0x8456EC8C7AF769C8",
       "device": "xc7z020clg400-1",
       "gen_directory": "../../../../RAPID.gen/sources_1/bd/top",
       "name": "top",

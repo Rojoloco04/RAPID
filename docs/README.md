@@ -43,7 +43,8 @@ RAPID/
 ├── hardware/                 # Xilinx Vivado project files (FPGA hardware)
 │   ├── RAPID.srcs/sources_1/new/
 │   │   ├── stepperDriver.vhd # Stepper motor FSM (DRV8834)
-│   │   └── spindle.vhd       # BLDC 6-step commutation (DRV8323)
+│   │   ├── spindle.vhd       # BLDC 6-step commutation (DRV8323)
+│   │   └── VoiceCoil.vhd     # Dual voice-coil PWM driver (~32 kHz)
 │   └── RAPID.srcs/constrs_1/new/RAPID.xdc  # Pin constraints (Arty Z7-20)
 ├── PCB/              # PCB schematic/layout designed with Altium Designer
 │   ├── Spindle       # BLDC spindle motor custom PCB files
@@ -218,6 +219,6 @@ The firmware enters a packet receive loop immediately — no startup zeroing del
 
 250 steps = 30 mm (full disc range, inner to outer edge). The stepper step rate is 500 Hz (2 ms/step).
 
-> **Spindle windup:** When streaming a pattern, the firmware waits 1 second after enabling the spindle before turning on the laser — allows the rotor to reach operating speed.
+> **Spindle windup:** At FPGA boot the firmware enables the spindle and waits 2 seconds for rotor alignment and speed. When streaming, `RAPID.exe` additionally waits 1 second after re-enabling the spindle before sending the first point. The laser turns on after the first point's stepper move completes.
 
 > **RPM readout:** `spindle.vhd` measures the period between consecutive hall sensor pulses using a 1 kHz tick counter and exposes the result via `axi_gpio_1`. The firmware computes `RPM = 10000 / ticks` (6 hall pulses per revolution) and logs it to the GUI console every 10 points during a stream. The PC can also request an on-demand reading by sending `TYPE_RPM_REQ (0x27)`.
