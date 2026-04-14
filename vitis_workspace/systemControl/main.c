@@ -258,9 +258,8 @@ static uint8_t receive_packet(uint8_t *out_payload)
 static uint16_t read_rpm(void)
 {
     u32 raw = XGpio_DiscreteRead(&gpio_rpm, 1);
-    uint32_t ticks = raw & 0xFFFFu;   /* RPM_Out is 16-bit */
-    if (ticks == 0)
-        return 0;
+    uint32_t ticks = raw & 0xFFFFu;
+    if (ticks == 0) return 0;
     uint32_t rpm = 10000u / ticks;
     return (uint16_t)(rpm > 0xFFFFu ? 0xFFFFu : rpm);
 }

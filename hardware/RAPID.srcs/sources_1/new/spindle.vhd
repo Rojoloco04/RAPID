@@ -54,11 +54,11 @@ signal duty_cycle_count : integer range 0 to 5000 := 4000; -- 80% at 25kHz
 
 constant RPM_CLK : integer := 125000;
 signal RPM_CLK_DIV : integer range 0 to 125001 := 0;
-signal RPM_CLK_EDGE : std_logic;
 signal RPM_CLK_CNT : integer range 0 to 65535 := 0;
 signal RPM_OUT_SIG : std_logic_vector (15 downto 0);
-signal RPM_PULSE_REG : std_logic_vector(3 downto 0);
-signal RPM_PULSE_PREV : std_logic;
+signal RPM_SYNC     : std_logic_vector(1 downto 0) := (others => '0'); -- 2-stage metastability sync
+signal RPM_DEBOUNCE : std_logic_vector(7 downto 0) := (others => '0'); -- 8-bit 1kHz debounce shift reg
+signal RPM_STABLE   : std_logic := '0'; -- last stable level
 
 begin
 
@@ -70,11 +70,9 @@ begin
 --12,820,512 gives 9.75 Hz = too jerky/unusable
 --10,309,278 gives 12.13 Hz = ~1 rotation every 3 seconds - slightly jerky
 --9,387,908 gives 13.32 Hz = 1 rotation every 2.6 seconds
---6,410,256 gives ~14.5 Hz = 1 rotation everhy 1.8 seconds
+--6,410,256 gives ~14.5 Hz = 1 rotation everhy 1.8 seconds, Smoothest/slowest
 --3,205,128 gives ~39 Hz = 1 RPS
-count_max <= 12500000;      --10 hz
-
---6410256; --14.5Hz - Smoothest/slowest
+count_max <= 12500000; --10 hz
 
 -- Clock divider
 process(clk)
@@ -146,31 +144,43 @@ process(clk)
 begin
     if rising_edge(clk) then
         if en = '0' then
-            -- Reset all RPM state when spindle is disabled so the counter
-            -- does not accumulate idle time before the next enable.  The
-            -- captured output is also cleared so stale values are not read.
             RPM_CLK_DIV  <= 0;
             RPM_CLK_CNT  <= 0;
             RPM_OUT_SIG  <= (others => '0');
-            RPM_PULSE_REG  <= (others => '0');
-            RPM_PULSE_PREV <= '0';
+            RPM_SYNC     <= (others => '0');
+            RPM_DEBOUNCE <= (others => '0');
+            RPM_STABLE   <= '0';
         else
+            -- Metastability sync at 125 MHz
+            RPM_SYNC <= RPM_SYNC(0) & RPM_Pulse_In;
+
             -- 1 kHz clock enable
             if RPM_CLK_DIV < RPM_CLK - 1 then
-                RPM_CLK_DIV  <= RPM_CLK_DIV + 1;
+                RPM_CLK_DIV <= RPM_CLK_DIV + 1;
             else
-                RPM_CLK_DIV  <= 0;
-                RPM_CLK_CNT <= RPM_CLK_CNT + 1;
-            end if;
+                RPM_CLK_DIV <= 0;
 
-            RPM_PULSE_REG <= RPM_PULSE_REG(2 downto 0) & RPM_Pulse_In;
-            RPM_PULSE_PREV <= RPM_PULSE_REG(3);
+                RPM_DEBOUNCE <= RPM_DEBOUNCE(6 downto 0) & RPM_SYNC(1);
+                if RPM_CLK_CNT < 65535 then
+                    RPM_CLK_CNT <= RPM_CLK_CNT + 1;
+                end if;
 
-            -- Edge detection and period measurement
-            if RPM_PULSE_REG(3) = '1' and RPM_PULSE_PREV = '0' then
-                -- Rising edge: capture period, reset counter
-                RPM_OUT_SIG <= std_logic_vector(to_unsigned(RPM_CLK_CNT, 16));
-                RPM_CLK_CNT <= 0;
+                -- Stale timeout: no pulse for >5 s
+                if RPM_CLK_CNT >= 5000 then
+                    RPM_OUT_SIG <= (others => '0');
+                end if;
+
+                -- Rising edge: all 8 bits high after stable low
+                if RPM_DEBOUNCE = X"FF" then
+                    if RPM_STABLE = '0' then
+                        RPM_OUT_SIG <= std_logic_vector(to_unsigned(RPM_CLK_CNT, 16));
+                        RPM_CLK_CNT <= 0;
+                        RPM_STABLE  <= '1';
+                    end if;
+                -- Falling edge: all 8 bits low rearms detection
+                elsif RPM_DEBOUNCE = X"00" then
+                    RPM_STABLE <= '0';
+                end if;
             end if;
         end if;
     end if;
