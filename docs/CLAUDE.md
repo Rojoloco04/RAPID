@@ -40,6 +40,7 @@ systemControl.c ── AXI GPIO (PS→PL) ──→ stepperDriver.vhd
 | `hardware/RAPID.xpr` | Vivado project file |
 | `hardware/RAPID.srcs/sources_1/new/stepperDriver.vhd` | **Active** stepper FSM VHDL |
 | `hardware/RAPID.srcs/sources_1/new/spindle.vhd` | **Active** BLDC 6-step commutation VHDL |
+| `hardware/RAPID.srcs/sources_1/new/VoiceCoil.vhd` | **Active** dual voice-coil PWM driver VHDL |
 | `hardware/RAPID.srcs/constrs_1/new/RAPID.xdc` | Pin constraints (Arty Z7-20) |
 | `hardware/ip_repo/src/stepperDriver.vhd` | Old simple 2-phase stepper (archived, not in block design) |
 | `hardware/ip_repo/src/BLDC.vhd` | Old abstract BLDC (archived, not in block design) |
@@ -124,7 +125,7 @@ Firmware computes `RPM = 10000 / ticks` (6 hall pulses per revolution).
 
 ### Firmware Sequence
 
-On startup, `systemControl/main.c` enables the stepper, then enables the spindle and waits 1 s (`usleep(1000000u)`) for the rotor to reach speed. After spindle windup it enters the packet receive loop — no zeroing delay on boot (stepper is pre-zeroed by the VHDL ZEROING state at power-on). It processes packets as they arrive:
+On startup, `systemControl/main.c` enables the stepper, then enables the spindle and waits 2 s (`usleep(2000000u)`) for the rotor to reach speed (covers the 1.5 s VHDL alignment phase plus margin for the first valid RPM pulse). After spindle windup it enters the packet receive loop — no zeroing delay on boot (stepper is pre-zeroed by the VHDL ZEROING state at power-on). It processes packets as they arrive:
 
 | Packet | Action |
 |--------|--------|
@@ -138,7 +139,7 @@ On startup, `systemControl/main.c` enables the stepper, then enables the spindle
 | `TYPE_JOG (0x26)` | **If stepper disabled:** log message, ACK, skip. Else: move N steps (int32 LE payload) in current direction, ACK |
 | `TYPE_RPM_REQ (0x27)` | Read `axi_gpio_1` ch1 bits[15:0] (1 kHz tick count between hall pulses), compute `RPM = 10000 / ticks`, send `TYPE_RPM (0x82)` + debug_printf |
 
-**Spindle windup:** The spindle is enabled at startup before the first packet arrives. The firmware waits `usleep(1000000u)` (1 s) for the rotor to reach speed before entering the packet receive loop. The laser is not enabled until after the first point's stepper move completes (`first_point` flag).
+**Spindle windup:** The spindle is enabled at startup before the first packet arrives. The firmware waits `usleep(2000000u)` (2 s) for the rotor to reach speed before entering the packet receive loop. The laser is not enabled until after the first point's stepper move completes (`first_point` flag).
 
 **Step-count mapping (fixed physical scale):**
 ```
@@ -154,8 +155,9 @@ usleep( 1200 + delta × 2000 + 10000 )   /* µs: wakeup + running (500 Hz step r
 
 **Key constants:**
 ```c
-#define MAX_STEPS       250
-#define DISC_RADIUS_UM  30000
+#define MAX_STEPS        250
+#define DISC_RADIUS_UM   30000
+#define RPM_PRINT_EVERY  1      /* log RPM every N TYPE_POINT packets (currently every point) */
 /* No ZERO_WAIT_US — zeroing delay removed; stepper is pre-zeroed externally */
 ```
 
@@ -222,7 +224,7 @@ ZEROING → (prox_stable) → IDLE ───────────────
 
 | State | Behaviour |
 |-------|-----------|
-| `ZEROING` | Drives direction='0' (towards home) at zero_freq (50 Hz pulses). Resets `step_total=0` on `prox_stable`. |
+| `ZEROING` | Drives direction='0' (towards home) at zero_freq (500 Hz pulses). Resets `step_total=0` on `prox_stable`. |
 | `IDLE` | Motor sleep (`en_out='0'`). Watches for `step_go` rising edge or `zero_req`. |
 | `WAKEUP` | `en_out='1'`, waits 150,000 cycles (1.2 ms) — DRV8834 wakeup delay from sleep. |
 | `RUNNING` | Outputs `run_clk` as step pulses. Counts down `steps_remaining`. Increments/decrements `step_total`. |
@@ -230,7 +232,7 @@ ZEROING → (prox_stable) → IDLE ───────────────
 
 **Key constants:**
 - `run_freq = 250000` → step pulse period = 125 MHz ÷ 250000 = **500 Hz** (2000 µs/step)
-- `zero_freq = 2,500,000` → homing pulse rate = 125 MHz ÷ 2,500,000 = 50 Hz
+- `zero_freq = 250000` → homing pulse rate = 125 MHz ÷ 250000 = **500 Hz**
 - Proximity debounce: 1,250,000 cycles = 10 ms
 - Wakeup hold: 150,000 cycles = 1.2 ms
 - 2FF synchroniser on `prox_in` for metastability protection (`ASYNC_REG` attribute set)
@@ -248,7 +250,7 @@ The spindle runs **fixed speed, fixed direction** — control is purely on/off v
 **Hardcoded values:**
 - `INHC <= '0'` — phase C high-side permanently low (direction fixed)
 - `INLC <= '1'` — brake always released
-- `en_spindle <= '1'` — DRV8323 always enabled
+- `en_spindle <= en` — DRV8323 enable follows the `en` input
 - `count_max = 12,500,000` → 10 Hz commutation
 - PWM at ~10 Hz, 1% duty cycle (`pwm_counter` period 12,500,000, high for 125,000 counts)
 
@@ -272,6 +274,39 @@ The spindle runs **fixed speed, fixed direction** — control is purely on/off v
 | 6 | 0 | 1 | 0 |
 
 `INHA` carries the PWM signal. Sequence repeats steps 1–6 continuously while `en='1'`.
+
+---
+
+---
+
+### `VoiceCoil.vhd` — `hardware/RAPID.srcs/sources_1/new/`
+
+Dual-channel PWM generator for two voice coil actuators. Clock: 125 MHz.
+
+**Ports:**
+| Port | Direction | Description |
+|------|-----------|-------------|
+| `clk` | in | 125 MHz system clock |
+| `PWM1` | out | PWM output for voice coil 1 |
+| `PWM1r` | out | Mirror of PWM1 (both inputs of the H-bridge receive the same signal) |
+| `PWM2` | out | PWM output for voice coil 2 |
+| `PWM2r` | out | Mirror of PWM2 |
+
+**Operation:**
+- PWM frequency: 125 MHz ÷ 3907 cycles ≈ **32 kHz**
+- Each channel generates an independent PWM signal; duty cycle is set by `DC_cnt_1` / `DC_cnt_2` (0–3906 counts)
+- Duty cycle is currently **hardcoded to 0%** (`DC_cnt_1 = DC_cnt_2 = 0`) — voice coils are not actively driven
+- Variable duty cycle via 7-bit GPIO inputs (`VC1_DC`, `VC2_DC`) is implemented in commented-out code for future use; each bit step = ~1% duty cycle (39 counts / 3906)
+
+**Pin assignments (RAPID.xdc):**
+| Signal | Pin |
+|--------|-----|
+| `PWM1_0` | U5 |
+| `PWM1r_0` | V5 |
+| `PWM2_0` | V6 |
+| `PWM2r_0` | U7 |
+
+All voice coil outputs are LVCMOS33, PULLDOWN.
 
 ---
 
@@ -300,6 +335,11 @@ All I/O banks run at 3.3 V (LVCMOS33). `clk`, `en`, `dir` are internal PS/PL sig
 | `en_out_0` | V17 | Stepper enable (DRV8834 SLEEP) |
 | `prox_in_0` | R17 | Proximity switch input (PULLDOWN) |
 | `LaserEn[0]` | P18 | Laser enable output (PULLDOWN) |
+| `RPM_Pulse_In_0` | U17 | Hall sensor input (spindle RPM measurement) |
+| `PWM1_0` | U5 | Voice coil 1 PWM output (PULLDOWN) |
+| `PWM1r_0` | V5 | Voice coil 1 PWM mirror output (PULLDOWN) |
+| `PWM2_0` | V6 | Voice coil 2 PWM output (PULLDOWN) |
+| `PWM2r_0` | U7 | Voice coil 2 PWM mirror output (PULLDOWN) |
 
 ---
 
