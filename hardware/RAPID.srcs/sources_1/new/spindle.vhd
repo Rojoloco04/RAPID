@@ -145,26 +145,33 @@ end process;
 process(clk)
 begin
     if rising_edge(clk) then
-        -- 1 kHz clock enable
-        if RPM_CLK_DIV < RPM_CLK - 1 then
-            RPM_CLK_DIV  <= RPM_CLK_DIV + 1;
-            -- RPM_CLK_EDGE <= '0';
-        else
+        if en = '0' then
+            -- Reset all RPM state when spindle is disabled so the counter
+            -- does not accumulate idle time before the next enable.  The
+            -- captured output is also cleared so stale values are not read.
             RPM_CLK_DIV  <= 0;
-            -- RPM_CLK_EDGE <= '1';
-            RPM_CLK_CNT <= RPM_CLK_CNT + 1;
-        end if;
-        
-        RPM_PULSE_REG <= RPM_PULSE_REG(2 downto 0) & RPM_Pulse_In;
-        RPM_PULSE_PREV <= RPM_PULSE_REG(3);
-        
-        -- Edge detection and period measurement
-        if RPM_PULSE_REG(3) = '1' and RPM_PULSE_PREV = '0' then
-            -- Rising edge: capture period, reset counter
-            RPM_OUT_SIG <= std_logic_vector(to_unsigned(RPM_CLK_CNT, 16));
-            RPM_CLK_CNT <= 0;
-        -- elsif RPM_CLK_EDGE = '1' then
-            -- RPM_CLK_CNT <= RPM_CLK_CNT + 1;
+            RPM_CLK_CNT  <= 0;
+            RPM_OUT_SIG  <= (others => '0');
+            RPM_PULSE_REG  <= (others => '0');
+            RPM_PULSE_PREV <= '0';
+        else
+            -- 1 kHz clock enable
+            if RPM_CLK_DIV < RPM_CLK - 1 then
+                RPM_CLK_DIV  <= RPM_CLK_DIV + 1;
+            else
+                RPM_CLK_DIV  <= 0;
+                RPM_CLK_CNT <= RPM_CLK_CNT + 1;
+            end if;
+
+            RPM_PULSE_REG <= RPM_PULSE_REG(2 downto 0) & RPM_Pulse_In;
+            RPM_PULSE_PREV <= RPM_PULSE_REG(3);
+
+            -- Edge detection and period measurement
+            if RPM_PULSE_REG(3) = '1' and RPM_PULSE_PREV = '0' then
+                -- Rising edge: capture period, reset counter
+                RPM_OUT_SIG <= std_logic_vector(to_unsigned(RPM_CLK_CNT, 16));
+                RPM_CLK_CNT <= 0;
+            end if;
         end if;
     end if;
 end process;
