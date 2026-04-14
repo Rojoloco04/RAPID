@@ -1,2 +1,3 @@
 laser on/off to etch specific points
 RPM used to extrapolate position
+control flow update - need to wait for the spindle to rotate before sending the next point or accumulate points into a buffer and wait when buffer is full?
