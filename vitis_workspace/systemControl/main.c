@@ -308,8 +308,8 @@ int main(void)
     /* ===== 2. ENABLE SPINDLE ======================================= */
     config |= (1u << BIT_SPINDLE_EN);
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
-    debug_printf("Spindle enabled. Waiting 1 s for windup...");
-    usleep(1000000u);   /* 1 s spindle windup */
+    debug_printf("Spindle enabled. Waiting 2 s for windup...");
+    usleep(2000000u);   /* 2 s: covers 1.5 s VHDL startup alignment + margin for first valid RPM pulse */
     debug_printf("Spindle ready.");
 
     /* ===== 3. POINT LOOP =========================================== */

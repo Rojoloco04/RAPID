@@ -1,1 +1,2 @@
 laser on/off to etch specific points
+RPM used to extrapolate position
