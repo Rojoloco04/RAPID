@@ -35,6 +35,8 @@ hardware/RAPID.hw/
 hardware/RAPID.runs/
 hardware/RAPID.sim/
 hardware/RAPID.tmp/
+hardware/RAPID.gen/
+hardware/RAPID.ip_user_files/
 
 # Vivado journals and logs (root of hardware/)
 hardware/vivado.jou
