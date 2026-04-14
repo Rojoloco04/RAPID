@@ -36,8 +36,7 @@ import pyqtgraph as pg
 ACK_RE      = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+um,\s+theta=(?P<t>-?\d+\.?\d*)\s+deg")
 CRC_RE      = re.compile(r"\[RX\]\s+CRC mismatch")
 PROGRESS_RE = re.compile(r"\[PROGRESS\]\s+(?P<i>\d+)/(?P<n>\d+)")
-# Matches both "[RPM] 1234 RPM" (TYPE_RPM response) and "[FPGA] RPM: 1234" (debug_printf)
-RPM_RE      = re.compile(r"(?:\[RPM\]\s+(?P<a>\d+)\s+RPM|\[FPGA\]\s+RPM:\s*(?P<b>\d+))")
+RPM_RE      = re.compile(r"\[RPM\]\s+(?P<a>\d+)\s+RPM")
 
 _CIRCLE_PTS = 256
 
@@ -226,21 +225,18 @@ class GUI(QWidget):
         self.btn_stepper = QPushButton("Stepper: OFF")
         self.btn_laser   = QPushButton("Laser: OFF")
         self.btn_zero    = QPushButton("Zero")
-        self.btn_rpm     = QPushButton("Read RPM")
 
         self.btn_spindle.setToolTip("Toggle spindle motor on/off (TYPE_SPINDLE)")
         self.btn_stepper.setToolTip("Toggle stepper motor on/off (TYPE_STEPPER) — must be ON to jog or zero")
         self.btn_laser.setToolTip("Toggle laser on/off (TYPE_LASER)")
         self.btn_zero.setToolTip("Pulse zero_req to home the sled and reset step count (TYPE_ZERO) — stepper must be ON")
-        self.btn_rpm.setToolTip("Request current spindle RPM from the FPGA (TYPE_RPM_REQ)")
 
         self.btn_spindle.clicked.connect(lambda: self._manual_toggle("spindle"))
         self.btn_stepper.clicked.connect(lambda: self._manual_toggle("stepper"))
         self.btn_laser.clicked.connect(  lambda: self._manual_toggle("laser"))
         self.btn_zero.clicked.connect(   self.manual_zero)
-        self.btn_rpm.clicked.connect(    self.manual_rpm)
 
-        for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero, self.btn_rpm):
+        for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero):
             btn.setEnabled(False)
             ctrl_layout.addWidget(btn)
         parent.addWidget(ctrl_group)
@@ -319,6 +315,11 @@ class GUI(QWidget):
         parent.addWidget(self.rpm_plot, 1)
 
         btn_row = QHBoxLayout()
+        self.btn_rpm = QPushButton("Read RPM")
+        self.btn_rpm.setToolTip("Request current spindle RPM from the FPGA (TYPE_RPM_REQ)")
+        self.btn_rpm.setEnabled(False)
+        self.btn_rpm.clicked.connect(self.manual_rpm)
+        btn_row.addWidget(self.btn_rpm)
         btn_clear_rpm = QPushButton("Clear")
         btn_clear_rpm.setToolTip("Clear RPM plot and log")
         btn_clear_rpm.clicked.connect(self.clear_rpm)
@@ -393,8 +394,9 @@ class GUI(QWidget):
         self.btn_move.setEnabled(connected)
         self.btn_jog.setEnabled(connected)
         self.btn_jog_dir.setEnabled(connected)
-        for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero, self.btn_rpm):
+        for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero):
             btn.setEnabled(connected)
+        self.btn_rpm.setEnabled(connected)
         if not connected:
             # reset toggle state so buttons show correct labels on reconnect
             self.manual_spindle_on  = False
@@ -511,7 +513,9 @@ class GUI(QWidget):
         line = line.rstrip()
         if not line:
             return
-        self._log(line)
+        # Suppress the FPGA's debug echo of RPM — the [RPM] response line is enough
+        if not line.startswith("[FPGA] RPM:"):
+            self._log(line)
 
         m = ACK_RE.search(line)
         if m:
@@ -533,7 +537,7 @@ class GUI(QWidget):
 
         m = RPM_RE.search(line)
         if m:
-            rpm = int(m.group("a") or m.group("b"))
+            rpm = int(m.group("a"))
             now = time.monotonic()
             if self._rpm_t0 is None:
                 self._rpm_t0 = now

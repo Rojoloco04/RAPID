@@ -375,8 +375,12 @@ int main(void)
             send_frame(TYPE_ACK, rx_payload, POINT_LEN);
 
             /* Periodically log RPM to the GUI console */
-            if (++point_count % RPM_PRINT_EVERY == 0)
-                debug_printf("RPM: %u", (unsigned)read_rpm());
+            if (++point_count % RPM_PRINT_EVERY == 0) {
+                u32 _raw = XGpio_DiscreteRead(&gpio_rpm, 1);
+                uint32_t _ticks = _raw & 0xFFFFu;
+                debug_printf("RPM: %u (raw=0x%08X ticks=%u)",
+                             (unsigned)read_rpm(), (unsigned)_raw, (unsigned)_ticks);
+            }
         }
 
         else if (pkt_type == TYPE_END) {
