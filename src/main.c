@@ -294,6 +294,8 @@ static void cmd_stream(AppState *app, const char *filepath) {
             aborted = 1; break;
         }
         PRINT(app, "[PROGRESS] %zu/%zu\n", i + 1, count);
+        /* Fire-and-forget RPM request after each point; reader thread prints [RPM] */
+        send_rpm_req_packet(app->rx.h);
     }
 
     free(polar);
