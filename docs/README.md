@@ -149,6 +149,9 @@ The GUI lets you:
 - Connect to the serial port and manage `RAPID.exe` as a subprocess
 - Select a GDS input file and stream a pattern with live ACK plotting — the sled is automatically zeroed before each stream
 - Toggle spindle and laser, jog the stepper, send a zero request — all from the Manual Control tab
+- Set voice coil 1 duty cycle (0–100%) from the Manual Control tab
+- Stream a pattern multiple times (repeat count spinbox) without stopping the spindle between repetitions
+- Monitor spindle RPM on a live time-series plot in the RPM Monitor tab
 - Monitor ACK / CRC error counters and a scrolling output log
 
 ### 3 - Clean build artefacts
@@ -178,6 +181,7 @@ Both `main.c` (PC) and `systemControl/main.c` (FPGA) use the same framing:
 | PC → FPGA | `0x25` | 0 | (none) | Zero request |
 | PC → FPGA | `0x26` | 4 | int32 LE step count | Jog — move N steps in current direction |
 | PC → FPGA | `0x27` | 0 | (none) | RPM request — FPGA reads hall sensor period and responds |
+| PC → FPGA | `0x28` | 1 | uint8 (0–100) | Voice coil 1 duty cycle % |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
 | FPGA → PC | `0x82` | 2 | uint16 LE | Computed spindle RPM (`10000 / hall_period_ticks`) |
 | FPGA → PC | `0xF0` | N | ASCII string | Debug / status message |
@@ -216,9 +220,12 @@ The firmware enters a packet receive loop immediately — no startup zeroing del
 | `TYPE_ZERO` | Pulse `zero_req` 100 ms, reset `current_step=0`, ACK — **ignored if stepper is disabled** |
 | `TYPE_JOG` | Move N steps (int32 LE payload) in current direction, ACK — **ignored if stepper is disabled** |
 | `TYPE_RPM_REQ` | Read hall sensor period from `axi_gpio_1`, compute `RPM = 10000 / ticks` (6 pulses/rev, 1 kHz tick clock), respond with `TYPE_RPM` |
+| `TYPE_VC1_DC` | Write 0–100 duty cycle value to `axi_gpio_1` ch2 → VoiceCoil.vhd `VC1_DC` port, ACK |
 
 250 steps = 30 mm (full disc range, inner to outer edge). The stepper step rate is 500 Hz (2 ms/step).
 
 > **Spindle windup:** At FPGA boot the firmware enables the spindle and waits 2 seconds for rotor alignment and speed. When streaming, `RAPID.exe` additionally waits 1 second after re-enabling the spindle before sending the first point. The laser turns on after the first point's stepper move completes.
 
-> **RPM readout:** `spindle.vhd` measures the period between consecutive hall sensor pulses using a 1 kHz tick counter and exposes the result via `axi_gpio_1`. The firmware computes `RPM = 10000 / ticks` (6 hall pulses per revolution) and logs it to the GUI console every 10 points during a stream. The PC can also request an on-demand reading by sending `TYPE_RPM_REQ (0x27)`.
+> **RPM readout:** `spindle.vhd` measures the period between consecutive hall sensor pulses using a 1 kHz tick counter and exposes the result via `axi_gpio_1` ch1. The firmware computes `RPM = 10000 / ticks` (6 hall pulses per revolution) and logs it after every point during a stream. The PC can also request an on-demand reading by sending `TYPE_RPM_REQ (0x27)`.
+
+> **Voice coil:** `VoiceCoil.vhd` generates a ~32 kHz PWM signal for VC1 (vertical / Z-axis). Duty cycle is software-controlled via `axi_gpio_1` ch2 and the `TYPE_VC1_DC` packet. Firmware boots at 60% duty cycle. VC2 (horizontal) is present in hardware but not yet driven.
