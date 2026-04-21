@@ -552,7 +552,8 @@ class GUI(QWidget):
     # -----------------------------------------------------------------------
 
     def _log(self, text: str):
-        self.log.appendPlainText(text)
+        ts = time.strftime("%H:%M:%S")
+        self.log.appendPlainText(f"[{ts}] {text}")
 
     def _pick_file(self):
         p, _ = QFileDialog.getOpenFileName(

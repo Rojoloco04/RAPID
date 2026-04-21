@@ -10,8 +10,9 @@
  *     3. Enter packet receive loop (runs forever).
  *
  *   Packet handling (all types ACK'd after action):
- *     TYPE_POINT  (0x10): Map r_um -> target step, move stepper, turn laser
- *                         on after first point's move.
+ *     TYPE_POINT  (0x10): Map r_um -> target step, move stepper, stall until
+ *                         disc theta matches point theta, then turn laser on
+ *                         after first point's move (stays on until TYPE_END).
  *     TYPE_END    (0x01): Disable laser/spindle/stepper, reset first_point,
  *                         ACK, continue loop (does NOT exit).
  *     TYPE_SPINDLE(0x21): Set/clear spindle enable bit.
@@ -41,6 +42,7 @@
 #include "sleep.h"
 #include "xuartps.h"
 #include "xuartps_hw.h"
+#include "xtime_l.h"
 #include "protocol.h"
 
 #include <stdio.h>
@@ -90,6 +92,20 @@
 #define RPM_PRINT_EVERY  1
 
 /* ------------------------------------------------------------------ */
+/*  Theta tracking constants                                          */
+/* ------------------------------------------------------------------ */
+
+/* Zynq global timer: CPU_FREQ/2 = 325 MHz */
+#define GTIMER_HZ           325000000ULL
+
+/* Bail out of wait_for_theta after this many revolutions (at current RPM).
+ * At 10 RPM (slowest expected), 3 revs = 18 s. */
+#define THETA_TIMEOUT_REVS  3
+
+/* Accept disc theta as "arrived" within this many degrees of target. */
+#define THETA_WINDOW_DEG    3.0f
+
+/* ------------------------------------------------------------------ */
 /*  Globals                                                           */
 /* ------------------------------------------------------------------ */
 
@@ -117,6 +133,17 @@ static int32_t unpack_i32_le(const uint8_t b[4])
         ((uint32_t)b[2] << 16) |
         ((uint32_t)b[3] << 24)
     );
+}
+
+static float unpack_f32_le(const uint8_t b[4])
+{
+    uint32_t u = (uint32_t)b[0]        |
+                 ((uint32_t)b[1] << 8)  |
+                 ((uint32_t)b[2] << 16) |
+                 ((uint32_t)b[3] << 24);
+    float f;
+    __builtin_memcpy(&f, &u, sizeof f);
+    return f;
 }
 
 /* ------------------------------------------------------------------ */
@@ -265,6 +292,82 @@ static uint16_t read_rpm(void)
 }
 
 /* ------------------------------------------------------------------ */
+/*  Theta tracking                                                    */
+/* ------------------------------------------------------------------ */
+
+static XTime    theta_t0;        /* XTime captured when theta_init() was called (theta=0) */
+static uint32_t theta_rev_us;   /* microseconds per full revolution at init time */
+static int      theta_tracking; /* 1 when tracking is active */
+
+/*
+ * theta_init - snapshot RPM and start time so disc angle can be inferred.
+ * Call once after the spindle is stable (after windup delay).
+ *
+ * Disc theta is then:  theta = (elapsed_us / theta_rev_us) * 360  (mod 360)
+ *
+ * Accuracy note: pure time integration; drifts ~1°/rev at 1% RPM error.
+ * Adequate for short patterns at 10-25 RPM. If drift proves too large, a
+ * VHDL hall-sector counter can re-sync theta every 60° — see plan notes.
+ */
+static void theta_init(void)
+{
+    u32 raw = XGpio_DiscreteRead(&gpio_rpm, 1);
+    uint32_t ticks = raw & 0xFFFFu;
+    /* rev_period_us = 6 pulses/rev * ticks ms/pulse * 1000 us/ms */
+    theta_rev_us   = (ticks > 0) ? (ticks * 6000u) : 2400000u; /* fallback: 25 RPM */
+    XTime_GetTime(&theta_t0);
+    theta_tracking = 1;
+    debug_printf("Theta init: rev_us=%lu RPM~%u",
+                 (unsigned long)theta_rev_us,
+                 ticks > 0 ? (unsigned)(10000u / ticks) : 25u);
+}
+
+/*
+ * wait_for_theta - stall until the disc reaches target_deg (±THETA_WINDOW_DEG).
+ *
+ * Uses elapsed time since theta_init() and the captured revolution period to
+ * compute current disc angle, then sleeps the remaining arc. Loops until
+ * arrival or THETA_TIMEOUT_REVS have elapsed (returns 0 on timeout, 1 on
+ * success). If theta_tracking is not active, returns immediately.
+ */
+static int wait_for_theta(float target_deg)
+{
+    if (!theta_tracking) return 1;
+
+    XTime t_call_start;
+    XTime_GetTime(&t_call_start);
+    uint64_t timeout_us = (uint64_t)theta_rev_us * THETA_TIMEOUT_REVS;
+
+    for (;;) {
+        XTime t_now;
+        XTime_GetTime(&t_now);
+
+        /* Timeout measured from this call's start, not from theta_t0 */
+        uint64_t call_us = (uint64_t)((t_now - t_call_start) * 1000000ULL / GTIMER_HZ);
+        if (call_us > timeout_us) {
+            debug_printf("wait_for_theta: TIMEOUT target=%.1f", (double)target_deg);
+            return 0;
+        }
+
+        /* Current disc angle via time integration from theta_t0 phase reference */
+        uint64_t elapsed_us = (uint64_t)((t_now - theta_t0) * 1000000ULL / GTIMER_HZ);
+        float phase = (float)(elapsed_us % (uint64_t)theta_rev_us) / (float)theta_rev_us;
+        float current_theta = phase * 360.0f;
+
+        /* Degrees remaining to target (always ≥0: how far disc must still rotate) */
+        float remaining = target_deg - current_theta;
+        if (remaining < 0.0f) remaining += 360.0f;
+
+        if (remaining <= THETA_WINDOW_DEG) return 1;
+
+        /* Sleep the remaining fraction of the revolution, waking 1 ms early */
+        uint32_t sleep_us = (uint32_t)(remaining / 360.0f * (float)theta_rev_us);
+        if (sleep_us > 2000u) sleep_us -= 1000u;
+        usleep(sleep_us);
+    }
+}
+
+/* ------------------------------------------------------------------ */
 /*  Main                                                              */
 /* ------------------------------------------------------------------ */
 
@@ -321,8 +424,8 @@ int main(void)
 
         if (pkt_type == TYPE_POINT) {
 
-            int32_t r_um = unpack_i32_le(&rx_payload[0]);
-            /* theta_deg currently unused; spindle position not yet controlled */
+            int32_t r_um     = unpack_i32_le(&rx_payload[0]);
+            float   theta_deg = unpack_f32_le(&rx_payload[4]);
 
             /* --- map physical radius (µm) to stepper steps ---
              *   steps = round( r_um / DISC_RADIUS_UM * MAX_STEPS )
@@ -363,6 +466,9 @@ int main(void)
 
             current_step = target_step;
 
+            /* stall until disc reaches target angular position */
+            wait_for_theta(theta_deg);
+
             /* turn laser on after the first point's move completes */
             if (first_point) {
                 config |= (1u << BIT_LASER_EN);
@@ -391,8 +497,9 @@ int main(void)
             config &= ~(1u << BIT_STEPPER_EN);
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
             debug_printf("END received. Laser OFF. Motors stopped. Ready.");
-            first_point  = 1;   /* next pattern re-arms the laser-on trigger */
-            point_count  = 0;   /* reset RPM print counter */
+            first_point    = 1;   /* next pattern re-arms the laser-on trigger */
+            point_count    = 0;   /* reset RPM print counter */
+            theta_tracking = 0;   /* re-arm theta_init on next stream start */
             uint8_t empty_end = 0;
             send_frame(TYPE_ACK, &empty_end, 0);
         }
@@ -402,6 +509,7 @@ int main(void)
             else               config &= ~(1u << BIT_SPINDLE_EN);
             XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
             debug_printf("Spindle %s.", rx_payload[0] ? "ON" : "OFF");
+            if (rx_payload[0]) theta_init();   /* arm theta tracking before the 1 s windup wait */
             send_frame(TYPE_ACK, rx_payload, CTRL_LEN);
         }
 
