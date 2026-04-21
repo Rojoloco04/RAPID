@@ -17,6 +17,7 @@
  *   TYPE_ZERO    0x25  LEN 0x00  pulse zero_req, reset step tracking
  *   TYPE_JOG     0x26  LEN 0x04  int32 LE step count
  *   TYPE_RPM_REQ 0x27  LEN 0x00  request current spindle RPM reading
+ *   TYPE_VC1_DC  0x28  LEN 0x01  payload[0]: 0-100 (VC1 duty cycle %)
  *
  * FPGA → PC packet types:
  *   TYPE_ACK     0x81  echoes incoming payload
