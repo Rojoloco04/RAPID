@@ -46,6 +46,7 @@
 #define TYPE_ZERO        0x25
 #define TYPE_JOG         0x26
 #define TYPE_RPM_REQ     0x27
+#define TYPE_VC1_DC      0x28  /* VC1 duty cycle  LEN 0x01  payload[0]: 0-100 % */
 
 /* ---- FPGA → PC ---- */
 #define TYPE_ACK         0x81

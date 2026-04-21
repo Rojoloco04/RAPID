@@ -110,7 +110,7 @@
 /* ------------------------------------------------------------------ */
 
 static XGpio   gpio;        /* axi_gpio_0: motor/laser outputs (ch1) + step_total input (ch2) */
-static XGpio   gpio_rpm;   /* axi_gpio_1: spindle RPM_Out input (ch1) */
+static XGpio   gpio_rpm;   /* axi_gpio_1: RPM_Out input (ch1) + VC1 duty cycle output (ch2) */
 static XUartPs Uart_Ps;
 
 /* ------------------------------------------------------------------ */
@@ -382,10 +382,12 @@ int main(void)
     XGpio_SetDataDirection(&gpio, 1, 0x00000000);  /* ch1: all outputs */
     XGpio_SetDataDirection(&gpio, 2, 0xFFFFFFFF);  /* ch2: all inputs  */
 
-    /* axi_gpio_1: RPM_Out from Spindle IP (ch1 input, 16-bit) */
+    /* axi_gpio_1: RPM_Out from Spindle IP (ch1 input) + VC1 duty cycle (ch2 output) */
     if (XGpio_Initialize(&gpio_rpm, XPAR_AXI_GPIO_1_BASEADDR) != XST_SUCCESS)
         return XST_FAILURE;
-    XGpio_SetDataDirection(&gpio_rpm, 1, 0xFFFFFFFF);  /* ch1: all inputs */
+    XGpio_SetDataDirection(&gpio_rpm, 1, 0xFFFFFFFF);  /* ch1: all inputs  (RPM) */
+    XGpio_SetDataDirection(&gpio_rpm, 2, 0x00000000);  /* ch2: all outputs (VC1_DC) */
+    XGpio_DiscreteWrite(&gpio_rpm, 2, 0);              /* start at 0% duty cycle */
 
     /* ---- initialise PS UART ---- */
     XUartPs_Config *cfg = XUartPs_LookupConfig(UART_BASEADDR);
@@ -608,6 +610,13 @@ int main(void)
             rpm_payload[1] = (uint8_t)((rpm >> 8) & 0xFF);
             send_frame(TYPE_RPM, rpm_payload, RPM_LEN);
             debug_printf("RPM: %u", (unsigned)rpm);
+        }
+
+        else if (pkt_type == TYPE_VC1_DC) {
+            uint8_t duty = (rx_payload[0] > 100u) ? 100u : rx_payload[0];
+            XGpio_DiscreteWrite(&gpio_rpm, 2, (u32)duty);
+            debug_printf("VC1 duty: %u%%", (unsigned)duty);
+            send_frame(TYPE_ACK, rx_payload, CTRL_LEN);
         }
 
         /* any other packet type is silently ignored */
