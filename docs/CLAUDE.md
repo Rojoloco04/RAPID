@@ -81,6 +81,7 @@ Identical on PC (`main.c`) and FPGA (`systemControl/main.c`):
 | PC → FPGA | `0x25` | 0 | (none) | Zero request — pulses `zero_req` for 100 ms, resets `current_step=0` |
 | PC → FPGA | `0x26` | 4 | int32 LE step count | Jog — move N steps in current direction |
 | PC → FPGA | `0x27` | 0 | (none) | RPM request — firmware reads `axi_gpio_1` and responds with `TYPE_RPM` |
+| PC → FPGA | `0x28` | 1 | uint8 duty cycle (0–100) | VC1 duty cycle — firmware writes value to `axi_gpio_1` ch2 → VoiceCoil.vhd VC1_DC |
 | FPGA → PC | `0x81` | 8 or 0 | Echo of received payload | ACK for all packet types |
 | FPGA → PC | `0x82` | 2 | uint16 LE computed RPM | RPM response — `RPM = 10000 / ticks` (6 hall pulses/rev, 1 kHz tick clock) |
 | FPGA → PC | `0xF0` | N | ASCII string | Debug/status |
@@ -114,10 +115,9 @@ Defined and written in `vitis_workspace/systemControl/main.c`:
 ### Channel 2 (input)
 `XGpio_SetDataDirection(&gpio, 2, 0xFFFFFFFF)` — all inputs, reserved for future readback (e.g. `step_total_out` from stepper VHDL).
 
-### `axi_gpio_1` — RPM input (`gpio_rpm` instance, `XPAR_AXI_GPIO_1_BASEADDR = 0x41210000`)
-Single-channel, 16-bit. Ch1 connected to `Spindle_0/RPM_Out`.
-`RPM_Out` holds the count of 1 kHz ticks between consecutive hall sensor rising edges.
-Firmware computes `RPM = 10000 / ticks` (6 hall pulses per revolution).
+### `axi_gpio_1` — RPM input + VC1 duty cycle output (`gpio_rpm` instance, `XPAR_AXI_GPIO_1_BASEADDR = 0x41210000`)
+- **Ch1 (input):** Connected to `Spindle_0/RPM_Out`. `RPM_Out` holds the count of 1 kHz ticks between consecutive hall sensor rising edges. Firmware computes `RPM = 10000 / ticks` (6 hall pulses per revolution).
+- **Ch2 (output):** 7-bit value written to `VoiceCoil_0/VC1_DC`. Firmware boots with this set to `60` (60% duty cycle). Updated via `TYPE_VC1_DC` packets.
 
 > **SDT init note:** In Vitis 2025.1 SDT flow `XGpio_Initialize` takes a **BaseAddress**, not a DeviceId.
 > Passing `0` works only by accident (SDT `LookupConfig` returns the first table entry when `BaseAddress == 0`).
@@ -130,14 +130,15 @@ On startup, `systemControl/main.c` enables the stepper, then enables the spindle
 | Packet | Action |
 |--------|--------|
 | `TYPE_END (0x01)` | Disable laser/spindle/stepper, reset `first_point=1`, ACK, **continue loop** |
-| `TYPE_POINT (0x10)` | Compute `target_step`, update dir+num_steps, pulse `step_go`, wait for move, turn laser on after first move, ACK |
-| `TYPE_SPINDLE (0x21)` | Set/clear `BIT_SPINDLE_EN`, write GPIO, ACK |
+| `TYPE_POINT (0x10)` | Compute `target_step`, move stepper, then call `wait_for_theta(theta_deg)` to stall until disc reaches target angle, gate laser off during long waits, turn laser on at target, ACK |
+| `TYPE_SPINDLE (0x21)` | Set/clear `BIT_SPINDLE_EN`, write GPIO, call `theta_init()` on enable (arms time-integration theta tracking), ACK |
 | `TYPE_STEPPER (0x22)` | Set/clear `BIT_STEPPER_EN`, write GPIO, ACK |
 | `TYPE_LASER (0x23)` | Set/clear `BIT_LASER_EN`, write GPIO, ACK |
 | `TYPE_DIR (0x24)` | Set/clear `BIT_STEPPER_DIR`, write GPIO, ACK |
 | `TYPE_ZERO (0x25)` | **If stepper disabled:** log message, ACK, skip. Else: pulse `BIT_ZERO_REQ` high 100 ms, clear, reset `current_step=0`, ACK |
 | `TYPE_JOG (0x26)` | **If stepper disabled:** log message, ACK, skip. Else: move N steps (int32 LE payload) in current direction, ACK |
 | `TYPE_RPM_REQ (0x27)` | Read `axi_gpio_1` ch1 bits[15:0] (1 kHz tick count between hall pulses), compute `RPM = 10000 / ticks`, send `TYPE_RPM (0x82)` + debug_printf |
+| `TYPE_VC1_DC (0x28)` | Write payload byte (0–100) to `axi_gpio_1` ch2 → sets `VC1_DC` on `VoiceCoil.vhd`, ACK |
 
 **Spindle windup:** The spindle is enabled at startup before the first packet arrives. The firmware waits `usleep(2000000u)` (2 s) for the rotor to reach speed before entering the packet receive loop. The laser is not enabled until after the first point's stepper move completes (`first_point` flag).
 
@@ -157,7 +158,7 @@ usleep( 1200 + delta × 2000 + 10000 )   /* µs: wakeup + running (500 Hz step r
 ```c
 #define MAX_STEPS        250
 #define DISC_RADIUS_UM   30000
-#define RPM_PRINT_EVERY  1      /* log RPM every N TYPE_POINT packets (currently every point) */
+#define RPM_PRINT_EVERY  1      /* log RPM every N TYPE_POINT packets (1 = every point) */
 /* No ZERO_WAIT_US — zeroing delay removed; stepper is pre-zeroed externally */
 ```
 
@@ -171,6 +172,7 @@ usleep( 1200 + delta × 2000 + 10000 )   /* µs: wakeup + running (500 Hz step r
 |---------|--------|
 | `POINT <r_um> <theta>` | Send one `TYPE_POINT` packet, wait for ACK |
 | `STREAM <filepath>` | Enable stepper → zero sled → enable spindle → wait 1 s → stream all points with stop-and-wait ACK → auto-send END |
+| `MSTREAM <count> <filepath>` | Same as STREAM but repeats the pattern `count` times without stopping the spindle between repetitions |
 | `END` | Send `TYPE_END` packet (disables FPGA hardware, firmware stays running) |
 | `EXIT` | Always send `TYPE_END` (regardless of stream state), close serial port, process exits |
 | `SPINDLE 0\|1` | Send `TYPE_SPINDLE` packet |
@@ -179,12 +181,14 @@ usleep( 1200 + delta × 2000 + 10000 )   /* µs: wakeup + running (500 Hz step r
 | `DIR 0\|1` | Send `TYPE_DIR` packet |
 | `ZERO` | Send `TYPE_ZERO` packet |
 | `JOG <n>` | Send `TYPE_JOG` packet (move N steps in current direction) |
+| `VC1 <0-100>` | Send `TYPE_VC1_DC` packet (set voice coil 1 duty cycle %) |
 
 **stdout lines** (parsed by `gui.py`):
 - `[ACK] r=<r> um, theta=<t> deg` — point acknowledged (reader thread, POINT ACKs only)
 - `[FPGA] <msg>` — TYPE_DEBUG string from FPGA (reader thread)
 - `[RX] CRC mismatch` — CRC error
 - `[PROGRESS] <n>/<total>` — stream progress (after each ACKed point)
+- `[RPM] <n> RPM` — RPM response from FPGA (fire-and-forget; auto-sent after each POINT during stream)
 - `[DONE] N points sent — FPGA hardware disabled` — stream completed cleanly (TYPE_END auto-sent)
 - `[STATUS] ...` — connection / informational messages
 - `[ERROR] ...` — command or I/O errors
@@ -241,7 +245,7 @@ ZEROING → (prox_stable) → IDLE ───────────────
 
 ### `spindle.vhd` — `hardware/RAPID.srcs/sources_1/new/`
 
-BLDC 6-step open-loop commutation. Drives DRV8323 3-phase gate driver. Clock: 125 MHz.
+BLDC 6-step commutation (fixed speed/direction). Drives DRV8323 3-phase gate driver. Clock: 125 MHz. Theta (angular position) is tracked in firmware via time-integration of RPM — see `theta_init()` / `wait_for_theta()` in `systemControl/main.c`.
 
 **Ports:** `clk`, `en`, `en_spindle` (out), `RPM_Out` (out, 16-bit), `RPM_Pulse_In` (in), `INHA/INLA/INHB/INLB/INHC/INLC` (out).
 
@@ -287,6 +291,7 @@ Dual-channel PWM generator for two voice coil actuators. Clock: 125 MHz.
 | Port | Direction | Description |
 |------|-----------|-------------|
 | `clk` | in | 125 MHz system clock |
+| `VC1_DC` | in | 7-bit duty cycle select for voice coil 1 (0–100; each step ≈ 1%, 39 counts/step) |
 | `PWM1` | out | PWM output for voice coil 1 |
 | `PWM1r` | out | Mirror of PWM1 (both inputs of the H-bridge receive the same signal) |
 | `PWM2` | out | PWM output for voice coil 2 |
@@ -294,9 +299,8 @@ Dual-channel PWM generator for two voice coil actuators. Clock: 125 MHz.
 
 **Operation:**
 - PWM frequency: 125 MHz ÷ 3907 cycles ≈ **32 kHz**
-- Each channel generates an independent PWM signal; duty cycle is set by `DC_cnt_1` / `DC_cnt_2` (0–3906 counts)
-- Duty cycle is currently **hardcoded to 0%** (`DC_cnt_1 = DC_cnt_2 = 0`) — voice coils are not actively driven
-- Variable duty cycle via 7-bit GPIO inputs (`VC1_DC`, `VC2_DC`) is implemented in commented-out code for future use; each bit step = ~1% duty cycle (39 counts / 3906)
+- **VC1 (vertical / Z-axis):** Duty cycle is software-controlled via the `VC1_DC` port (driven from `axi_gpio_1` ch2). Each integer step maps to 39 counts (≈1% duty cycle). Firmware boots at 60%. Controlled at runtime via `TYPE_VC1_DC` packets.
+- **VC2 (horizontal / Y-axis):** `DC_cnt_2` is **hardcoded to 0%** — voice coil 2 is not yet driven. The `VC2_DC` port and its case statement are fully commented out for future use.
 
 **Pin assignments (RAPID.xdc):**
 | Signal | Pin |
@@ -393,7 +397,9 @@ EXE path field + Port field + **Connect** button + **END** button + **EXIT** but
 `_set_connected(False)` is idempotent (guarded by checking the status label) so the disconnect log line only appears once even when `finished` and `disconnect` both fire.
 
 ### Pattern Stream tab
-GDS file field + **Stream** button + ACK/CRC counters + progress label + pyqtgraph scatter plot + **Clear Plot** button.
+GDS file field + **Stream** button + repeat count spinbox (x1–x999) + ACK/CRC counters + progress label + pyqtgraph scatter plot + **Clear Plot** button.
+
+The **Stream** button sends `MSTREAM <n> <filepath>` (where `n` is the repeat count). The spindle keeps running continuously across repetitions so theta integration is uninterrupted.
 
 ### Manual Control tab
 
@@ -413,6 +419,10 @@ GDS file field + **Stream** button + ACK/CRC counters + progress label + pyqtgra
 - theta QDoubleSpinBox (0–360°)
 - **Move** button
 
+**Voice Coil Control group:**
+- VC1 duty cycle QSpinBox (0–100%)
+- **Set VC1** button — sends `VC1 <duty>` → `TYPE_VC1_DC` packet
+
 ### Output log
 Shared `QPlainTextEdit` (fixed height 180 px) below tabs. Receives all stdout from RAPID.exe.
 
@@ -420,10 +430,13 @@ Shared `QPlainTextEdit` (fixed height 180 px) below tabs. Receives all stdout fr
 - `ACK_RE` → `\[ACK\] r=(\S+) um, theta=(\S+) deg` — updates scatter plot + ACK counter
 - `CRC_RE` → `\[RX\] CRC mismatch` — increments CRC error counter
 - `PROGRESS_RE` → `\[PROGRESS\] (\d+)/(\d+)` — updates progress label
+- `RPM_RE` → `\[RPM\] (\d+) RPM` — appends to RPM time-series plot + RPM log (RPM Monitor tab)
+
+Lines matching `[FPGA] RPM:` are suppressed from the shared log (the `[RPM]` line from the reader thread is shown instead).
 
 ---
 
 ## Known Issues / Active Development Notes
 
-1. **Spindle runs open-loop:** No closed-loop angle control; `theta_deg` is received but not used. RPM is now measurable via hall sensor (`RPM_Pulse_In` → `RPM_Out` → `axi_gpio_1`), but theta position control still requires a feedback loop.
+1. **Theta tracking implemented (time-integration):** `systemControl/main.c` uses `theta_init()` / `wait_for_theta()` to stall each point until the disc reaches the target angle. `theta_init()` snapshots RPM (from `axi_gpio_1`) and a Zynq global-timer timestamp; subsequent calls compute disc angle as `(elapsed_us % rev_us) / rev_us * 360`. Accuracy is ~1°/rev at 1% RPM error — adequate for current patterns. The laser is gated off between points when the remaining arc exceeds `LASER_OFF_GRACE_US` (50 ms) to avoid unintended exposure during long waits.
 2. **step_total_out → GPIO ch2 wiring unverified:** `axi_gpio_0` ch2 is configured as input but stepper absolute position readback is not yet implemented in firmware.

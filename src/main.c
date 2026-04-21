@@ -261,7 +261,7 @@ static void cmd_end(AppState *app) {
         PRINT(app, "[STATUS] END acknowledged — FPGA hardware disabled\n");
 }
 
-static void cmd_stream(AppState *app, const char *filepath) {
+static void cmd_stream_impl(AppState *app, const char *filepath, size_t repeats) {
     size_t count = 0;
     Coordinate *coords = getCoordinates(filepath, &count);
     if (!coords || count == 0) {
@@ -274,7 +274,8 @@ static void cmd_stream(AppState *app, const char *filepath) {
         PRINT(app, "[ERROR] Failed to convert to polar\n"); return;
     }
 
-    PRINT(app, "[STATUS] Streaming %zu points from %s\n", count, filepath);
+    size_t total = count * repeats;
+    PRINT(app, "[STATUS] Streaming %zu points x%zu from %s\n", count, repeats, filepath);
 
     /* Re-enable stepper and spindle in case a previous TYPE_END disabled them. */
     LONG t_st = next_target(app);
@@ -293,34 +294,53 @@ static void cmd_stream(AppState *app, const char *filepath) {
     InterlockedExchange(&app->stream_active, 1);
 
     int aborted = 0;
-    for (size_t i = 0; i < count; i++) {
-
-        LONG target = InterlockedCompareExchange(&app->rx.ack_count, 0, 0) + 1;
-        if (!send_polar_point(app->rx.h, (int32_t)llround(polar[i].r), (float)polar[i].theta)) {
-            PRINT(app, "[ERROR] Serial write failed at point %zu\n", i);
-            aborted = 1; break;
+    for (size_t rep = 0; rep < repeats && !aborted; rep++) {
+        for (size_t i = 0; i < count; i++) {
+            LONG target = InterlockedCompareExchange(&app->rx.ack_count, 0, 0) + 1;
+            if (!send_polar_point(app->rx.h, (int32_t)llround(polar[i].r), (float)polar[i].theta)) {
+                PRINT(app, "[ERROR] Serial write failed at point %zu\n", rep * count + i);
+                aborted = 1; break;
+            }
+            if (!wait_for_ack(&app->rx, target, ACK_TIMEOUT)) {
+                PRINT(app, "[ERROR] ACK timeout at point %zu/%zu\n", rep * count + i, total);
+                aborted = 1; break;
+            }
+            PRINT(app, "[PROGRESS] %zu/%zu\n", rep * count + i + 1, total);
+            /* Fire-and-forget RPM request after each point; reader thread prints [RPM] */
+            send_rpm_req_packet(app->rx.h);
         }
-        if (!wait_for_ack(&app->rx, target, ACK_TIMEOUT)) {
-            PRINT(app, "[ERROR] ACK timeout at point %zu/%zu\n", i, count);
-            aborted = 1; break;
-        }
-        PRINT(app, "[PROGRESS] %zu/%zu\n", i + 1, count);
-        /* Fire-and-forget RPM request after each point; reader thread prints [RPM] */
-        send_rpm_req_packet(app->rx.h);
     }
 
     free(polar);
     InterlockedExchange(&app->stream_active, 0);
 
     if (!aborted) {
-        /* Auto-send TYPE_END after a complete stream */
+        /* Auto-send TYPE_END after all repetitions complete */
         LONG target = InterlockedCompareExchange(&app->rx.ack_count, 0, 0) + 1;
         if (send_end_packet(app->rx.h) && wait_for_ack(&app->rx, target, ACK_TIMEOUT)) {
-            PRINT(app, "[DONE] %zu points sent — FPGA hardware disabled\n", count);
+            PRINT(app, "[DONE] %zu points sent — FPGA hardware disabled\n", total);
         } else {
             PRINT(app, "[ERROR] END packet failed after stream\n");
         }
     }
+}
+
+static void cmd_stream(AppState *app, const char *filepath) {
+    cmd_stream_impl(app, filepath, 1);
+}
+
+/* MSTREAM <count> <filepath> — repeat the pattern N times without stopping the spindle */
+static void cmd_mstream(AppState *app, const char *args) {
+    char *end;
+    long n = strtol(args, &end, 10);
+    if (end == args || n < 1) {
+        PRINT(app, "[ERROR] MSTREAM syntax: MSTREAM <count> <filepath>\n"); return;
+    }
+    while (*end == ' ') end++;
+    if (*end == '\0') {
+        PRINT(app, "[ERROR] MSTREAM: missing filepath\n"); return;
+    }
+    cmd_stream_impl(app, end, (size_t)n);
 }
 
 /* ------------------------------------------------------------------ */
@@ -339,6 +359,8 @@ static void run_command_loop(AppState *app) {
             cmd_point(app, line + 6);
         } else if (strncmp(line, "STREAM ", 7) == 0) {
             cmd_stream(app, line + 7);
+        } else if (strncmp(line, "MSTREAM ", 8) == 0) {
+            cmd_mstream(app, line + 8);
         } else if (strcmp(line, "END") == 0) {
             cmd_end(app);
         } else if (strncmp(line, "SPINDLE ", 8) == 0) {

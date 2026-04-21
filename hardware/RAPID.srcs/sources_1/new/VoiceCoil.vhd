@@ -12,8 +12,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity VoiceCoil is
     Port ( clk : in STD_LOGIC;
-           VC1_DC : in STD_LOGIC_VECTOR(6 downto 0);      --software controlled voice coil duty cycle <-vertical movement
-           --VC2_DC : in STD_LOGIC_VECTOR(6 downto 0);      --added for future use <-horizontal movement
+           VC1_DC : in STD_LOGIC_VECTOR(6 downto 0);      --software controlled voice coil duty cycle <- vertical (Z-axis) movement
+           --VC2_DC : in STD_LOGIC_VECTOR(6 downto 0);    --for future use <-horizontal(Y-axis) movement
            PWM1 : out STD_LOGIC;    --PWM out for VC1
            PWM1r : out STD_LOGIC;   --PWM out mirror for VC1 (both receive same PWM input)
            PWM2 : out STD_LOGIC;    --PWM out for VC1

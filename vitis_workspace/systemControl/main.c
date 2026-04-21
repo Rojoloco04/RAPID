@@ -105,6 +105,11 @@
 /* Accept disc theta as "arrived" within this many degrees of target. */
 #define THETA_WINDOW_DEG    3.0f
 
+/* Only turn the laser off between arc points if the disc needs longer than this
+ * to reach the next target.  Short waits (disc arriving soon) keep the laser on
+ * to avoid flicker.  Long waits (wrapping to next revolution) turn it off. */
+#define LASER_OFF_GRACE_US  50000u   /* 50 ms */
+
 /* ------------------------------------------------------------------ */
 /*  Globals                                                           */
 /* ------------------------------------------------------------------ */
@@ -387,7 +392,7 @@ int main(void)
         return XST_FAILURE;
     XGpio_SetDataDirection(&gpio_rpm, 1, 0xFFFFFFFF);  /* ch1: all inputs  (RPM) */
     XGpio_SetDataDirection(&gpio_rpm, 2, 0x00000000);  /* ch2: all outputs (VC1_DC) */
-    XGpio_DiscreteWrite(&gpio_rpm, 2, 0);              /* start at 0% duty cycle */
+    XGpio_DiscreteWrite(&gpio_rpm, 2, 60);             /* fixed 60% duty cycle */
 
     /* ---- initialise PS UART ---- */
     XUartPs_Config *cfg = XUartPs_LookupConfig(UART_BASEADDR);
@@ -468,16 +473,33 @@ int main(void)
 
             current_step = target_step;
 
-            /* stall until disc reaches target angular position */
+            /* stall until disc reaches target angular position.
+             * Only turn the laser off if the disc needs longer than LASER_OFF_GRACE_US
+             * to arrive — avoids flicker on short consecutive-arc waits, but ensures
+             * the laser is off when wrapping to the next revolution. */
+            if (!first_point && theta_tracking) {
+                XTime t_grace;
+                XTime_GetTime(&t_grace);
+                uint64_t elapsed_us = (uint64_t)((t_grace - theta_t0) * 1000000ULL / GTIMER_HZ);
+                float phase = (float)(elapsed_us % (uint64_t)theta_rev_us) / (float)theta_rev_us;
+                float now_theta = phase * 360.0f;
+                float remaining_deg = theta_deg - now_theta;
+                if (remaining_deg < 0.0f) remaining_deg += 360.0f;
+                uint32_t remaining_us = (uint32_t)(remaining_deg / 360.0f * (float)theta_rev_us);
+                if (remaining_us > LASER_OFF_GRACE_US) {
+                    config &= ~(1u << BIT_LASER_EN);
+                    XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
+                }
+            }
             wait_for_theta(theta_deg);
 
-            /* turn laser on after the first point's move completes */
+            /* turn laser on once disc is at the target angle */
             if (first_point) {
-                config |= (1u << BIT_LASER_EN);
-                XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
                 first_point = 0;
                 debug_printf("Laser ON.");
             }
+            config |= (1u << BIT_LASER_EN);
+            XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
 
             /* ACK the point - echo payload back to PC */
             send_frame(TYPE_ACK, rx_payload, POINT_LEN);

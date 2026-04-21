@@ -181,16 +181,27 @@ class GUI(QWidget):
         file_row.addWidget(btn_browse)
         parent.addLayout(file_row)
 
-        # Stream button + counters
+        # Stream button + repeat count + counters
         ctrl_row = QHBoxLayout()
         self.btn_stream = QPushButton("Stream")
         self.btn_stream.setToolTip("Parse the GDS file and stream all points to the FPGA")
         self.btn_stream.setEnabled(False)
         self.btn_stream.clicked.connect(self.stream)
+
+        self.repeat_count = QSpinBox()
+        self.repeat_count.setRange(1, 999)
+        self.repeat_count.setValue(1)
+        self.repeat_count.setPrefix("x")
+        self.repeat_count.setToolTip(
+            "Number of times to repeat the pattern. "
+            "The spindle keeps running between repetitions so theta is continuous."
+        )
+
         self.lbl_ack      = QLabel("ACK: 0")
         self.lbl_crc      = QLabel("CRC: 0")
         self.lbl_progress = QLabel("")
         ctrl_row.addWidget(self.btn_stream)
+        ctrl_row.addWidget(self.repeat_count)
         ctrl_row.addWidget(self.lbl_ack)
         ctrl_row.addWidget(self.lbl_crc)
         ctrl_row.addStretch(1)
@@ -441,7 +452,8 @@ class GUI(QWidget):
         if not gds:
             self._log("[GUI] No GDS file specified.")
             return
-        self.proc.write(f"STREAM {gds}\n".encode())
+        n = self.repeat_count.value()
+        self.proc.write(f"MSTREAM {n} {gds}\n".encode())
 
     def clear_plot(self):
         self.ack_count = 0
