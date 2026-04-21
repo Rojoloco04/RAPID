@@ -45,6 +45,10 @@ int send_ctrl_packet(HANDLE h, uint8_t type, uint8_t value) {
     return write_all(h, frame, CTRL_FRAME_SIZE);
 }
 
+int send_vc1_dc_packet(HANDLE h, uint8_t duty_pct) {
+    return send_ctrl_packet(h, TYPE_VC1_DC, duty_pct);
+}
+
 int send_jog_packet(HANDLE h, int32_t steps) {
     uint8_t frame[JOG_FRAME_SIZE];
     frame[0] = SOF_BYTE_1;

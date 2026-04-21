@@ -18,3 +18,4 @@ int send_ctrl_packet(HANDLE h, uint8_t type, uint8_t value);
 int send_jog_packet(HANDLE h, int32_t steps);
 int send_zero_packet(HANDLE h);
 int send_rpm_req_packet(HANDLE h);
+int send_vc1_dc_packet(HANDLE h, uint8_t duty_pct);

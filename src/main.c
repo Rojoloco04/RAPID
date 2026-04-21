@@ -21,6 +21,7 @@
  *   DIR 0|1                          send TYPE_DIR (0=inward, 1=outward)
  *   ZERO                             send TYPE_ZERO (pulse zero_req, reset step tracking)
  *   JOG <n>                          send TYPE_JOG (move N steps in current direction)
+ *   VC1 <0-100>                      set voice coil 1 duty cycle (%)
  *
  * Stdout output:
  *   [STATUS] ...                 connection / progress messages
@@ -244,6 +245,16 @@ static void cmd_rpm(AppState *app) {
         PRINT(app, "[ERROR] Serial write failed (RPM_REQ)\n");
 }
 
+static void cmd_vc1(AppState *app, const char *args) {
+    long dc = atol(args);
+    if (dc < 0 || dc > 100) {
+        PRINT(app, "[ERROR] VC1 duty cycle must be 0-100\n");
+        return;
+    }
+    LONG t = next_target(app);
+    send_wait(app, t, send_vc1_dc_packet(app->rx.h, (uint8_t)dc), "VC1");
+}
+
 static void cmd_end(AppState *app) {
     LONG t = next_target(app);
     if (send_wait(app, t, send_end_packet(app->rx.h), "END"))
@@ -344,6 +355,8 @@ static void run_command_loop(AppState *app) {
             cmd_zero(app);
         } else if (strcmp(line, "RPM") == 0) {
             cmd_rpm(app);
+        } else if (strncmp(line, "VC1 ", 4) == 0) {
+            cmd_vc1(app, line + 4);
         } else if (strcmp(line, "EXIT") == 0) {
             cmd_end(app);
             break;

@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x8456EC8C7AF769C8",
+      "boundary_crc": "0x8456EC8C37CF15CB",
       "device": "xc7z020clg400-1",
       "gen_directory": "../../../../RAPID.gen/sources_1/bd/top",
       "name": "top",
@@ -2481,8 +2481,14 @@
           "C_ALL_INPUTS": {
             "value": "1"
           },
+          "C_ALL_OUTPUTS_2": {
+            "value": "1"
+          },
           "C_GPIO_WIDTH": {
             "value": "16"
+          },
+          "C_IS_DUAL": {
+            "value": "1"
           }
         }
       },
@@ -2512,6 +2518,11 @@
                 "value_src": "default_prop"
               }
             }
+          },
+          "VC1_DC": {
+            "direction": "I",
+            "left": "6",
+            "right": "0"
           },
           "PWM1": {
             "direction": "O"
@@ -2651,6 +2662,12 @@
           "ilslice_6/Din"
         ]
       },
+      "axi_gpio_1_gpio2_io_o": {
+        "ports": [
+          "axi_gpio_1/gpio2_io_o",
+          "VoiceCoil_0/VC1_DC"
+        ]
+      },
       "ilslice_0_Dout": {
         "ports": [
           "ilslice_0/Dout",
@@ -2702,8 +2719,8 @@
           "rst_ps7_0_100M/slowest_sync_clk",
           "stepperDriver_0/clk",
           "axi_gpio_1/s_axi_aclk",
-          "VoiceCoil_0/clk",
-          "Spindle_0/clk"
+          "Spindle_0/clk",
+          "VoiceCoil_0/clk"
         ]
       },
       "processing_system7_0_FCLK_RESET0_N": {

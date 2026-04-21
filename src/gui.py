@@ -296,6 +296,27 @@ class GUI(QWidget):
         move_layout.addStretch(1)
 
         parent.addWidget(move_group)
+
+        # -- voice coil duty cycle --
+        vc_group = QGroupBox("Voice Coil Control")
+        vc_layout = QHBoxLayout(vc_group)
+
+        self.vc1_duty = QSpinBox()
+        self.vc1_duty.setRange(0, 100)
+        self.vc1_duty.setValue(0)
+        self.vc1_duty.setSuffix(" %")
+
+        self.btn_vc1 = QPushButton("Set VC1")
+        self.btn_vc1.setToolTip("Set vertical voice coil PWM duty cycle 0–100 % (TYPE_VC1_DC)")
+        self.btn_vc1.setEnabled(False)
+        self.btn_vc1.clicked.connect(self._send_vc1)
+
+        vc_layout.addWidget(QLabel("VC1 Duty:"))
+        vc_layout.addWidget(self.vc1_duty)
+        vc_layout.addWidget(self.btn_vc1)
+        vc_layout.addStretch(1)
+        parent.addWidget(vc_group)
+
         parent.addStretch(1)
 
     # -----------------------------------------------------------------------
@@ -397,6 +418,7 @@ class GUI(QWidget):
         for btn in (self.btn_spindle, self.btn_stepper, self.btn_laser, self.btn_zero):
             btn.setEnabled(connected)
         self.btn_rpm.setEnabled(connected)
+        self.btn_vc1.setEnabled(connected)
         if not connected:
             # reset toggle state so buttons show correct labels on reconnect
             self.manual_spindle_on  = False
@@ -476,6 +498,9 @@ class GUI(QWidget):
 
     def manual_rpm(self):
         self.proc.write(b"RPM\n")
+
+    def _send_vc1(self):
+        self.proc.write(f"VC1 {self.vc1_duty.value()}\n".encode())
 
     def _update_toggle_labels(self):
         self.btn_spindle.setText(f"Spindle: {'ON'  if self.manual_spindle_on  else 'OFF'}")

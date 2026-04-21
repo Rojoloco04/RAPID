@@ -37,6 +37,7 @@
     "boundary": {
       "ports": {
         "clk": [ { "direction": "in" } ],
+        "VC1_DC": [ { "direction": "in", "size_left": "6", "size_right": "0" } ],
         "PWM1": [ { "direction": "out" } ],
         "PWM1r": [ { "direction": "out" } ],
         "PWM2": [ { "direction": "out" } ],
