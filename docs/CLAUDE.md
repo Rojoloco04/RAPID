@@ -439,4 +439,3 @@ Lines matching `[FPGA] RPM:` are suppressed from the shared log (the `[RPM]` lin
 ## Known Issues / Active Development Notes
 
 1. **Theta tracking implemented (time-integration):** `systemControl/main.c` uses `theta_init()` / `wait_for_theta()` to stall each point until the disc reaches the target angle. `theta_init()` snapshots RPM (from `axi_gpio_1`) and a Zynq global-timer timestamp; subsequent calls compute disc angle as `(elapsed_us % rev_us) / rev_us * 360`. Accuracy is ~1°/rev at 1% RPM error — adequate for current patterns. The laser is gated off between points when the remaining arc exceeds `LASER_OFF_GRACE_US` (50 ms) to avoid unintended exposure during long waits.
-2. **step_total_out → GPIO ch2 wiring unverified:** `axi_gpio_0` ch2 is configured as input but stepper absolute position readback is not yet implemented in firmware.

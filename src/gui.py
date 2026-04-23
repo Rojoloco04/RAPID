@@ -22,13 +22,22 @@ import math
 import time
 from pathlib import Path
 
-from PySide6.QtCore import QProcess, QTimer
+from PySide6.QtCore import QProcess, QTimer, Qt
+from PySide6.QtGui import QPalette
 from PySide6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QLineEdit, QLabel, QFileDialog, QPlainTextEdit,
     QTabWidget, QSpinBox, QDoubleSpinBox, QGroupBox,
 )
 import pyqtgraph as pg
+
+
+def _apply_pg_theme(app: QApplication) -> None:
+    bg = app.palette().color(QPalette.ColorRole.Window)
+    if bg.lightness() < 128:
+        pg.setConfigOptions(background="k", foreground="d")
+    else:
+        pg.setConfigOptions(background="w", foreground="k")
 
 # ---------------------------------------------------------------------------
 # Regex patterns for parsing RAPID.exe stdout
@@ -39,6 +48,30 @@ PROGRESS_RE = re.compile(r"\[PROGRESS\]\s+(?P<i>\d+)/(?P<n>\d+)")
 RPM_RE      = re.compile(r"\[RPM\]\s+(?P<a>\d+)\s+RPM")
 
 _CIRCLE_PTS = 256
+
+
+def _parse_gds(path: str) -> tuple[list[float], list[float]]:
+    xs, ys = [], []
+    reading = False
+    with open(path, "r") as f:
+        for line in f:
+            line = line.strip()
+            if not reading:
+                if line.startswith("XY"):
+                    reading = True
+                    line = line[2:]
+                else:
+                    continue
+            if "ENDEL" in line:
+                break
+            parts = line.split(":")
+            if len(parts) == 2:
+                try:
+                    xs.append(float(parts[0]))
+                    ys.append(float(parts[1]))
+                except ValueError:
+                    pass
+    return xs, ys
 
 
 def polar_to_xy(r_list, theta_deg_list):
@@ -176,9 +209,13 @@ class GUI(QWidget):
         btn_browse = QPushButton("Browse")
         btn_browse.setToolTip("Select a GDS2 file to stream")
         btn_browse.clicked.connect(self._pick_file)
+        btn_preview = QPushButton("Preview")
+        btn_preview.setToolTip("Plot the GDS file coordinates without connecting to hardware")
+        btn_preview.clicked.connect(self._preview_pattern)
         file_row.addWidget(QLabel("GDS File:"))
         file_row.addWidget(self.gds_file, 1)
         file_row.addWidget(btn_browse)
+        file_row.addWidget(btn_preview)
         parent.addLayout(file_row)
 
         # Stream button + repeat count + counters
@@ -214,6 +251,7 @@ class GUI(QWidget):
         self.plot.setLabel("left",   "Y (µm)")
         self.plot.showGrid(x=True, y=True, alpha=0.2)
         self.plot.setAspectLocked(True)
+        self.curve_preview = self.plot.plot([], [], pen=None, symbol="o", symbolSize=6)
         self.curve_ack  = self.plot.plot([], [], pen=None, symbol="o", symbolSize=6)
         self.ref_circle = self.plot.plot([], [], pen=pg.mkPen(width=1))
         parent.addWidget(self.plot, 1)
@@ -464,6 +502,7 @@ class GUI(QWidget):
         self.lbl_ack.setText("ACK: 0")
         self.lbl_crc.setText("CRC: 0")
         self.lbl_progress.setText("")
+        self.curve_preview.setData([], [])
         self._refresh_plot()
 
     def clear_rpm(self):
@@ -598,6 +637,16 @@ class GUI(QWidget):
         if p:
             self.gds_file.setText(p)
 
+    def _preview_pattern(self):
+        path = self.gds_file.text().strip()
+        try:
+            xs, ys = _parse_gds(path)
+        except Exception as e:
+            self._log(f"[ERROR] Preview failed: {e}")
+            return
+        self.curve_preview.setData(xs, ys)
+        self._log(f"[STATUS] Preview: {len(xs)} points from {path}")
+
     # -----------------------------------------------------------------------
     # Plot refresh
     # -----------------------------------------------------------------------
@@ -633,8 +682,9 @@ class GUI(QWidget):
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    _apply_pg_theme(app)
     w = GUI()
-    w.resize(1100, 750)
+    w.resize(800, 1000)
     w.show()
 
     signal.signal(signal.SIGINT, lambda *_: w.close())
