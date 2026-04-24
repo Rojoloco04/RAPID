@@ -1,0 +1,7 @@
+//arch = zynq; split = false; format = BIN
+the_ROM_image:
+{
+	[bootloader]C:\Users\jparrack\Documents\RAPID\vitis_workspace\platform\export\platform\sw\boot\fsbl.elf
+	C:\Users\jparrack\Documents\RAPID\vitis_workspace\systemControl\_ide\bitstream\top_wrapper.bit
+	C:\Users\jparrack\Documents\RAPID\vitis_workspace\systemControl\build\systemControl.elf
+}

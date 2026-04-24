@@ -253,7 +253,7 @@ class GUI(QWidget):
         self.plot.setAspectLocked(True)
         self.curve_preview = self.plot.plot([], [], pen=None, symbol="o", symbolSize=6)
         self.curve_ack  = self.plot.plot([], [], pen=None, symbol="o", symbolSize=6)
-        self.ref_circle = self.plot.plot([], [], pen=pg.mkPen(width=1))
+        self.ref_circle = self.plot.plot([], [], pen=pg.mkPen(color="#888888", width=1))
         parent.addWidget(self.plot, 1)
 
         btn_clear = QPushButton("Clear Plot")
@@ -646,6 +646,13 @@ class GUI(QWidget):
             return
         self.curve_preview.setData(xs, ys)
         self._log(f"[STATUS] Preview: {len(xs)} points from {path}")
+        rmax = max(math.hypot(x, y) for x, y in zip(xs, ys)) if xs else 0
+        if rmax > 0:
+            angles = [2 * math.pi * i / _CIRCLE_PTS for i in range(_CIRCLE_PTS + 1)]
+            self.ref_circle.setData(
+                [rmax * math.cos(a) for a in angles],
+                [rmax * math.sin(a) for a in angles],
+            )
 
     # -----------------------------------------------------------------------
     # Plot refresh
