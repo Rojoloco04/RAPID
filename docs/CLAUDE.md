@@ -181,6 +181,7 @@ usleep( 1200 + delta × 2000 + 10000 )   /* µs: wakeup + running (500 Hz step r
 | `DIR 0\|1` | Send `TYPE_DIR` packet |
 | `ZERO` | Send `TYPE_ZERO` packet |
 | `JOG <n>` | Send `TYPE_JOG` packet (move N steps in current direction) |
+| `RPM` | Send `TYPE_RPM_REQ` — FPGA replies with `TYPE_RPM`; reader thread prints `[RPM] X RPM` (no ACK) |
 | `VC1 <0-100>` | Send `TYPE_VC1_DC` packet (set voice coil 1 duty cycle %) |
 
 **stdout lines** (parsed by `gui.py`):
@@ -397,9 +398,11 @@ EXE path field + Port field + **Connect** button + **END** button + **EXIT** but
 `_set_connected(False)` is idempotent (guarded by checking the status label) so the disconnect log line only appears once even when `finished` and `disconnect` both fire.
 
 ### Pattern Stream tab
-GDS file field + **Stream** button + repeat count spinbox (x1–x999) + ACK/CRC counters + progress label + pyqtgraph scatter plot + **Clear Plot** button.
+GDS file field + **Browse** button (file picker) + **Preview** button + **Stream** button + repeat count spinbox (x1–x999) + ACK/CRC counters + progress label + pyqtgraph scatter plot + **Clear Plot** button.
 
-The **Stream** button sends `MSTREAM <n> <filepath>` (where `n` is the repeat count). The spindle keeps running continuously across repetitions so theta integration is uninterrupted.
+- **Browse:** opens a file dialog to select a GDS file.
+- **Preview:** parses the selected GDS file and renders the raw XY coordinates on the scatter plot without connecting to hardware. Also draws a reference circle at the maximum radius.
+- **Stream:** sends `MSTREAM <n> <filepath>` (where `n` is the repeat count). The spindle keeps running continuously across repetitions so theta integration is uninterrupted.
 
 ### Manual Control tab
 

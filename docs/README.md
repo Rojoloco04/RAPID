@@ -147,7 +147,7 @@ python src/gui.py
 
 The GUI lets you:
 - Connect to the serial port and manage `RAPID.exe` as a subprocess
-- Select a GDS input file and stream a pattern with live ACK plotting — the sled is automatically zeroed before each stream
+- Select a GDS input file, preview its XY coordinates without hardware, and stream a pattern with live ACK plotting — the sled is automatically zeroed before each stream
 - Toggle spindle and laser, jog the stepper, send a zero request — all from the Manual Control tab
 - Set voice coil 1 duty cycle (0–100%) from the Manual Control tab
 - Stream a pattern multiple times (repeat count spinbox) without stopping the spindle between repetitions
