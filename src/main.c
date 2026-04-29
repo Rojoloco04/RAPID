@@ -51,17 +51,13 @@
 #include "protocol.h"
 #include "packets.h"
 
-/* ------------------------------------------------------------------ */
-/*  Constants                                                          */
-/* ------------------------------------------------------------------ */
+/* Constants */
 
 #define BAUD_RATE      115200
 #define RX_BUF_SIZE    256
 #define ACK_TIMEOUT    5000      /* ms — generous for stepper moves  */
 
-/* ------------------------------------------------------------------ */
-/*  Shared state                                                       */
-/* ------------------------------------------------------------------ */
+/* Shared state */
 
 /*
  * ReaderCtx — shared between main thread and background serial reader.
@@ -95,9 +91,7 @@ typedef struct {
     LeaveCriticalSection(&(app)->stdout_cs); \
 } while (0)
 
-/* ------------------------------------------------------------------ */
-/*  ACK wait                                                           */
-/* ------------------------------------------------------------------ */
+/* ACK wait */
 
 static int wait_for_ack(ReaderCtx *ctx, LONG target, DWORD timeout_ms) {
     DWORD deadline = GetTickCount() + timeout_ms;
@@ -126,9 +120,7 @@ static int send_wait(AppState *app, LONG target, int sent, const char *name) {
     return 1;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Reader thread — framed-packet state machine                        */
-/* ------------------------------------------------------------------ */
+/* Reader thread — framed-packet state machine */
 
 enum rx_state { S_SOF1, S_SOF2, S_TYPE, S_LEN, S_PAYLOAD, S_CRC };
 
@@ -208,9 +200,7 @@ static DWORD WINAPI reader_thread(LPVOID param) {
     return 0;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Command handlers                                                   */
-/* ------------------------------------------------------------------ */
+/* Command handlers */
 
 static void cmd_point(AppState *app, const char *args) {
     long  r_um_long;
@@ -343,9 +333,7 @@ static void cmd_mstream(AppState *app, const char *args) {
     cmd_stream_impl(app, end, (size_t)n);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Command loop                                                       */
-/* ------------------------------------------------------------------ */
+/* Command loop */
 
 static void run_command_loop(AppState *app) {
     char line[512];
@@ -388,9 +376,7 @@ static void run_command_loop(AppState *app) {
     }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Entry point                                                        */
-/* ------------------------------------------------------------------ */
+/* Entry point */
 
 int main(int argc, char **argv) {
     setvbuf(stdout, NULL, _IONBF, 0);

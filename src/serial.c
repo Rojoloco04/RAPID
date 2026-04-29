@@ -9,9 +9,7 @@
 #include <string.h>   /* memcpy */
 #include <stdio.h>    /* snprintf */
 
-/* ------------------------------------------------------------------ */
-/*  Serial port                                                        */
-/* ------------------------------------------------------------------ */
+/* Serial port */
 
 HANDLE open_serial(const char *com_name, int baud) {
     char path[64];
@@ -61,9 +59,7 @@ int write_all(HANDLE h, const uint8_t *buf, size_t len) {
     return 1;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Packet helpers                                                     */
-/* ------------------------------------------------------------------ */
+/* Packet helpers */
 
 uint8_t crc8_xor(const uint8_t *data, size_t len) {
     uint8_t c = 0;

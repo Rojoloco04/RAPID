@@ -6,7 +6,7 @@
 #include "protocol.h"
 #include "serial.h"
 
-/* 0-byte payload packet (TYPE_END, TYPE_ZERO). */
+/* 0-byte payload packet helper used by TYPE_END, TYPE_ZERO, and TYPE_RPM_REQ. */
 static int send_pulse_packet(HANDLE h, uint8_t type) {
     uint8_t frame[END_FRAME_SIZE];
     frame[0] = SOF_BYTE_1;

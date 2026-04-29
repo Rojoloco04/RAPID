@@ -44,6 +44,12 @@ systemControl.c ── AXI GPIO (PS→PL) ──→ stepperDriver.vhd
 | `hardware/RAPID.srcs/constrs_1/new/RAPID.xdc` | Pin constraints (Arty Z7-20) |
 | `hardware/ip_repo/src/stepperDriver.vhd` | Old simple 2-phase stepper (archived, not in block design) |
 | `hardware/ip_repo/src/BLDC.vhd` | Old abstract BLDC (archived, not in block design) |
+| `tests/mlx90393.c` | Bare-metal XIicPs driver for MLX90393 magnetometer — **untested on hardware** |
+| `tests/mlx90393.h` | Header for above: pin wiring, register definitions, calibration constants, API |
+| `old/angleMeasure.ino` | Arduino sketch — MLX90393 angle tracking algorithm reference / calibration origin |
+| `old/BLDC.vhd` | Early abstract BLDC design (archived) |
+| `old/OLD_pcCommunication.c` | Superseded PC-side communication code (archived) |
+| `old/OLD_systemControl.c` | Superseded FPGA application (archived) |
 | `Makefile` | PC-side build: `make`, `make gui`, `make clean` |
 | `requirements.txt` | Python deps: PySide6, pyqtgraph |
 | `docs/README.md` | User-facing project documentation |
@@ -442,3 +448,57 @@ Lines matching `[FPGA] RPM:` are suppressed from the shared log (the `[RPM]` lin
 ## Known Issues / Active Development Notes
 
 1. **Theta tracking implemented (time-integration):** `systemControl/main.c` uses `theta_init()` / `wait_for_theta()` to stall each point until the disc reaches the target angle. `theta_init()` snapshots RPM (from `axi_gpio_1`) and a Zynq global-timer timestamp; subsequent calls compute disc angle as `(elapsed_us % rev_us) / rev_us * 360`. Accuracy is ~1°/rev at 1% RPM error — adequate for current patterns. The laser is gated off between points when the remaining arc exceeds `LASER_OFF_GRACE_US` (50 ms) to avoid unintended exposure during long waits.
+
+2. **VC2 (X/horizontal voice coil) not driven:** `VoiceCoil.vhd` has the VC2 PWM generator (`DC_cnt_2`, `PWM_2_sig`) and XDC pin assignments (PWM2 → V6, PWM2r → U7) in place, but `DC_cnt_2` is hardcoded to 0 and the `VC2_DC` port is commented out. See Future Work section.
+
+3. **Stepper `step_total_out` unused in firmware:** `stepperDriver.vhd` exports a 21-bit absolute position counter connected to `axi_gpio_0` ch2 (all-input), but `systemControl/main.c` never reads it — position tracking is dead-reckoning from `current_step`.
+
+---
+
+## Future Work
+
+### Absolute spindle position via magnetometer (MLX90393)
+
+A complete bare-metal Xilinx XIicPs driver exists in `tests/mlx90393.c` / `tests/mlx90393.h` — **untested on hardware**. The algorithm and calibration constants originated in `old/angleMeasure.ino` (Arduino sketch).
+
+**Driver summary:**
+- **Interface:** PS I2C0, 100 kHz. Wired to Arty Z7-20 Arduino header: SCL → A5 (P15), SDA → A4 (P16). Sensor I2C address `0x0C` (A0/A1 tied GND). Requires external 4.7 kΩ pull-ups on SCL/SDA to 3.3 V.
+- **Config:** GAIN_SEL=5 (1.667×), DIG_FILT=3, OSR=3 (~6 ms conversion, driver waits 10 ms).
+- **Calibration constants** (empirically derived, hardcoded in both files):
+  ```c
+  MLX_X_OFFSET = -47.5498f,  MLX_Y_OFFSET = -23.2500f
+  MLX_X_SCALE  =  0.00010226f, MLX_Y_SCALE  =  0.00010226f
+  MLX_ANGLE_DIVISOR = 1.54f   /* mechanical coupling factor */
+  ```
+- **Algorithm:** cross/dot-product of consecutive calibrated XY vectors — more numerically stable through wrap-around than raw `atan2` subtraction used in the Arduino sketch.
+- **API:** `mlx_init(dev, XPAR_XIICPS_0_BASEADDR)` + `mlx_read_angle(dev, &angle_out)`.
+
+**Integration steps for `systemControl/main.c`:**
+1. Add `tests/mlx90393.c` and `tests/mlx90393.h` to the Vitis project sources.
+2. Call `mlx_init(&mlx, XPAR_XIICPS_0_BASEADDR)` after spindle windup.
+3. Call `mlx_read_angle()` periodically inside `wait_for_theta()` to get drift-free absolute angle instead of (or to re-sync) the time-integration estimate.
+
+Re-calibrate if the magnet is moved relative to the sensor.
+
+### Voice coil VC2 — X direction (horizontal focus)
+
+All hardware is in place. Steps to enable:
+
+1. In `VoiceCoil.vhd`: add `VC2_DC : in STD_LOGIC_VECTOR(6 downto 0)` to the entity port list, remove `DC_cnt_2 <= 0`, and add the VC2 decode logic mirroring the VC1 multiplier: `DC_cnt_2 <= to_integer(unsigned(VC2_DC)) * 39`.
+2. In Vivado block design: connect `VC2_DC` to a new AXI GPIO output channel (or extend the existing `axi_gpio_1` ch2 to carry both VC1 and VC2 values in separate bit fields). Re-export hardware, rebuild BSP.
+3. Add `TYPE_VC2_DC 0x29  LEN 0x01  payload[0]: 0-100%` to `src/protocol.h` and `vitis_workspace/systemControl/protocol.h`.
+4. In `vitis_workspace/systemControl/main.c`: add a `TYPE_VC2_DC` handler (mirror `TYPE_VC1_DC`, write to the new GPIO register/bits).
+5. In `src/main.c`: add a `VC2 <0-100>` command (mirror `cmd_vc1`).
+6. In `src/gui.py`: add a VC2 duty cycle spinbox and Set button in the Manual Control tab Voice Coil group.
+
+### Hall-sector theta re-sync
+
+`spindle.vhd` generates 6 hall pulses per revolution at known 60° sector boundaries. In `systemControl/main.c`, polling (or interrupt-driven capture) of `RPM_Pulse_In` via a new GPIO input could snap `theta_t0` to the nearest 60° sector on each rising edge, eliminating long-run drift without external sensors.
+
+### Closed-loop spindle speed control
+
+Commutation is currently open-loop (fixed `count_max = 12,500,000` in `spindle.vhd`). The hall-sensor RPM measurement already in the firmware could drive a proportional controller that adjusts `count_max` (written via AXI GPIO or AXI lite register) to hold a target RPM, making theta tracking more stable.
+
+### Stepper closed-loop position verification
+
+`stepperDriver.vhd` exports `step_total_out` (21-bit absolute position counter from home), connected to `axi_gpio_0` ch2. The firmware reads this channel as all-inputs but discards the value. Reading `step_total_out` after each move and comparing to `current_step` would detect missed steps and trigger corrective re-homing.

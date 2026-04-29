@@ -9,18 +9,20 @@
  *     2. Enable spindle; wait 1 s for rotor windup.
  *     3. Enter packet receive loop (runs forever).
  *
- *   Packet handling (all types ACK'd after action):
- *     TYPE_POINT  (0x10): Map r_um -> target step, move stepper, stall until
- *                         disc theta matches point theta, then turn laser on
- *                         after first point's move (stays on until TYPE_END).
- *     TYPE_END    (0x01): Disable laser/spindle/stepper, reset first_point,
- *                         ACK, continue loop (does NOT exit).
- *     TYPE_SPINDLE(0x21): Set/clear spindle enable bit.
- *     TYPE_STEPPER(0x22): Set/clear stepper enable bit.
- *     TYPE_LASER  (0x23): Set/clear laser enable bit.
- *     TYPE_DIR    (0x24): Set/clear stepper direction bit.
- *     TYPE_ZERO   (0x25): Pulse zero_req 100 ms, reset current_step=0.
- *     TYPE_JOG    (0x26): Move N steps (int32 LE) in current direction.
+ *   Packet handling (all types ACK'd after action unless noted):
+ *     TYPE_POINT   (0x10): Map r_um -> target step, move stepper, stall until
+ *                          disc theta matches point theta, then turn laser on
+ *                          after first point's move (stays on until TYPE_END).
+ *     TYPE_END     (0x01): Disable laser/spindle/stepper, reset first_point,
+ *                          ACK, continue loop (does NOT exit).
+ *     TYPE_SPINDLE (0x21): Set/clear spindle enable bit.
+ *     TYPE_STEPPER (0x22): Set/clear stepper enable bit.
+ *     TYPE_LASER   (0x23): Set/clear laser enable bit.
+ *     TYPE_DIR     (0x24): Set/clear stepper direction bit.
+ *     TYPE_ZERO    (0x25): Pulse zero_req 100 ms, reset current_step=0.
+ *     TYPE_JOG     (0x26): Move N steps (int32 LE) in current direction.
+ *     TYPE_RPM_REQ (0x27): Read hall-sensor tick count, reply TYPE_RPM (no ACK).
+ *     TYPE_VC1_DC  (0x28): Write 0-100 duty cycle to VC1 voice coil, ACK.
  *
  * GPIO output word layout (27 bits, AXI GPIO channel 1):
  *   Bit  0        spindle_en   Spindle enable         (0=off, 1=on)
@@ -49,9 +51,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-/* ------------------------------------------------------------------ */
-/*  GPIO constants                                                    */
-/* ------------------------------------------------------------------ */
+/* GPIO constants */
 
 /* Mask to keep only the 27 valid output bits when writing to GPIO. */
 #define GPIO_MASK       0x07FFFFFF
@@ -66,16 +66,12 @@
 
 #define NUM_STEP_MAX    ((1 << 21) - 1)   /* 2097151 */
 
-/* ------------------------------------------------------------------ */
-/*  UART constants                                                    */
-/* ------------------------------------------------------------------ */
+/* UART constants */
 
 #define UART_BASEADDR   XPAR_XUARTPS_0_BASEADDR
 #define BAUD_RATE       115200
 
-/* ------------------------------------------------------------------ */
-/*  Motor constants                                                   */
-/* ------------------------------------------------------------------ */
+/* Motor constants */
 
 /* Full stepper range: inner edge (home / step 0) to outer edge. */
 #define MAX_STEPS        250
@@ -84,16 +80,12 @@
  * 250 steps spans this full range: steps = round(r_um * MAX_STEPS / DISC_RADIUS_UM). */
 #define DISC_RADIUS_UM   30000
 
-/* ------------------------------------------------------------------ */
-/*  Spindle RPM constants                                             */
-/* ------------------------------------------------------------------ */
+/* Spindle RPM constants */
 
 /* Log spindle RPM to the GUI console once per this many TYPE_POINT packets. */
 #define RPM_PRINT_EVERY  1
 
-/* ------------------------------------------------------------------ */
-/*  Theta tracking constants                                          */
-/* ------------------------------------------------------------------ */
+/* Theta tracking constants */
 
 /* Zynq global timer: CPU_FREQ/2 = 325 MHz */
 #define GTIMER_HZ           325000000ULL
@@ -110,17 +102,13 @@
  * to avoid flicker.  Long waits (wrapping to next revolution) turn it off. */
 #define LASER_OFF_GRACE_US  50000u   /* 50 ms */
 
-/* ------------------------------------------------------------------ */
-/*  Globals                                                           */
-/* ------------------------------------------------------------------ */
+/* Globals */
 
 static XGpio   gpio;        /* axi_gpio_0: motor/laser outputs (ch1) + step_total input (ch2) */
 static XGpio   gpio_rpm;   /* axi_gpio_1: RPM_Out input (ch1) + VC1 duty cycle output (ch2) */
 static XUartPs Uart_Ps;
 
-/* ------------------------------------------------------------------ */
-/*  CRC / serialisation helpers                                       */
-/* ------------------------------------------------------------------ */
+/* CRC / serialisation helpers */
 
 static uint8_t crc8_xor(const uint8_t *data, unsigned len)
 {
@@ -151,9 +139,7 @@ static float unpack_f32_le(const uint8_t b[4])
     return f;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Low-level UART I/O (polled, no interrupts)                        */
-/* ------------------------------------------------------------------ */
+/* Low-level UART I/O (polled, no interrupts) */
 
 static void uart_send(const uint8_t *buf, unsigned len)
 {
@@ -177,9 +163,7 @@ static uint8_t uart_recv_byte(void)
     return b;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Framed packet TX                                                  */
-/* ------------------------------------------------------------------ */
+/* Framed packet TX */
 
 /*
  * send_frame - build and transmit a framed response packet.
@@ -203,9 +187,7 @@ static void send_frame(uint8_t type, const uint8_t *payload, uint8_t len)
     uart_flush_tx();
 }
 
-/* ------------------------------------------------------------------ */
-/*  Debug output via TYPE_DEBUG packet                               */
-/* ------------------------------------------------------------------ */
+/* Debug output via TYPE_DEBUG packet */
 
 /*
  * debug_printf - send a formatted string to the PC as a TYPE_DEBUG (0xF0)
@@ -226,9 +208,7 @@ static void debug_printf(const char *fmt, ...)
     send_frame(TYPE_DEBUG, (const uint8_t *)buf, len);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Framed packet RX                                                  */
-/* ------------------------------------------------------------------ */
+/* Framed packet RX */
 
 /*
  * receive_packet - block until one valid framed packet is received.
@@ -269,9 +249,7 @@ static uint8_t receive_packet(uint8_t *out_payload)
     }
 }
 
-/* ------------------------------------------------------------------ */
-/*  RPM measurement                                                   */
-/* ------------------------------------------------------------------ */
+/* RPM measurement */
 
 /*
  * read_rpm - read the 1 kHz tick count between consecutive hall sensor pulses
@@ -296,9 +274,7 @@ static uint16_t read_rpm(void)
     return (uint16_t)(rpm > 0xFFFFu ? 0xFFFFu : rpm);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Theta tracking                                                    */
-/* ------------------------------------------------------------------ */
+/* Theta tracking */
 
 static XTime    theta_t0;        /* XTime captured when theta_init() was called (theta=0) */
 static uint32_t theta_rev_us;   /* microseconds per full revolution at init time */
@@ -372,15 +348,13 @@ static int wait_for_theta(float target_deg)
     }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Main                                                              */
-/* ------------------------------------------------------------------ */
+/* Main */
 
 int main(void)
 {
     init_platform();
 
-    /* ---- initialise AXI GPIO ---- */
+    /* Initialise AXI GPIO */
     /* SDT flow: XGpio_Initialize takes BaseAddress, not DeviceId */
     if (XGpio_Initialize(&gpio, XPAR_AXI_GPIO_0_BASEADDR) != XST_SUCCESS)
         return XST_FAILURE;   /* UART not yet up - can't send debug packet */
@@ -394,7 +368,7 @@ int main(void)
     XGpio_SetDataDirection(&gpio_rpm, 2, 0x00000000);  /* ch2: all outputs (VC1_DC) */
     XGpio_DiscreteWrite(&gpio_rpm, 2, 60);             /* fixed 60% duty cycle */
 
-    /* ---- initialise PS UART ---- */
+    /* Initialise PS UART */
     XUartPs_Config *cfg = XUartPs_LookupConfig(UART_BASEADDR);
     if (!cfg) { for (;;) ; }   /* halt - no UART config found */
     if (XUartPs_CfgInitialize(&Uart_Ps, cfg, cfg->BaseAddress) != XST_SUCCESS)
@@ -404,8 +378,7 @@ int main(void)
 
     u32 config = 0;
 
-    /* ===== 1. ENABLE STEPPER ======================================== */
-    /* Stepper is already zeroed before this program runs. */
+    /* 1. Enable stepper — sled is pre-zeroed before this program runs */
     config = (1u << BIT_STEPPER_EN);
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
     debug_printf("Stepper enabled. Disc radius: %u um, max steps: %u. Ready for points.",
@@ -414,14 +387,14 @@ int main(void)
     uint8_t rx_payload[MAX_PAYLOAD];
     uint8_t pkt_type;
 
-    /* ===== 2. ENABLE SPINDLE ======================================= */
+    /* 2. Enable spindle */
     config |= (1u << BIT_SPINDLE_EN);
     XGpio_DiscreteWrite(&gpio, 1, config & GPIO_MASK);
     debug_printf("Spindle enabled. Waiting 2 s for windup...");
     usleep(2000000u);   /* 2 s: covers 1.5 s VHDL startup alignment + margin for first valid RPM pulse */
     debug_printf("Spindle ready.");
 
-    /* ===== 3. POINT LOOP =========================================== */
+    /* 3. Packet receive loop */
     int32_t current_step = 0;
     int     first_point  = 1;
     uint32_t point_count = 0;   /* counts TYPE_POINT packets; RPM logged every RPM_PRINT_EVERY */

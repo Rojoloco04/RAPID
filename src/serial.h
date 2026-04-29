@@ -17,9 +17,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-/* ------------------------------------------------------------------ */
-/*  Serial port                                                        */
-/* ------------------------------------------------------------------ */
+/* Serial port */
 
 /*
  * open_serial - open COM port <com_name> at <baud> baud, 8N1.
@@ -38,9 +36,7 @@ HANDLE open_serial(const char *com_name, int baud);
  */
 int write_all(HANDLE h, const uint8_t *buf, size_t len);
 
-/* ------------------------------------------------------------------ */
-/*  Packet helpers                                                     */
-/* ------------------------------------------------------------------ */
+/* Packet helpers */
 
 /* XOR-based CRC-8 over a byte buffer. */
 uint8_t crc8_xor(const uint8_t *data, size_t len);

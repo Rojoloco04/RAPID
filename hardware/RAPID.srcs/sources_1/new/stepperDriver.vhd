@@ -1,3 +1,31 @@
+-- stepperDriver.vhd - Stepper motor FSM for the RAPID sled stage.
+--
+-- Drives a DRV8834 stepper driver IC at 500 Hz step rate.
+-- Clock: 125 MHz (run_freq = 250000 gives 2 ms period = 500 Hz).
+--
+-- FSM states:
+--   ZEROING  Drive inward at 500 Hz until prox_stable, then reset step_total and go IDLE.
+--   IDLE     Motor asleep. Waits for step_go rising edge or zero_req.
+--   WAKEUP   Assert en_out, hold 1.2 ms (150,000 cycles) for DRV8834 wake-up, then RUNNING.
+--   RUNNING  Output step pulses, decrement steps_remaining, update step_total.
+--            Goes DONE when steps_remaining hits zero. zero_req interrupts at any time.
+--   DONE     Motor asleep. Waits for next step_go or zero_req.
+--
+-- Inputs:
+--   clk          125 MHz system clock
+--   dir          1 = outward, 0 = inward
+--   en           Stepper enable from processor GPIO
+--   num_steps    Number of steps to execute (21-bit)
+--   step_go      Rising edge triggers a move
+--   zero_req     Rising edge triggers re-zero (any state)
+--   prox_in      Proximity sensor input (debounced internally)
+--
+-- Outputs:
+--   dir_out          Direction signal to DRV8834
+--   pwm_out_step     Step pulse output to DRV8834
+--   en_out           SLEEP pin to DRV8834 (1 = awake)
+--   step_total_out   Absolute position counter (steps from home)
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
@@ -20,9 +48,8 @@ end stepperDriver;
 architecture Behavioral of stepperDriver is
 --constants for clock and clock dividers
 constant base_clk : integer := 125000000;
-constant run_freq : integer := 250000; --set for 1kHz for testing
---1kHz = 125000
-constant zero_freq : integer := 250000; --set 500 Hz for zeroing process
+constant run_freq : integer := 250000; -- 500 Hz step rate (125 MHz / 250000 = 2 ms period)
+constant zero_freq : integer := 250000; -- 500 Hz homing rate (same as run_freq)
 --state logic for zero mode vs normal
 type state_t is (ZEROING, IDLE, WAKEUP, RUNNING, DONE);
 signal state : state_t := ZEROING;
@@ -69,7 +96,7 @@ begin
 num_steps_int <= to_integer(unsigned(num_steps));
 
 
---normal run clock div
+-- Step clock divider (500 Hz)
 process(clk)
 begin
         
@@ -88,7 +115,7 @@ begin
      end if;
 end process;
 
---sled zero clock div (1hz)
+-- Homing clock divider (500 Hz)
 process(clk)
 begin
     
@@ -146,7 +173,7 @@ begin
     
     case state is
         when ZEROING =>
-            dir_sig <= '0'; --drive towards spindle
+            dir_sig <= '0'; -- inward (toward home proximity sensor)
             en_sig <= '1';
             if en ='1' then
                 pwm_sig <= zero_clk;
@@ -186,6 +213,7 @@ begin
             end if;
             
        when WAKEUP =>
+        -- Hold en_out high for 1.2 ms (150,000 cycles @ 125 MHz) per DRV8834 wake-up spec
         en_sig <= '1';
         pwm_sig <= '0';
         if wakeup_counter < 150000 then

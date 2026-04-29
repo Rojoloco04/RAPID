@@ -1,15 +1,16 @@
 """
 gui.py - RAPID control GUI.
 
-Launches a single persistent RAPID.exe child process that owns the
-serial connection.  Both tabs send text commands to its stdin and read
+Launches a single persistent RAPID.exe child process that owns the serial
+connection.  All three tabs send text commands to its stdin and read
 responses from its stdout — no serial library needed in Python.
 
 Top bar (always visible):
-    Port field | Connect | Disconnect | Stop
+    EXE path | Port | Connect | END | EXIT | status label
 
-Tab 1 "Pattern Stream": stream a GDS file, live ACK plot.
-Tab 2 "Manual Control": send individual POINT commands.
+Tab 1 "Pattern Stream": select a GDS2 file, preview coordinates, stream to FPGA, live ACK plot.
+Tab 2 "Manual Control": toggle spindle/stepper/laser, jog stepper, send a single point, set voice coil duty.
+Tab 3 "RPM Monitor": request spindle RPM readings and plot them over time.
 
 Usage:
     python gui.py
@@ -39,9 +40,7 @@ def _apply_pg_theme(app: QApplication) -> None:
     else:
         pg.setConfigOptions(background="w", foreground="k")
 
-# ---------------------------------------------------------------------------
 # Regex patterns for parsing RAPID.exe stdout
-# ---------------------------------------------------------------------------
 ACK_RE      = re.compile(r"\[ACK\]\s+r=(?P<r>-?\d+)\s+um,\s+theta=(?P<t>-?\d+\.?\d*)\s+deg")
 CRC_RE      = re.compile(r"\[RX\]\s+CRC mismatch")
 PROGRESS_RE = re.compile(r"\[PROGRESS\]\s+(?P<i>\d+)/(?P<n>\d+)")
@@ -83,9 +82,7 @@ def polar_to_xy(r_list, theta_deg_list):
     return xs, ys
 
 
-# ---------------------------------------------------------------------------
 # Main GUI widget
-# ---------------------------------------------------------------------------
 class GUI(QWidget):
     def __init__(self):
         super().__init__()
@@ -157,9 +154,7 @@ class GUI(QWidget):
 
 
 
-    # -----------------------------------------------------------------------
-    # Top bar: port | Connect | Disconnect | Stop
-    # -----------------------------------------------------------------------
+    # Top bar
 
     def _build_top_bar(self, parent):
         row = QHBoxLayout()
@@ -198,9 +193,7 @@ class GUI(QWidget):
 
         parent.addLayout(row)
 
-    # -----------------------------------------------------------------------
     # Pattern Stream tab
-    # -----------------------------------------------------------------------
 
     def _build_pattern_tab(self, parent):
         # GDS file row
@@ -261,9 +254,7 @@ class GUI(QWidget):
         btn_clear.clicked.connect(self.clear_plot)
         parent.addWidget(btn_clear)
 
-    # -----------------------------------------------------------------------
     # Manual Control tab
-    # -----------------------------------------------------------------------
 
     def _build_manual_tab(self, parent):
         # -- hardware toggles --
@@ -368,9 +359,7 @@ class GUI(QWidget):
 
         parent.addStretch(1)
 
-    # -----------------------------------------------------------------------
     # RPM Monitor tab
-    # -----------------------------------------------------------------------
 
     def _build_rpm_tab(self, parent):
         # Time-series plot
@@ -404,9 +393,7 @@ class GUI(QWidget):
         self.rpm_log.setFixedHeight(160)
         parent.addWidget(self.rpm_log)
 
-    # -----------------------------------------------------------------------
     # Shared log
-    # -----------------------------------------------------------------------
 
     def _build_log(self, parent):
         self.log = QPlainTextEdit()
@@ -415,9 +402,7 @@ class GUI(QWidget):
         self.log.setFixedHeight(180)
         parent.addWidget(self.log)
 
-    # -----------------------------------------------------------------------
     # Connection management
-    # -----------------------------------------------------------------------
 
     def connect(self):
         exe  = self.exe_path.text().strip()
@@ -481,9 +466,7 @@ class GUI(QWidget):
         if not connected:
             self._log("[GUI] Disconnected.")
 
-    # -----------------------------------------------------------------------
     # Pattern Stream actions
-    # -----------------------------------------------------------------------
 
     def stream(self):
         gds = self.gds_file.text().strip()
@@ -513,9 +496,7 @@ class GUI(QWidget):
         self.rpm_log.clear()
         self._refresh_rpm_plot()
 
-    # -----------------------------------------------------------------------
     # Manual Control actions
-    # -----------------------------------------------------------------------
 
     def manual_move(self):
         r     = self.manual_r.value()
@@ -559,9 +540,7 @@ class GUI(QWidget):
         self.btn_laser.setText(  f"Laser: {'ON'    if self.manual_laser_on    else 'OFF'}")
         self.btn_jog_dir.setText(f"Dir: {'OUTWARD' if self.jog_dir_outward    else 'INWARD'}")
 
-    # -----------------------------------------------------------------------
     # QProcess signal handlers
-    # -----------------------------------------------------------------------
 
     def _on_proc_error(self, _):
         self._log(f"[GUI] Process error: {self.proc.errorString()}")
@@ -581,9 +560,7 @@ class GUI(QWidget):
             line, self._read_buf = self._read_buf.split("\n", 1)
             self._process_line(line)
 
-    # -----------------------------------------------------------------------
     # Output parser
-    # -----------------------------------------------------------------------
 
     def _process_line(self, line: str):
         line = line.rstrip()
@@ -623,9 +600,7 @@ class GUI(QWidget):
             self._rpm_plot_dirty = True
 
 
-    # -----------------------------------------------------------------------
     # Helpers
-    # -----------------------------------------------------------------------
 
     def _log(self, text: str):
         ts = time.strftime("%H:%M:%S")
@@ -654,9 +629,7 @@ class GUI(QWidget):
                 [rmax * math.sin(a) for a in angles],
             )
 
-    # -----------------------------------------------------------------------
     # Plot refresh
-    # -----------------------------------------------------------------------
 
     def _refresh_plot(self):
         if not self._plot_dirty:
@@ -684,9 +657,7 @@ class GUI(QWidget):
         self.rpm_curve.setData(self.rpm_times, self.rpm_values)
 
 
-# ---------------------------------------------------------------------------
 # Entry point
-# ---------------------------------------------------------------------------
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     _apply_pg_theme(app)

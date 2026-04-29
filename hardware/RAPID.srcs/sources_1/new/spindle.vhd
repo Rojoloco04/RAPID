@@ -1,23 +1,30 @@
-----------------------------------------------------------------------------------
--- Company: RAPID
--- Engineer: Chance, Matt
--- 
--- Create Date: 11/07/2025 11:40:49 AM
--- Design Name: BLDC Driver
--- Module Name: Spindle - Behavioral
--- Project Name: RAPID
--- Target Devices: Arty Z7
--- Tool Versions: 2025.1
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
+-- spindle.vhd - BLDC spindle motor controller for the RAPID disc stage.
+--
+-- Drives a DRV8323 gate driver using 6-step trapezoidal commutation.
+-- Clock: 125 MHz.
+--
+-- Startup: on en rising edge, all three low-side phases are held high for 1.5 s
+-- (187,500,000 cycles) for rotor alignment before commutation begins.
+--
+-- Commutation: count_max = 12,500,000 → 10 Hz commutation clock → ~1 rev/1.8 s
+-- at the current setting (6 commutation steps per electrical revolution).
+-- INHA carries a 1% duty-cycle PWM at 10 Hz; INH[B/C] are state/direction control.
+--
+-- RPM measurement: a 1 kHz tick counter counts ticks between hall sensor rising
+-- edges (RPM_Pulse_In). RPM_Out[15:0] holds the raw tick count. The Zynq
+-- firmware computes RPM = 10000 / ticks (6 pulses/rev, 1 kHz tick clock).
+-- Output clears to zero after 5 s with no pulse (spindle stopped).
+--
+-- Inputs:
+--   clk          125 MHz system clock
+--   en           Spindle enable from processor GPIO
+--   RPM_Pulse_In Hall sensor input
+--
+-- Outputs:
+--   en_spindle   DRV8323 enable
+--   RPM_Out      16-bit 1 kHz tick count between consecutive hall pulses
+--   INHA/B/C     High-side gate driver inputs (INHA carries PWM)
+--   INLA/B/C     Low-side gate driver inputs
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -50,7 +57,7 @@ signal in_startup : std_logic := '0';
 
 signal in_startup_s1 : std_logic := '0';
 signal in_startup_sync : std_logic := '0';
-signal duty_cycle_count : integer range 0 to 5000 := 4000; -- 80% at 25kHz
+-- duty_cycle_count: reserved for future variable-duty PWM; not currently used
 
 constant RPM_CLK : integer := 125000;
 signal RPM_CLK_DIV : integer range 0 to 125001 := 0;
@@ -62,17 +69,9 @@ signal RPM_STABLE   : std_logic := '0'; -- last stable level
 
 begin
 
--- Commutation frequency: count_max=6,410,256 gives ~14.5 Hz (~1 rev / 1.8 s)
---count_max <= 200000 when (speed = "00") else  -- Slowest
---             100000 when (speed = "01") else  
---             50000 when (speed = "10") else   
---             25000;                           -- Fastest
---12,820,512 gives 9.75 Hz = too jerky/unusable
---10,309,278 gives 12.13 Hz = ~1 rotation every 3 seconds - slightly jerky
---9,387,908 gives 13.32 Hz = 1 rotation every 2.6 seconds
---6,410,256 gives ~14.5 Hz = 1 rotation everhy 1.8 seconds, Smoothest/slowest
---3,205,128 gives ~39 Hz = 1 RPS
-count_max <= 12500000; --10 hz
+-- count_max sets the commutation clock period.
+-- 12,500,000 cycles @ 125 MHz = 100 ms per step = 10 Hz commutation clock.
+count_max <= 12500000;
 
 -- Clock divider
 process(clk)
@@ -119,7 +118,9 @@ begin
     end if;
 end process;
 
-process(clk) --logic for initial startup allign phase
+-- Startup alignment: hold all low-side phases high for 1.5 s on en rising edge
+-- (187,500,000 cycles @ 125 MHz) to magnetically align the rotor before commutation.
+process(clk)
 begin
     if rising_edge(clk) then
         if en = '0' then
@@ -186,8 +187,11 @@ begin
     end if;
 end process;
 
--- Brushless Logic
-process(clk_div, en) 
+-- 6-step trapezoidal commutation on commutation clock (clk_div).
+-- Phase C is unused (single-direction, open-loop); INHC=0, INLC=1 are fixed below.
+-- INHA carries the PWM signal generated separately; INLA/INHB/INLB carry the step state.
+-- During startup alignment all low-side phases are held high.
+process(clk_div, en)
 begin
     if rising_edge(clk_div) then
         if (en = '1') then
@@ -195,7 +199,7 @@ begin
                 INLA <= '1';
                 INHB <= '1';
                 INLB <= '1';
-            else 
+            else
                 if step = 1 then
                     INLA <= '1';
                     INHB <= '1';
@@ -243,8 +247,8 @@ end process;
         
 RPM_Out <= RPM_OUT_SIG;
 INHA <= pwm_signal;
-INHC <= '0'; --DIR
-INLC <= '1';
+INHC <= '0'; -- phase C high-side off (single-direction operation)
+INLC <= '1'; -- phase C low-side on (completes the return path)
 en_spindle <= en;
 
 end Behavioral;
