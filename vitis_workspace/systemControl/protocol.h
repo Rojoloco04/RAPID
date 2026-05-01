@@ -33,11 +33,11 @@
 
 #include <stdint.h>
 
-/* ---- Start-of-frame bytes ---- */
+/* Start-of-frame bytes */
 #define SOF_BYTE_1       0xAA
 #define SOF_BYTE_2       0x55
 
-/* ---- PC → FPGA ---- */
+/* PC → FPGA */
 #define TYPE_END         0x01
 #define TYPE_POINT       0x10
 #define TYPE_SPINDLE     0x21
@@ -49,24 +49,24 @@
 #define TYPE_RPM_REQ     0x27
 #define TYPE_VC1_DC      0x28  /* VC1 duty cycle  LEN 0x01  payload[0]: 0-100 % */
 
-/* ---- FPGA → PC ---- */
+/* FPGA → PC */
 #define TYPE_ACK         0x81
 #define TYPE_RPM         0x82
 #define TYPE_DEBUG       0xF0
 
-/* ---- Payload lengths ---- */
+/* Payload lengths */
 #define POINT_LEN        0x08   /* r_um (int32 LE) + theta_deg (float32 LE) */
 #define CTRL_LEN         0x01   /* single on/off byte                       */
 #define JOG_LEN          0x04   /* step count (int32 LE)                    */
 #define RPM_LEN          0x02   /* computed RPM (uint16 LE)                 */
 
-/* ---- Frame sizes (SOF(2) + TYPE(1) + LEN(1) + PAYLOAD + CRC(1)) ---- */
+/* Frame sizes: SOF(2) + TYPE(1) + LEN(1) + PAYLOAD + CRC(1) */
 #define END_FRAME_SIZE   5      /* 0-byte payload */
 #define CTRL_FRAME_SIZE  6      /* 1-byte payload */
 #define POINT_FRAME_SIZE 13     /* 8-byte payload */
 #define JOG_FRAME_SIZE   9      /* 4-byte payload */
 
-/* ---- Receive buffer size ---- */
+/* Receive buffer size */
 #define MAX_PAYLOAD      255
 
 #endif /* PROTOCOL_H */

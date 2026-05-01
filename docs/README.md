@@ -1,5 +1,7 @@
 # RAPID
 
+## ECE Capstone Design Project Award Winner, 2026 
+
 Software component of a capstone design project.
 Streams GDS2 lithography patterns to an FPGA over UART for motor-driven stage control.
 
