@@ -191,6 +191,8 @@ end process;
 -- Phase C is unused (single-direction, open-loop); INHC=0, INLC=1 are fixed below.
 -- INHA carries the PWM signal generated separately; INLA/INHB/INLB carry the step state.
 -- During startup alignment all low-side phases are held high.
+
+--this section is left in case hall sensors broke and sensorless commutation needed
 process(clk_div, en)
 begin
     if rising_edge(clk_div) then
