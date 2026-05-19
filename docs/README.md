@@ -263,7 +263,7 @@ The calibration constants are hardcoded and were derived empirically — a re-ca
 
 `VoiceCoil.vhd` already contains a fully wired PWM generator for VC2 (`DC_cnt_2`, `clk_div_cnt2`, `PWM_2_sig`) and the XDC pin assignments are defined (`PWM2` → V6, `PWM2r` → U7). The channel is hardcoded to 0% duty cycle pending the following steps:
 
-1. Add `VC2_DC : in STD_LOGIC_VECTOR(6 downto 0)` to the VoiceCoil entity port list and uncomment the commented-out VC2 control process in `VoiceCoil.vhd`.
+1. Add `VC2_DC : in STD_LOGIC_VECTOR(6 downto 0)` to the VoiceCoil entity port list, remove `DC_cnt_2 <= 0`, and add `DC_cnt_2 <= to_integer(unsigned(VC2_DC)) * 39`.
 2. Connect `VC2_DC` to a new AXI GPIO output channel in the Vivado block design and re-export the hardware definition.
 3. Add `TYPE_VC2_DC 0x29` to `src/protocol.h` and `vitis_workspace/systemControl/protocol.h`.
 4. Add a handler in `vitis_workspace/systemControl/main.c` (mirror the `TYPE_VC1_DC` handler).
